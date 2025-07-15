@@ -1,11 +1,32 @@
 {
   "name": "@datawizio/react-components",
+  "description": "Datawiz.io components library for React.js",
   "private": true,
   "version": "2.0.0",
+  "author": "Datawiz.io",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/datawizio/react-components"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "keywords": [
+    "antd",
+    "less",
+    "react",
+    "vite",
+    "library",
+    "components",
+    "typescript",
+    "highcharts",
+    "datawiz.io"
+  ],
   "type": "module",
-  "main": "./lib/index.cjs",
-  "module": "./es/index.js",
-  "typings": "./es/index.d.ts",
+  "main": "lib/index.cjs",
+  "module": "es/index.js",
+  "typings": "es/index.d.ts",
   "exports": {
     ".": {
       "import": "./es/index.js",

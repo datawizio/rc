@@ -14,6 +14,9 @@ dist-ssr
 es
 lib
 
+# Publishing
+.npmrc
+
 # Environment
 *.local
 *.env
