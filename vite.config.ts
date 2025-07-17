@@ -1,9 +1,14 @@
 import dts from "vite-plugin-dts";
 import react from "@vitejs/plugin-react-swc";
 import { libInjectCss } from "vite-plugin-lib-inject-css";
+import { glob } from "glob";
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import { peerDependencies } from "./package.json";
+
+const entryFiles = await glob("./src/**/*.{ts,tsx,less}", {
+  ignore: ["./src/vite-env.d.ts"]
+});
 
 export default defineConfig({
   plugins: [
@@ -25,7 +30,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
+      entry: entryFiles,
       fileName: format => (format === "es" ? "index.js" : "index.cjs")
     },
     rollupOptions: {
@@ -49,6 +54,7 @@ export default defineConfig({
       ],
       external: ["react/jsx-runtime", ...Object.keys(peerDependencies || {})]
     },
-    sourcemap: true
+    sourcemap: true, // TODO: import.meta.env.NODE_ENV === 'development'
+    emptyOutDir: true
   }
 });
