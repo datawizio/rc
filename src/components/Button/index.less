@@ -1,0 +1,27 @@
+.dw-btn.ant-btn {
+  &.no-border {
+    border: none;
+    box-shadow: none;
+  }
+
+  &.highlight:not(:hover) {
+    background: none;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  &-link {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  &.ant-btn-primary[disabled] {
+    &:before {
+      display: block;
+    }
+  }
+}
+
+.theme-dark .dw-btn.ant-btn.ant-btn-primary[disabled] {
+  color: gray !important;
+}
