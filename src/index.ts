@@ -8,3 +8,4 @@ export { default as UserAvatar } from "./components/UserAvatar";
 export { default as Checkbox } from "./components/Checkbox";
 export { default as Tree } from "./components/Tree";
 export { default as Button } from "./components/Button";
+export { default as Loader } from "./components/Loader";
