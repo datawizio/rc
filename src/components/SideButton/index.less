@@ -1,0 +1,40 @@
+@padding: 15px;
+@iconMargin: 13px;
+@sideMargin: @iconMargin * 2 + @padding;
+
+.side-button-container {
+  position: fixed !important;
+  z-index: 999;
+
+  &--right {
+    right: 0;
+  }
+  &--left {
+    direction: ltr;
+    left: 0;
+  }
+}
+
+.side-button {
+  &:hover {
+    transform: translateX(0);
+  }
+}
+
+.side-button--right {
+  padding: 0 @padding 0 0 !important;
+  transform: translateX(calc(100% - @sideMargin));
+
+  .side-button__icon {
+    margin: 0 @iconMargin;
+  }
+}
+
+.side-button--left {
+  padding: 0 0 0 @padding !important;
+  transform: translateX(calc(-1 * (100% - @sideMargin)));
+
+  .side-button__icon {
+    margin: 0 @iconMargin;
+  }
+}
