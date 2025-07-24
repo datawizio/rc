@@ -3,7 +3,7 @@ import type { TFunction } from "i18next";
 import type { DirectionType } from "antd/es/config-provider";
 
 export interface ConfigContextValue {
-  translate?: TFunction;
+  translate: TFunction;
   direction?: DirectionType;
 }
 

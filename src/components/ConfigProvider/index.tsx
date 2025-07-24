@@ -1,19 +1,19 @@
 import { useMemo } from "react";
 import { ConfigProvider as AntdConfigProvider } from "antd";
-
 import ConfigContext, { defaultContextValue } from "./context";
 
 import type { FC } from "react";
 import type { ConfigProviderProps as AntdConfigProviderProps } from "antd";
 import type { ConfigContextValue } from "./context";
 
-const ConfigProvider: FC<ConfigContextValue & AntdConfigProviderProps> = (
-  props = defaultContextValue
-) => {
+export type ConfigProviderProps = Partial<ConfigContextValue> &
+  AntdConfigProviderProps;
+
+const ConfigProvider: FC<ConfigProviderProps> = props => {
   const { children, translate, direction, ...restProps } = props;
 
   const contextValue = useMemo<ConfigContextValue>(() => {
-    const nextValue: ConfigContextValue = {};
+    const nextValue = defaultContextValue;
 
     if (translate) nextValue.translate = translate;
     if (direction) nextValue.direction = direction;
@@ -27,7 +27,5 @@ const ConfigProvider: FC<ConfigContextValue & AntdConfigProviderProps> = (
     </ConfigContext.Provider>
   );
 };
-
-ConfigProvider.displayName = "ConfigProvider";
 
 export default ConfigProvider;

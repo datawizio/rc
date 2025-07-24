@@ -50,6 +50,4 @@ ApiError.showNotification = (
   });
 };
 
-ApiError.displayName = "ApiError";
-
 export default ApiError;

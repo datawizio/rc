@@ -22,6 +22,4 @@ const UserAvatar: FC<UserAvatarProps> = ({ src, name, size }) => {
   );
 };
 
-UserAvatar.displayName = "UserAvatar";
-
 export default UserAvatar;

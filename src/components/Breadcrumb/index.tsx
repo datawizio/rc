@@ -1,7 +1,7 @@
 import { useContext, type FC } from "react";
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import ConfigContext from "@/components/ConfigProvider/context";
+import ConfigContext from "../ConfigProvider/context";
 
 import "./index.less";
 
@@ -24,7 +24,5 @@ const Breadcrumb: FCBreadcrumb = ({ separator, ...props }) => {
 
 Breadcrumb.Item = AntBreadcrumb.Item;
 Breadcrumb.Separator = AntBreadcrumb.Separator;
-
-Breadcrumb.displayName = "Breadcrumb";
 
 export default Breadcrumb;
