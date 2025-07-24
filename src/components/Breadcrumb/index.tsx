@@ -1,10 +1,7 @@
-import { useContext } from "react";
-import { Breadcrumb as AntBreadcrumb } from "antd";
+import { useContext, type FC } from "react";
+import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import ConfigContext from "@/components/ConfigProvider/context";
-
-import type { FC } from "react";
-import type { BreadcrumbProps } from "antd";
 
 import "./index.less";
 
