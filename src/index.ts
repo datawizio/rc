@@ -6,3 +6,4 @@ export { default as ApiError } from "./components/ApiError";
 export { default as Breadcrumb } from "./components/Breadcrumb";
 export { default as UserAvatar } from "./components/UserAvatar";
 export { default as Checkbox } from "./components/Checkbox";
+export { default as Tree } from "./components/Tree";
