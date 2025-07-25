@@ -1,6 +1,6 @@
 @padding: 15px;
-@iconMargin: 13px;
-@sideMargin: @iconMargin * 2 + @padding;
+@icon-margin: 13px;
+@side-margin: @icon-margin * 2 + @padding;
 
 .side-button-container {
   position: fixed !important;
@@ -23,18 +23,18 @@
 
 .side-button--right {
   padding: 0 @padding 0 0 !important;
-  transform: translateX(calc(100% - @sideMargin));
+  transform: translateX(calc(100% - @side-margin));
 
   .side-button__icon {
-    margin: 0 @iconMargin;
+    margin: 0 @icon-margin;
   }
 }
 
 .side-button--left {
   padding: 0 0 0 @padding !important;
-  transform: translateX(calc(-1 * (100% - @sideMargin)));
+  transform: translateX(calc(-1 * (100% - @side-margin)));
 
   .side-button__icon {
-    margin: 0 @iconMargin;
+    margin: 0 @icon-margin;
   }
 }
