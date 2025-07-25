@@ -1,17 +1,17 @@
 import clsx from "clsx";
 import Button, { type ButtonProps } from "../Button";
 import { createPortal } from "react-dom";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 
 import "./index.less";
 
 export interface SideButtonProps extends ButtonProps {
   text: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   className?: string;
   renderTo?: Element;
   side?: "left" | "right";
-  extra?: React.ReactNode;
+  extra?: ReactNode;
 }
 
 const SideButton: FC<SideButtonProps> = ({
