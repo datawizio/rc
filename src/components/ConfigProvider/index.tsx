@@ -1,12 +1,7 @@
 import { useMemo } from "react";
 import { ConfigProvider as AntdConfigProvider, theme } from "antd";
 import { useTheme } from "@/hooks";
-import {
-  ANTD_THEME_CLASS,
-  cssVar,
-  getSystemTheme,
-  initTheme
-} from "@/utils/theme";
+import { ANTD_THEME_CLASS, cssVar, initTheme } from "@/utils/theme";
 import ConfigContext, { defaultContextValue } from "./context";
 
 import type { FC } from "react";
@@ -25,10 +20,7 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   ...props
 }) => {
   const customTheme = useTheme();
-
-  const isDark =
-    customTheme === "dark" ||
-    (customTheme === "system" && getSystemTheme() === "dark");
+  const isDark = customTheme === "dark";
 
   const themeConfig = {
     cssVar: { key: ANTD_THEME_CLASS },

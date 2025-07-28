@@ -1,6 +1,7 @@
 // Types
 
-export type Theme = "dark" | "light" | "system";
+export type ThemingMode = "dark" | "light" | "system";
+export type Theme = Exclude<ThemingMode, "system">;
 
 declare global {
   interface Window {
@@ -18,10 +19,8 @@ export const ANTD_THEME_CLASS = "ant-theme";
 // Theming
 
 const applyTheme = (theme: Theme) => {
-  const resolvedTheme = theme === "system" ? getSystemTheme() : theme;
-
   document.body.classList.remove("theme-light", "theme-dark");
-  document.body.classList.add(ANTD_THEME_CLASS, `theme-${resolvedTheme}`);
+  document.body.classList.add(ANTD_THEME_CLASS, `theme-${theme}`);
 
   window.theme = theme;
   localStorage.setItem(THEME_KEY, theme);
@@ -34,8 +33,8 @@ export const initTheme = () => {
   applyTheme(stored || DEFAULT_THEME);
 };
 
-export const changeTheme = (theme: Theme) => {
-  applyTheme(theme);
+export const changeTheme = (themingMode: ThemingMode) => {
+  applyTheme(themingMode === "system" ? getSystemTheme() : themingMode);
 };
 
 export const getSystemTheme = (): Theme => {
@@ -49,7 +48,7 @@ export const getCurrentTheme = (): Theme => {
 
 // Global style variables
 
-export const cssVar = (variableName: string) => {
+export const cssVar = <T extends string>(variableName: T): string => {
   const styles = window.getComputedStyle(document.body);
   return styles.getPropertyValue(variableName);
 };
