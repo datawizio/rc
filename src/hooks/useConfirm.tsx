@@ -1,13 +1,13 @@
 import { Modal } from "antd";
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import ConfigContext from "@/components/ConfigProvider/context";
+import { useConfig } from "./useConfig";
 
 import type { ReactNode } from "react";
 import type { ModalFuncProps } from "antd";
 
 export const useConfirm = () => {
-  const { translate } = useContext(ConfigContext);
+  const { translate } = useConfig();
 
   return useCallback(
     (

@@ -1,3 +1,4 @@
+export { useConfig } from "./useConfig";
 export { useConfirm } from "./useConfirm";
 export { useDebounce } from "./useDebounce";
 export { useDeepEqualMemo } from "./useDeepEqualMemo";

@@ -1,7 +1,7 @@
-import { useContext, type FC } from "react";
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import ConfigContext from "../ConfigProvider/context";
+import { useConfig } from "@/hooks";
+import type { FC } from "react";
 
 import "./index.less";
 
@@ -11,7 +11,7 @@ export interface FCBreadcrumb extends FC<BreadcrumbProps> {
 }
 
 const Breadcrumb: FCBreadcrumb = ({ separator, ...props }) => {
-  const { direction } = useContext(ConfigContext);
+  const { direction } = useConfig();
 
   if (!separator) {
     separator = direction === "rtl" ? <LeftOutlined /> : <RightOutlined />;
