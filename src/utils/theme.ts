@@ -1,3 +1,5 @@
+// Types
+
 export type Theme = "dark" | "light" | "system";
 
 declare global {
@@ -6,15 +8,20 @@ declare global {
   }
 }
 
+// Constants
+
 export const THEME_KEY = "theme";
 export const THEME_EVENT = "theme-change";
 export const DEFAULT_THEME = "light" satisfies Theme;
+export const ANTD_THEME_CLASS = "ant-theme";
+
+// Theming
 
 const applyTheme = (theme: Theme) => {
   const resolvedTheme = theme === "system" ? getSystemTheme() : theme;
 
   document.body.classList.remove("theme-light", "theme-dark");
-  document.body.classList.add("theme", `theme-${resolvedTheme}`);
+  document.body.classList.add(ANTD_THEME_CLASS, `theme-${resolvedTheme}`);
 
   window.theme = theme;
   localStorage.setItem(THEME_KEY, theme);
@@ -38,4 +45,11 @@ export const getSystemTheme = (): Theme => {
 
 export const getCurrentTheme = (): Theme => {
   return window.theme || DEFAULT_THEME;
+};
+
+// Global style variables
+
+export const cssVar = (variableName: string) => {
+  const styles = window.getComputedStyle(document.body);
+  return styles.getPropertyValue(variableName);
 };

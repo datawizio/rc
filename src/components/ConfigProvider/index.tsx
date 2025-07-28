@@ -1,5 +1,12 @@
 import { useMemo } from "react";
-import { ConfigProvider as AntdConfigProvider } from "antd";
+import { ConfigProvider as AntdConfigProvider, theme } from "antd";
+import { useTheme } from "@/hooks";
+import {
+  ANTD_THEME_CLASS,
+  cssVar,
+  getSystemTheme,
+  initTheme
+} from "@/utils/theme";
 import ConfigContext, { defaultContextValue } from "./context";
 
 import type { FC } from "react";
@@ -9,8 +16,27 @@ import type { ConfigContextValue } from "./context";
 export type ConfigProviderProps = Partial<ConfigContextValue> &
   AntdConfigProviderProps;
 
-const ConfigProvider: FC<ConfigProviderProps> = props => {
-  const { children, translate, direction, ...restProps } = props;
+initTheme();
+
+const ConfigProvider: FC<ConfigProviderProps> = ({
+  translate,
+  direction,
+  children,
+  ...props
+}) => {
+  const customTheme = useTheme();
+
+  const isDark =
+    customTheme === "dark" ||
+    (customTheme === "system" && getSystemTheme() === "dark");
+
+  const themeConfig = {
+    cssVar: { key: ANTD_THEME_CLASS },
+    hashed: false,
+    algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+    token: { colorPrimary: cssVar("--primary-color") },
+    ...props.theme
+  };
 
   const contextValue = useMemo<ConfigContextValue>(() => {
     const nextValue = defaultContextValue;
@@ -23,7 +49,9 @@ const ConfigProvider: FC<ConfigProviderProps> = props => {
 
   return (
     <ConfigContext.Provider value={contextValue}>
-      <AntdConfigProvider {...restProps}>{children}</AntdConfigProvider>
+      <AntdConfigProvider {...props} theme={themeConfig}>
+        {children}
+      </AntdConfigProvider>
     </ConfigContext.Provider>
   );
 };
