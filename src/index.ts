@@ -13,3 +13,4 @@ export { default as SideButton } from "./components/SideButton";
 export { default as AppFooter } from "./components/AppFooter";
 export { default as AppLoader } from "./components/AppLoader";
 export { default as InfoTooltip } from "./components/InfoTooltip";
+export { default as BookMeetingModal } from "./components/BookMeetingModal";
