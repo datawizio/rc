@@ -1,0 +1,129 @@
+button.info-tooltip-button {
+  margin-left: 8px;
+  margin-right: 4px;
+  width: 16px !important;
+  height: 16px !important;
+  line-height: 16px;
+  background: transparent;
+  color: var(--primary-color);
+  box-shadow: none;
+  border: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 50%;
+
+  .anticon-info-circle {
+    width: 16px;
+    height: 16px;
+  }
+
+  .anticon-info-circle:not(:hover) {
+    color: var(--primary-color);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: var(--primary-medium-color);
+    border-color: var(--primary-medium-color);
+  }
+
+  &.info-tooltip-button-highlighted {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+
+    svg {
+      path:last-child {
+        color: #fff;
+      }
+    }
+
+    .anticon-info-circle {
+      color: var(--primary-color);
+    }
+
+    &:hover {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+
+      .anticon-info-circle {
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+
+.theme-dark {
+  button.info-tooltip-button:hover {
+    color: #69459b;
+
+    .anticon-info-circle {
+      color: #69459b;
+    }
+  }
+
+  .info-tooltip-button-highlighted:hover {
+    .anticon-info-circle {
+      color: #975fe4 !important;
+    }
+  }
+}
+
+.card-header {
+  button.info-tooltip-button {
+    margin-left: 8px;
+  }
+}
+
+.info-tooltip {
+  max-width: 420px;
+  z-index: 1200 !important;
+
+  @media (max-width: 768px) {
+    max-width: 250px;
+  }
+
+  .ant-tooltip-inner {
+    padding: 20px;
+  }
+
+  &-detailed {
+    text-align: right;
+    margin-bottom: 0;
+    color: var(--primary-color);
+
+    span {
+      display: inline-block;
+      cursor: pointer;
+    }
+  }
+
+  &-content {
+    position: relative;
+
+    .anticon.anticon-close {
+      position: absolute;
+      right: -12px;
+      top: -12px;
+      cursor: pointer;
+    }
+  }
+
+  &.info-tooltip-theme-light {
+    .ant-tooltip-arrow::before {
+      background: #fff;
+    }
+
+    .ant-tooltip-inner {
+      background: #fff;
+      color: var(--ant-color-text);
+
+      .anticon.anticon-close {
+        color: var(--ant-color-text);
+      }
+    }
+  }
+}

@@ -5,8 +5,11 @@ import { ANTD_THEME_CLASS, cssVar, initTheme } from "@/utils/theme";
 import ConfigContext, { defaultContextValue } from "./context";
 
 import type { FC } from "react";
-import type { ConfigProviderProps as AntdConfigProviderProps } from "antd";
 import type { ConfigContextValue } from "./context";
+import type {
+  ThemeConfig,
+  ConfigProviderProps as AntdConfigProviderProps
+} from "antd";
 
 export type ConfigProviderProps = Partial<ConfigContextValue> &
   AntdConfigProviderProps;
@@ -22,11 +25,16 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   const customTheme = useTheme();
   const isDark = customTheme === "dark";
 
-  const themeConfig = {
+  const tokens: ThemeConfig["token"] = {
+    colorPrimary: cssVar("--primary-color"),
+    colorLink: cssVar("--primary-color")
+  };
+
+  const themeConfig: ThemeConfig = {
     cssVar: { key: ANTD_THEME_CLASS },
     hashed: false,
     algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-    token: { colorPrimary: cssVar("--primary-color") },
+    token: tokens,
     ...props.theme
   };
 

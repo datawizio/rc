@@ -12,3 +12,4 @@ export { default as Loader } from "./components/Loader";
 export { default as SideButton } from "./components/SideButton";
 export { default as AppFooter } from "./components/AppFooter";
 export { default as AppLoader } from "./components/AppLoader";
+export { default as InfoTooltip } from "./components/InfoTooltip";
