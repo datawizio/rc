@@ -1,0 +1,56 @@
+@import "./rtl";
+
+.ant-btn.user-name {
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+
+  .user-button-fullname {
+    margin-left: var(--ant-margin-xs);
+  }
+
+  .anticon-down {
+    padding-top: 5px;
+    font-size: 12px;
+  }
+
+  &.dw-dark,
+  &.dw-dark:hover {
+    background-color: var(--bg-dark-color);
+
+    .anticon {
+      color: var(--icon-color-dark-theme);
+    }
+  }
+}
+
+.user-dropdown {
+  .ant-dropdown-menu-item-group-title {
+    color: var(--ant-color-text-secondary);
+  }
+
+  .user-name-item {
+    padding-left: 5px;
+    display: block;
+  }
+}
+
+.theme-dark {
+  .ant-btn.user-name {
+    .anticon-down {
+      color: var(--icon-color-dark-theme);
+    }
+  }
+}
+
+.theme-light {
+  .ant-btn.user-name {
+    &.dw-dark,
+    &.dw-dark:hover {
+      .ant-avatar {
+        background: #bfbfbf;
+      }
+    }
+  }
+}

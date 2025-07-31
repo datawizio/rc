@@ -1,10 +1,11 @@
 import clsx from "clsx";
-import Button from "../Button";
+import Button from "@/components/Button";
 
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CloseOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
+import { CloseOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { useTheme } from "@/hooks";
 
 import type { ReactNode, MouseEvent, FC } from "react";
 import type { TooltipProps } from "antd";
@@ -31,6 +32,7 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
   getPopupContainer
 }) => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const buttonClassNames = clsx({
@@ -40,8 +42,8 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
 
   const tooltipClassNames = clsx(className || "", {
     "info-tooltip": true,
-    "info-tooltip-theme-light": window.theme !== "dark",
-    "info-tooltip-theme-dark": window.theme === "dark"
+    "info-tooltip-theme-light": theme !== "dark",
+    "info-tooltip-theme-dark": theme === "dark"
   });
 
   const closeTooltip = useCallback((e: MouseEvent) => {

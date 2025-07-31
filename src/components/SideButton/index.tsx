@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import Button, { type ButtonProps } from "../Button";
+import Button, { type ButtonProps } from "@/components/Button";
 import { createPortal } from "react-dom";
 import type { FC, ReactNode } from "react";
 
