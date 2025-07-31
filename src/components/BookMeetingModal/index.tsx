@@ -11,7 +11,7 @@ const APP_SRC_LIST = {
   "PH": "olena-dziuban-datawiz/product-demo-bi"
 };
 
-interface BookMeetingModalProps {
+export interface BookMeetingModalProps {
   visible: boolean;
   titleKey?: string;
   width: number;

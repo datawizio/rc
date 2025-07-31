@@ -8,7 +8,7 @@ import type { ButtonProps as AntButtonProps } from "antd";
 
 import "./index.less";
 
-interface CheckboxButtonProps extends Omit<AntButtonProps, "onChange"> {
+export interface CheckboxButtonProps extends Omit<AntButtonProps, "onChange"> {
   className?: string;
   checked?: boolean;
   text?: string;

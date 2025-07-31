@@ -19,3 +19,4 @@ export { default as ColoredTags } from "./components/ColoredTags";
 export { default as UserButton } from "./components/UserButton";
 export { default as UserItem } from "./components/UserItem";
 export { default as UserMenu } from "./components/UserMenu";
+export { default as Notice } from "./components/Notice";
