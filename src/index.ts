@@ -23,3 +23,4 @@ export { default as Notice } from "./components/Notice";
 export { default as Select } from "./components/Select";
 export { default as AppsList } from "./components/AppsList";
 export { default as Switch } from "./components/Switch";
+export { default as Pagination } from "./components/Pagination";
