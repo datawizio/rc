@@ -54,7 +54,8 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
-    "react-i18next": "^15.6.1"
+    "react-i18next": "^15.6.1",
+    "use-debounce": "^10.0.5"
   },
   "devDependencies": {
     "@ant-design/compatible": "^5.1.4",

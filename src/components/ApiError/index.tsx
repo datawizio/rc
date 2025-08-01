@@ -5,7 +5,7 @@ export interface ApiErrorProps {
   errors: string;
 }
 
-export interface FCApiError extends FC<ApiErrorProps> {
+export interface ApiErrorComponent extends FC<ApiErrorProps> {
   showError: (errors: string) => void;
   showNotification: (
     message: string,
@@ -15,7 +15,7 @@ export interface FCApiError extends FC<ApiErrorProps> {
   ) => void;
 }
 
-const ApiError: FCApiError = ({ errors }) => {
+const ApiError: ApiErrorComponent = ({ errors }) => {
   return <span dangerouslySetInnerHTML={{ __html: errors }} />;
 };
 

@@ -12,7 +12,7 @@ export const useConfirm = () => {
   return useCallback(
     (
       msg: string | ReactNode,
-      okFn: any,
+      okFn: ModalFuncProps["onOk"],
       content?: string,
       options?: ModalFuncProps
     ) => {
@@ -22,8 +22,8 @@ export const useConfirm = () => {
         icon: <ExclamationCircleOutlined />,
         okText: translate("YES"),
         cancelText: translate("CANCEL"),
-        onOk: () => okFn(),
-        onCancel: () => {},
+        onOk: okFn,
+        onCancel: () => void 0,
         ...options
       });
     },

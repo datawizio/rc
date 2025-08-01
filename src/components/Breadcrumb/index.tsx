@@ -5,12 +5,12 @@ import type { FC } from "react";
 
 import "./index.less";
 
-export interface FCBreadcrumb extends FC<BreadcrumbProps> {
+export interface BreadcrumbComponent extends FC<BreadcrumbProps> {
   Item: typeof AntBreadcrumb.Item;
   Separator: typeof AntBreadcrumb.Separator;
 }
 
-const Breadcrumb: FCBreadcrumb = ({ separator, ...props }) => {
+const Breadcrumb: BreadcrumbComponent = ({ separator, ...props }) => {
   const { direction } = useConfig();
 
   if (!separator) {
