@@ -25,3 +25,5 @@ export { default as AppsList } from "./components/AppsList";
 export { default as Switch } from "./components/Switch";
 export { default as Pagination } from "./components/Pagination";
 export { default as PageHeader } from "./components/PageHeader";
+export { default as TechnicalMaintenance } from "./components/TechnicalMaintenance";
+export { default as Forbidden } from "./components/Forbidden";
