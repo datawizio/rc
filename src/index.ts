@@ -30,3 +30,4 @@ export { default as Forbidden } from "./components/Forbidden";
 export { default as ExpandButton } from "./components/ExpandButton";
 export { default as ClientSelect } from "./components/ClientSelect";
 export { default as Drawer } from "./components/Drawer";
+export { default as DrawerForm } from "./components/DrawerForm";

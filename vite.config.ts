@@ -14,7 +14,12 @@ const v4Vars = convertLegacyToken(mapV4Token);
 
 const entryFiles = await glob("./src/**/*.{ts,tsx,less}", {
   ignore: [
+    // Do not compile files that contain only types
     "./src/vite-env.d.ts",
+    "./src/types/*.ts",
+    "./src/**/types.ts",
+
+    // Do not compile LESS specific files that result in empty CSS
     "./src/styles/mixin/*.less",
     "./src/styles/variables.less"
   ]
