@@ -32,3 +32,4 @@ export { default as ClientSelect } from "./components/ClientSelect";
 export { default as Drawer } from "./components/Drawer";
 export { default as DrawerForm } from "./components/DrawerForm";
 export { default as Help } from "./components/Help";
+export { default as Skeleton } from "./components/Skeleton";

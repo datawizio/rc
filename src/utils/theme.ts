@@ -7,6 +7,10 @@ declare global {
   interface Window {
     theme: Theme;
   }
+
+  interface DocumentEventMap {
+    [THEME_EVENT]: CustomEvent<Theme>;
+  }
 }
 
 // Constants
