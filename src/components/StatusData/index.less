@@ -1,0 +1,37 @@
+.status-data__container {
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: bold;
+  position: fixed;
+  bottom: 0;
+  background: var(--sidebar-bg-color);
+  padding: 22px 0 14px 22px;
+  font-size: 12px;
+  width: 240px;
+  display: block;
+
+  p {
+    margin-bottom: 0;
+  }
+
+  p:first-child {
+    direction: ltr !important;
+  }
+
+  p:last-child {
+    font-style: italic;
+  }
+}
+
+.ant-layout-sider-collapsed .status-data__container {
+  display: none;
+}
+
+.rtl {
+  .status-data__container {
+    padding: 22px 22px 14px 0;
+
+    p:first-child {
+      text-align: right;
+    }
+  }
+}
