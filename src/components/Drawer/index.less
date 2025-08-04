@@ -1,0 +1,129 @@
+@import "@/styles/variables";
+
+.ant-drawer {
+  .ant-drawer-title {
+    text-transform: uppercase;
+    color: var(--drawer-title-color);
+  }
+
+  .ant-drawer-actions {
+    text-align: right;
+
+    & > .ant-btn-group {
+      margin-left: var(--ant-margin-xs);
+    }
+
+    & > .ant-btn {
+      margin-left: var(--ant-margin-xs);
+      padding: 4px 10px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .ant-drawer-header {
+    padding: 16px 36px 16px 24px;
+  }
+}
+
+@media (max-width: 823px), (max-height: 420px) {
+  .ant-drawer-wrapper-body {
+    .ant-drawer-header {
+      padding: 8px 12px;
+    }
+
+    .ant-drawer-close {
+      padding: 12px;
+    }
+
+    .ant-drawer-body {
+      padding: 12px 24px;
+    }
+
+    .ant-picker-dropdown-range {
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  .ant-select-tree-list {
+    min-height: 50px;
+  }
+
+  .drawer-tree-select-dropdown {
+    .ant-drawer-body {
+      .drawer-tree-select-dropdown-toolbar {
+        min-height: 20px !important;
+      }
+    }
+  }
+}
+
+@media (max-width: @screen-xs) {
+  .ant-drawer-actions {
+    display: flex;
+    flex-direction: column;
+
+    .ant-btn {
+      margin: 10px 0 0 0 !important;
+
+      &:first-child {
+        margin: 0 !important;
+      }
+    }
+
+    .ant-btn-group.ant-dropdown-button {
+      margin: 10px 0 0 0 !important;
+
+      button {
+        margin: 0 !important;
+      }
+
+      .ant-btn {
+        flex: 1;
+
+        &.ant-dropdown-trigger {
+          flex: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: @screen-xxs) {
+  .ant-drawer-header {
+    & > .ant-drawer-title {
+      margin-right: 10px;
+    }
+  }
+}
+
+@media (max-width: @screen-md) {
+  .ant-drawer {
+    .ant-drawer-header,
+    .ant-drawer-body,
+    .ant-drawer-footer {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .ant-select-tree {
+      .ant-select-tree-list .ant-select-tree-treenode {
+        padding-left: 16px;
+      }
+    }
+  }
+}
+
+.rtl {
+  .ant-drawer .ant-drawer-actions > button:first-child {
+    margin-left: var(--ant-margin-xs);
+  }
+
+  .ant-drawer .ant-drawer-actions > button:last-child {
+    margin-left: 0;
+  }
+}

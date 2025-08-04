@@ -29,3 +29,4 @@ export { default as TechnicalMaintenance } from "./components/TechnicalMaintenan
 export { default as Forbidden } from "./components/Forbidden";
 export { default as ExpandButton } from "./components/ExpandButton";
 export { default as ClientSelect } from "./components/ClientSelect";
+export { default as Drawer } from "./components/Drawer";

@@ -1,3 +1,5 @@
+@import "@/styles/variables";
+
 button.info-tooltip-button {
   margin-left: 8px;
   margin-right: 4px;
@@ -82,7 +84,7 @@ button.info-tooltip-button {
   max-width: 420px;
   z-index: 1200 !important;
 
-  @media (max-width: 768px) {
+  @media (max-width: @screen-md) {
     max-width: 250px;
   }
 
