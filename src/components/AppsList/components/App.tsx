@@ -102,6 +102,7 @@ export const App: FC<CardAppProps> = ({
                   label={client.name}
                 >
                   <Badge
+                    style={{ width: 14 }}
                     status="default"
                     color={client.is_active ? "purple" : undefined}
                   />

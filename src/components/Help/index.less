@@ -1,0 +1,24 @@
+@import "./rtl";
+
+button.help-icon {
+  color: var(--help-icon-color);
+  margin-right: 16px;
+
+  .anticon-question-circle {
+    --ant-button-only-icon-size: 20px;
+  }
+
+  &:hover,
+  &:focus {
+    color: var(--help-icon-color-hover);
+  }
+}
+
+.help-menu-dropdown .ant-dropdown-menu-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.subjects-dropdown {
+  position: fixed !important;
+}
