@@ -28,3 +28,4 @@ export { default as PageHeader } from "./components/PageHeader";
 export { default as TechnicalMaintenance } from "./components/TechnicalMaintenance";
 export { default as Forbidden } from "./components/Forbidden";
 export { default as ExpandButton } from "./components/ExpandButton";
+export { default as ClientSelect } from "./components/ClientSelect";
