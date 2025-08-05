@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { isEqual } from "lodash";
 
-export function useDeepEqualMemo<T>(value: T) {
+export const useDeepEqualMemo = <T>(value: T) => {
   const ref = useRef<T | undefined>(undefined);
 
   if (!isEqual(ref.current, value)) {
@@ -9,4 +9,4 @@ export function useDeepEqualMemo<T>(value: T) {
   }
 
   return ref.current;
-}
+};

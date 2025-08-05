@@ -34,3 +34,4 @@ export { default as DrawerForm } from "./components/DrawerForm";
 export { default as Help } from "./components/Help";
 export { default as Skeleton } from "./components/Skeleton";
 export { default as StatusData } from "./components/StatusData";
+export { default as InfiniteScroll } from "./components/InfiniteScroll";
