@@ -1,0 +1,33 @@
+.ant-badge.notification-btn {
+  margin-right: 16px;
+
+  .ant-badge-dot {
+    box-shadow: none;
+    margin-top: 8px;
+    right: 11px;
+  }
+
+  .anticon-bell {
+    font-size: 20px;
+  }
+
+  button {
+    color: var(--help-icon-color);
+
+    &:hover,
+    &:focus {
+      color: var(--help-icon-color-hover);
+    }
+  }
+
+  &--disabled {
+    button {
+      color: gray !important;
+
+      &:hover,
+      &:focus {
+        color: gray !important;
+      }
+    }
+  }
+}

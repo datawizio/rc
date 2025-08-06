@@ -1,7 +1,7 @@
 export type WebSocketMessage = {
   id?: string;
   type: "subscribe" | "complete" | "connection_init" | "ping" | "error";
-  payload?: Record<string, string>;
+  payload?: Record<string, any>;
 };
 
 export class WebSocketManager {
