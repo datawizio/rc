@@ -5,3 +5,4 @@ export { useDeepEqualMemo } from "./useDeepEqualMemo";
 export { useError } from "./useError";
 export { useScrollToTop } from "./useScrollToTop";
 export { useTheme } from "./useTheme";
+export { useWebSocketSubscription } from "./useWebSocketSubscription";

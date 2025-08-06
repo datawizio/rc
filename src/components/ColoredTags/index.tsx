@@ -11,7 +11,7 @@ const tagColors = [
   { color: "#ffa73f", backgroundColor: "#fff7e2" }
 ];
 
-type ColoredTagsProps = React.HTMLAttributes<HTMLDivElement> & {
+export type ColoredTagsProps = React.HTMLAttributes<HTMLDivElement> & {
   startIndex?: number;
   suffix?: React.ReactNode;
 };
