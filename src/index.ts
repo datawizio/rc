@@ -41,3 +41,4 @@ export { default as NotificationsList } from "./components/NotificationsList";
 export { default as NotificationsListActions } from "./components/NotificationsListActions";
 export { default as NotificationsListItem } from "./components/NotificationsListItem";
 export { default as NotificationsListItemActions } from "./components/NotificationsListItemActions";
+export { default as EditSelect } from "./components/EditSelect";

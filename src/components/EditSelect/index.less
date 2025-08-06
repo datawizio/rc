@@ -1,0 +1,42 @@
+@import "./rtl";
+
+.ant-select-dropdown.edit-select-dropdown {
+  .ant-select-item {
+    &-option-content {
+      display: flex;
+      align-items: center;
+
+      & > span {
+        margin-right: 8px;
+
+        &:last-of-type {
+          margin-right: 0;
+        }
+      }
+
+      &-title {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 380px;
+      }
+
+      .anticon-delete {
+        color: var(--ant-red);
+      }
+    }
+  }
+
+  .edit-select-dropdown-edit {
+    display: flex;
+    padding: 0 12px 8px;
+
+    .ant-input {
+      margin-right: 12px;
+    }
+  }
+
+  .ant-divider {
+    margin: 8px 0;
+  }
+}
