@@ -46,3 +46,5 @@ export { default as PhoneInput } from "./components/PhoneInput";
 export { default as TopBar } from "./components/TopBar";
 export { default as FaviconBadger } from "./components/FaviconBadger";
 export { default as NotificationButton } from "./components/NotificationButton";
+export { default as SearchInput } from "./components/SearchInput";
+export { default as LiteSearchInput } from "./components/LiteSearchInput";
