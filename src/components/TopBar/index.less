@@ -1,0 +1,37 @@
+.top-bar {
+  background-color: var(--layout-body-background);
+  border-bottom: 1px solid var(--divider-border-color);
+  display: flex;
+  width: 100%;
+  padding: 0 var(--ant-padding-lg) 0 0;
+  align-items: center;
+
+  .fill-element {
+    flex: 1;
+  }
+
+  &.dw-dark {
+    background-color: var(--bg-dark-color);
+    border-bottom: none;
+    box-shadow: 0 0 10px black;
+    z-index: 100;
+    color: var(--color-dark-theme);
+
+    .tutorial-link,
+    .anticon-menu-unfold,
+    .anticon-menu-fold {
+      color: var(--icon-color-dark-theme);
+      font-size: 18px;
+    }
+
+    .divider {
+      border-right: 1px solid var(--divider-dark-border-color);
+    }
+  }
+
+  .divider {
+    height: 100%;
+    border-right: 1px solid var(--divider-border-color);
+    margin: 0 var(--ant-margin);
+  }
+}

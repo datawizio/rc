@@ -43,3 +43,4 @@ export { default as NotificationsListItem } from "./components/NotificationsList
 export { default as NotificationsListItemActions } from "./components/NotificationsListItemActions";
 export { default as EditSelect } from "./components/EditSelect";
 export { default as PhoneInput } from "./components/PhoneInput";
+export { default as TopBar } from "./components/TopBar";
