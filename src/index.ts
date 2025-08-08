@@ -48,3 +48,4 @@ export { default as FaviconBadger } from "./components/FaviconBadger";
 export { default as NotificationButton } from "./components/NotificationButton";
 export { default as SearchInput } from "./components/SearchInput";
 export { default as LiteSearchInput } from "./components/LiteSearchInput";
+export { default as AppSwitcher } from "./components/AppSwitcher";
