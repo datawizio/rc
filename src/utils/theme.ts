@@ -1,4 +1,4 @@
-// Types
+/* Types */
 
 export type ThemingMode = "dark" | "light" | "system";
 export type Theme = Exclude<ThemingMode, "system">;
@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-// Constants
+/* Constants */
 
 export const THEME_KEY = "theme";
 export const THEME_EVENT = "theme-change";
@@ -50,7 +50,7 @@ export const getCurrentTheme = (): Theme => {
   return window.theme || DEFAULT_THEME;
 };
 
-// Global style variables
+/* Global style variables */
 
 export const cssVar = <T extends string>(variableName: T): string => {
   const styles = window.getComputedStyle(document.body);
