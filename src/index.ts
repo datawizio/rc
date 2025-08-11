@@ -51,3 +51,4 @@ export { default as LiteSearchInput } from "./components/LiteSearchInput";
 export { default as AppSwitcher } from "./components/AppSwitcher";
 export { default as Cron } from "./components/Cron";
 export { default as TreeSelect } from "./components/TreeSelect";
+export { default as Polling } from "./components/Polling";

@@ -1,0 +1,121 @@
+@import "./rtl";
+
+.polling-container {
+  min-height: 80px;
+  background-color: var(--primary-light-color);
+
+  .ant-col {
+    padding: var(--ant-padding);
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-col:first-child {
+    justify-content: flex-end;
+  }
+
+  .polling-question {
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+
+  .polling-form {
+    width: 100%;
+
+    .polling-marks {
+      .polling-mark {
+        background-color: #eee;
+        padding: 6px 8px;
+        margin: 0 5px;
+        color: #000;
+        text-align: center;
+        border-radius: 1px;
+        cursor: pointer;
+      }
+    }
+
+    .polling-text {
+      .ant-input-group-wrapper {
+        width: calc(100% - 150px);
+      }
+
+      .polling-send-btn {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .polling-close-btn {
+    cursor: pointer;
+    color: var(--ant-color-white);
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+.theme-dark {
+  .polling-container {
+    background-color: var(--primary-medium-color);
+
+    ::selection {
+      color: var(--ant-color-white);
+      background: var(--primary-light-color);
+    }
+
+    .polling-question {
+      color: var(--ant-color-white);
+    }
+
+    .polling-form {
+      .polling-text {
+        .ant-input-group-wrapper {
+          .ant-input-group-addon,
+          .ant-input {
+            border-color: var(--ant-color-text-secondary);
+
+            &:focus {
+              border-color: var(--ant-color-text-secondary);
+            }
+          }
+
+          .ant-input,
+          .anticon {
+            color: var(--ant-color-white);
+          }
+        }
+
+        .polling-send-btn {
+          border-color: var(--ant-color-text-secondary);
+
+          &:disabled {
+            color: var(--ant-color-text-secondary);
+          }
+
+          &:not(:disabled) {
+            color: var(--ant-color-white) !important;
+
+            &:hover {
+              color: var(--ant-color-white) !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .polling-container .ant-col:first-child {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 479px) {
+  .polling-container .polling-form .polling-marks .polling-mark {
+    padding: 5px 6px;
+    margin: 0 3px;
+  }
+}
