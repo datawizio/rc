@@ -1,5 +1,5 @@
 import Text from "../templates/Text";
-import Marks from "../templates/Marks.tsx";
+import Marks from "../templates/Marks";
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
