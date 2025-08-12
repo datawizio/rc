@@ -53,3 +53,5 @@ export { default as Cron } from "./components/Cron";
 export { default as TreeSelect } from "./components/TreeSelect";
 export { default as Polling } from "./components/Polling";
 export { default as ListInfo } from "./components/ListInfo";
+export { default as TableTemplates } from "./components/TableTemplates";
+export { default as Radio } from "./components/Radio";
