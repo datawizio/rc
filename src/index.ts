@@ -57,3 +57,4 @@ export { default as TableTemplates } from "./components/TableTemplates";
 export { default as Radio } from "./components/Radio";
 export { default as Player } from "./components/Player";
 export { default as VideoModal } from "./components/VideoModal";
+export { default as TransferTable } from "./components/TransferTable";
