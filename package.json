@@ -59,7 +59,9 @@
     "lodash": "^4.17.21",
     "react-i18next": "^15.6.1",
     "react-loading-skeleton": "^3.5.0",
-    "use-debounce": "^10.0.5"
+    "use-debounce": "^10.0.5",
+    "uuid": "^11.1.0",
+    "video-react": "^0.16.0"
   },
   "devDependencies": {
     "@ant-design/compatible": "^5.1.4",
@@ -69,6 +71,7 @@
     "@types/node": "^24.0.14",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "@types/video-react": "^0.15.8",
     "@vitejs/plugin-react-swc": "^3.10.2",
     "antd": "^5.26.6",
     "autoprefixer": "^10.4.21",
