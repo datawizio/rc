@@ -60,3 +60,4 @@ export { default as VideoModal } from "./components/VideoModal";
 export { default as TransferTable } from "./components/TransferTable";
 export { default as ErrorBoundary } from "./components/ErrorBoundary";
 export { default as Transfer } from "./components/Transfer";
+export { default as BackTop } from "./components/BackTop";
