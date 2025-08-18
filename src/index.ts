@@ -62,3 +62,4 @@ export { default as ErrorBoundary } from "./components/ErrorBoundary";
 export { default as Transfer } from "./components/Transfer";
 export { default as BackTop } from "./components/BackTop";
 export { default as DatePicker } from "./components/DatePicker";
+export { default as DateRangePicker } from "./components/DateRangePicker";

@@ -1,4 +1,5 @@
 import dayjs, { type Dayjs } from "dayjs";
+import type { DateType } from "@/types/date";
 
 const format = "DD-MM-YYYY";
 
@@ -179,7 +180,7 @@ class FiscalCalendar {
     );
   }
 
-  public presetCurrentMonth(maxDate: Dayjs | null = null) {
+  public presetCurrentMonth(maxDate: DateType = null) {
     const min = maxDate
       ? this.getStartOfMonth(dayjs(maxDate, format))
       : this.getStartOfMonth(dayjs());
@@ -188,7 +189,7 @@ class FiscalCalendar {
     return [min, max];
   }
 
-  public presetCurrentQuarter(maxDate: Dayjs | null = null) {
+  public presetCurrentQuarter(maxDate: DateType = null) {
     const min = maxDate
       ? this.getStartOfQuarter(dayjs(maxDate, format))
       : this.getStartOfQuarter(dayjs());
@@ -197,7 +198,7 @@ class FiscalCalendar {
     return [min, max];
   }
 
-  public presetCurrentYear(maxDate: Dayjs | null = null) {
+  public presetCurrentYear(maxDate: DateType = null) {
     const min = maxDate
       ? this.getStartOfYear(dayjs(maxDate, format))
       : this.getStartOfYear(dayjs());
@@ -221,7 +222,7 @@ class FiscalCalendar {
     return min.isBefore(date) && (date.isBefore(max) || date.isSame(max));
   }
 
-  public prevLastQuarter(dateFrom = null, dateTo = null) {
+  public prevLastQuarter(dateFrom: DateType = null, dateTo: DateType = null) {
     let dateFromDays = 91;
     let dateToDays = 91;
 
@@ -255,7 +256,7 @@ class FiscalCalendar {
     return [min, max];
   }
 
-  public prevLastYear(dateFrom = null, dateTo = null) {
+  public prevLastYear(dateFrom: DateType = null, dateTo: DateType = null) {
     let dateFromDays = 364;
     let dateToDays = 364;
 
