@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import DatePicker from "@/components/DatePicker";
@@ -178,7 +179,8 @@ const DateRangePicker: IDateRangePicker = ({
       format={format}
       inputReadOnly={inputReadOnly}
       presets={translatedPreset}
-      className={fullWidth ? "ant-picker-full-width" : ""}
+      className={clsx(fullWidth && "ant-picker-full-width")}
+      classNames={{ popup: { root: "dw-range-picker-dropdown" } }}
       onChange={onChange}
       value={[dateFrom, dateTo]}
       disabledDate={isDisabledDate}
