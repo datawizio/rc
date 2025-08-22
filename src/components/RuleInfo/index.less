@@ -1,0 +1,44 @@
+.rule-info {
+  margin-left: 85px;
+  padding: 8px;
+  font-size: 14px;
+
+  .rule-info-section {
+    grid-template-columns: 130px 1fr;
+    border: none !important;
+    padding: 12px 0;
+    align-items: baseline;
+  }
+
+  .card-header-info-label {
+    font-weight: 600;
+
+    .colon {
+      padding-right: 5px;
+    }
+  }
+
+  .show-all-modal-button {
+    height: 1.75rem;
+    padding: 0;
+  }
+}
+
+.rule-info-modal {
+  & > .ant-modal-content {
+    & > .ant-modal-header {
+      & > .ant-modal-title {
+        text-align: center;
+      }
+    }
+
+    & > .ant-modal-body {
+      max-height: 75vh;
+      overflow-y: auto;
+
+      & .lite-search__input {
+        background-color: transparent;
+      }
+    }
+  }
+}

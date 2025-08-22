@@ -1,0 +1,33 @@
+.rule-info-table .rule-info-section {
+  &.rule-dimension .rule-info-section-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .show-all-modal-button {
+      padding: 0;
+      line-height: 1;
+      height: 1rem;
+    }
+  }
+
+  &.rule-filters .rule-info-section-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 100%;
+
+    .colored-tag .card-header-info-label {
+      padding-right: 5px;
+      font-weight: 600;
+    }
+  }
+
+  &.rule-report-dimension .rule-info-section-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
