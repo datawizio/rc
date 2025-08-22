@@ -3,10 +3,10 @@ import Select from "@/components/Select";
 import Dropdown from "./components/Dropdown";
 import Template from "./components/Template";
 
-import { useState, useCallback, useContext, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { TagsOutlined } from "@ant-design/icons";
 import { useDeepEqualMemo, useConfig } from "@/hooks";
-import { TableContext } from "@/components/Table/context";
+import { useTable } from "@/components/Table/hooks/useTable";
 
 import type { FC, ReactNode, MouseEvent } from "react";
 import type { MaybePromise } from "@/types/utils";
@@ -93,8 +93,7 @@ const TableTemplates: FC<TableTemplatesProps> = ({
 }) => {
   const { translate } = useConfig();
 
-  const { tableState, dispatch, baseTableState, tableProps } =
-    useContext(TableContext);
+  const { tableState, dispatch, baseTableState, tableProps } = useTable();
 
   const [templates, setTemplates] = useState<TableTemplate[]>([]);
 

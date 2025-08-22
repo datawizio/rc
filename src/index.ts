@@ -66,3 +66,4 @@ export { default as DateRangePicker } from "./components/DateRangePicker";
 export { default as TimePicker } from "./components/TimePicker";
 export { default as TimeRangePicker } from "./components/TimeRangePicker";
 export { default as PeriodSelect } from "./components/PeriodSelect";
+export { default as Table } from "./components/Table";
