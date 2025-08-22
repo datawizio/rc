@@ -275,6 +275,10 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
               <th {...props} />
             );
           }
+        },
+        body: {
+          cell: props => <Cell {...props} />,
+          row: props => <Row {...props} isTotalRow={isTotalRow} />
         }
       };
     }
@@ -362,6 +366,11 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
     }
   }));
 
+  const totalColumnsWidth = columnsState.columns?.reduce(
+    (acc, col) => acc + (columnsState.columnsWidth?.[col.dataIndex] ?? 0),
+    0
+  );
+
   return (
     <div className="dw-table-container">
       <DndProvider backend={HTML5Backend}>
@@ -388,8 +397,8 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
                 scroll={
                   virtual
                     ? {
-                        y: height
-                        // x: 500
+                        y: height,
+                        x: totalColumnsWidth
                       }
                     : undefined
                 }

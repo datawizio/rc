@@ -258,7 +258,6 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         ? model.key
         : model.originalKey;
 
-    // if (model.resizable) return ;
     const sortersEl = columnRef.current?.getElementsByClassName(
       "ant-table-column-sorters"
     ) as HTMLCollectionOf<HTMLElement>;
