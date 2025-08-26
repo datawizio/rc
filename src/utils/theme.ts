@@ -20,7 +20,7 @@ export const THEME_EVENT = "theme-change";
 export const DEFAULT_THEME = "light" satisfies Theme;
 export const ANTD_THEME_CLASS = "ant-theme";
 
-// Theming
+/* Theming */
 
 const applyTheme = (theme: Theme) => {
   document.body.classList.remove("theme-light", "theme-dark");

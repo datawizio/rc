@@ -64,7 +64,7 @@ export const exportTableToXLSX = async (
   const { columns, columnsMap, dataSource, dTypesConfig } = tableState ?? {};
 
   const formattedSheetName = (sheetName || filename)
-    .replace(/[`~!@#$%^&*()|+\-=?;:'",.<>{}[]\\\/]/gi, "")
+    .replace(/[`~!@#$%^&*()|+\-=?;:'",<>{}[]\\\/]/gi, "")
     .replace(".xlsx", "");
 
   const wb = new ExcelJS.Workbook();
