@@ -1,8 +1,10 @@
-export function resizeDetector(
+import type { MaybePromise } from "@/types/utils";
+
+export const resizeDetector = (
   el: HTMLElement,
-  onResize: (nextHeight: number, nextWidth: number) => void,
+  onResize: (nextHeight: number, nextWidth: number) => MaybePromise<void>,
   checkInterval: number = 500
-): () => void {
+) => {
   let lastWidth: number;
   let lastHeight: number;
 
@@ -17,7 +19,7 @@ export function resizeDetector(
   };
 
   const frame = () => {
-    notifyListener();
+    void notifyListener();
     updateLastSize();
   };
 
@@ -30,4 +32,4 @@ export function resizeDetector(
   }, checkInterval);
 
   return () => clearInterval(resizeObserverInterval);
-}
+};
