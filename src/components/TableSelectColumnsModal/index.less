@@ -1,0 +1,53 @@
+.select-columns {
+  &__icon {
+    color: var(--primary-color);
+  }
+
+  &__modal {
+    .ant-modal-footer {
+      display: flex;
+      justify-content: center;
+    }
+
+    .ant-modal-body {
+      overflow: hidden;
+      height: 500px;
+      position: relative;
+    }
+
+    .ant-tree-list {
+      height: 400px;
+      overflow: auto;
+      margin-top: 0;
+      margin-left: -20px;
+    }
+
+    &-selected {
+      position: absolute;
+      top: 65px;
+      right: 24px;
+      display: flex;
+      background: var(--ant-color-bg-container);
+      justify-content: flex-end;
+      width: 100%;
+
+      &-warning {
+        color: red;
+      }
+    }
+  }
+
+  &__modal-with-counter {
+    .ant-tree-list {
+      margin-top: 18px;
+    }
+
+    .ant-empty {
+      margin-top: 40px;
+    }
+
+    &.select-columns__modal-safari .ant-tree-list {
+      margin-top: 30px;
+    }
+  }
+}
