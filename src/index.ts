@@ -73,3 +73,4 @@ export { default as HighChart } from "./components/HighChart";
 export { default as TableMenu } from "./components/TableMenu";
 export { default as TreeSearch } from "./components/TreeSearch";
 export { default as TableSelectColumnsModal } from "./components/TableSelectColumnsModal";
+export { default as ColorPicker } from "./components/ColorPicker";
