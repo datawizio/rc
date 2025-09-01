@@ -1,3 +1,5 @@
+import type { DataNode } from "antd/es/tree";
+import type { SimpleModeConfig } from "rc-tree-select/lib/interface";
 import type {
   IDrawerTreeSelectFilters,
   SelectValues
@@ -53,4 +55,26 @@ export const calcEmptyIsAll = (
   if (filters.search) return false;
   if (filters.level && filters.level.toString() !== "1") return false;
   return !(filters.shop_markers && filters.shop_markers.length !== 0);
+};
+
+export const buildTreeData = <T extends DataNode & Required<SimpleModeConfig>>(
+  simpleData: T[] | undefined
+) => {
+  const nodeMap = new Map<number | string, DataNode>();
+  const roots: DataNode[] = [];
+
+  simpleData?.forEach(item => {
+    nodeMap.set(item.id, { ...item, children: [] });
+  });
+
+  simpleData?.forEach(item => {
+    const node = nodeMap.get(item.id)!;
+    if (item.pId === 0 || !nodeMap.has(item.pId)) {
+      roots.push(node);
+    } else {
+      nodeMap.get(item.pId)!.children!.push(node);
+    }
+  });
+
+  return roots;
 };
