@@ -41,9 +41,9 @@ export interface DrawerTreeSelectProps<VT>
   selectAllText?: string;
   onCheckedDependentValue?: (
     fieldName: SafeKey,
-    selectedItems: Array<string>
+    selectedItems: string[]
   ) => void;
-  dependentItems?: Array<any>;
+  dependentItems?: any[];
   treeDataCount?: number;
   strictlyModeCheckbox?: boolean;
   emptyIsAll?: boolean;

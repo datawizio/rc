@@ -4,7 +4,7 @@ import type { AntTreeNode } from "antd/es/tree";
 import type { DataNode, SafeKey } from "rc-tree-select/es/interface";
 import type { LevelsType, SelectValues } from "../types";
 
-export interface IUseDrawerTreeSelect {
+export interface IDrawerTreeSelectState {
   drawerVisible: boolean;
   internalValue: SelectValues | undefined;
   selected: AntTreeNode | undefined;
@@ -18,8 +18,7 @@ export interface IUseDrawerTreeSelect {
   showSelectAll: boolean;
 }
 
-const reducer = (state: IUseDrawerTreeSelect, action: any) => {
-  console.log({ state, action });
+const reducer = (state: IDrawerTreeSelectState, action: any) => {
   switch (action.type) {
     case "resetInternalValue": {
       return { ...state, internalValue: [] };
@@ -112,6 +111,6 @@ const reducer = (state: IUseDrawerTreeSelect, action: any) => {
   }
 };
 
-export const useDrawerTreeSelect = (initialState: IUseDrawerTreeSelect) => {
+export const useDrawerTreeSelect = (initialState: IDrawerTreeSelectState) => {
   return useReducer(reducer, initialState);
 };
