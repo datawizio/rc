@@ -9,6 +9,8 @@ import type { FC, Key } from "react";
 import type { TreeProps, TreeDataNode } from "antd";
 import type { SafeKey } from "rc-tree-select/es/interface";
 import type { HandlerFn } from "@/types/utils";
+import type { IDrawerTreeSelectState } from "../hooks/useDrawerTreeSelect";
+import type { SelectValues } from "../types";
 
 export type InnerTreeProps = Omit<
   TreeProps<any>,
@@ -20,12 +22,12 @@ export type InnerTreeProps = Omit<
   treeNodeFilterProp?: string;
   internalTreeDefaultExpandedKeys?: Key[];
   onExpandedKeysChange?: (keys: SafeKey[]) => void;
-  setState?: (state: any) => void;
+  setState?: (state: Partial<IDrawerTreeSelectState>) => void;
   checkSelectAllStatus?: (
-    values: any,
+    values: SelectValues | undefined,
     ignoreEmpty?: boolean,
     forceSelectAll?: boolean
-  ) => { selectAllState: string; internalValue?: any };
+  ) => { selectAllState: string; internalValue?: SelectValues | undefined };
 };
 
 const InnerTree: FC<InnerTreeProps> = ({
@@ -75,29 +77,23 @@ const InnerTree: FC<InnerTreeProps> = ({
 
   const renderedTreeData = useMemo(() => {
     if (!isLocalSearching) return nestedTreeData;
-
-    const visibleKeySet = new Set(
-      (localExpandedKeys ?? []).map(k => String(k))
-    );
+    const visibleKeys = new Set(localExpandedKeys ?? []);
 
     // Visually hide nodes that are not expanded during local searching (do not filter data)
     const markHidden = (nodes?: TreeDataNode[]): TreeDataNode[] | undefined => {
       if (!nodes) return nodes;
       return nodes.map(node => {
-        const keyStr = String(node.key);
-        const shouldHide = !visibleKeySet.has(keyStr);
+        const shouldHide = !visibleKeys.has(node.key);
         const children = markHidden(node.children);
 
-        const className = clsx([
+        const className = clsx(
           node.className,
           shouldHide && "rcv2-tree-hidden"
-        ]);
+        );
 
         return {
           ...node,
-          style: shouldHide
-            ? { ...(node.style || {}), display: "none" }
-            : node.style,
+          style: shouldHide ? { ...node.style, display: "none" } : node.style,
           className,
           children
         } as TreeDataNode;
@@ -159,7 +155,7 @@ const InnerTree: FC<InnerTreeProps> = ({
       if (multiple) {
         state.internalValue = valueKeys;
         if (valueKeys) {
-          const check = checkSelectAllStatus?.(valueKeys, true);
+          const check = checkSelectAllStatus?.(valueKeys as SafeKey[], true);
           state = { ...state, ...check };
         }
       } else {

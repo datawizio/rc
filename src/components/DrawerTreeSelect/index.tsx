@@ -357,7 +357,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   const checkSelectAllStatus = (
     values: SelectValues | undefined,
     ignoreEmpty: boolean = false,
-    forceSelectAll = false
+    forceSelectAll: boolean = false
   ) => {
     if (!values) values = [];
     let checked = true;
