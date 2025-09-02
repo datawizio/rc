@@ -293,7 +293,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         levelSelected.current ?? null
       );
 
-      const newState: any = {
+      const newState: Partial<IDrawerTreeSelectState> = {
         stateTreeData: data
       };
 
@@ -401,7 +401,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   };
 
   const selectAll = () => {
-    const state: any = {
+    const state: Partial<IDrawerTreeSelectState> = {
       selectAllState: "checked"
     };
     if (showCheckedStrategy === "SHOW_CHILD") {

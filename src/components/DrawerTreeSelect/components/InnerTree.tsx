@@ -33,7 +33,7 @@ export type InnerTreeProps = Omit<
     values: SelectValues | undefined,
     ignoreEmpty?: boolean,
     forceSelectAll?: boolean
-  ) => { selectAllState: string; internalValue?: SelectValues | undefined };
+  ) => Partial<IDrawerTreeSelectState>;
 };
 
 const InnerTree: FC<InnerTreeProps> = ({
