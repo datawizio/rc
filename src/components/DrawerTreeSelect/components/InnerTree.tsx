@@ -2,7 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Tree } from "antd";
 import { useConfig } from "@/hooks";
 import { flattenOptions } from "@/utils/data/tree";
-import { buildTreeData, getRelatedKeys } from "../utils/tree";
+import {
+  buildTreeData,
+  getRelatedKeys,
+  buildTreeIndexes,
+  applyCheckedStrategy
+} from "../utils/tree";
 
 import type { FC, Key } from "react";
 import type { TreeProps, TreeDataNode } from "antd";
@@ -72,13 +77,13 @@ const InnerTree: FC<InnerTreeProps> = ({
     [searchValue]
   );
 
-  const isLocalSearching = useMemo(
+  const searchingLocally = useMemo(
     () => !remoteSearch && Boolean(searchValue),
     [remoteSearch, searchValue]
   );
 
   const renderedTreeData = useMemo(() => {
-    if (!isLocalSearching) return nestedTreeData;
+    if (!searchingLocally) return nestedTreeData;
     const visibleKeys = new Set(localExpandedKeys ?? []);
 
     // Visually hide nodes that are not expanded during local searching (do not filter data)
@@ -97,7 +102,7 @@ const InnerTree: FC<InnerTreeProps> = ({
     };
 
     return markHidden(nestedTreeData as TreeDataNode[]);
-  }, [isLocalSearching, nestedTreeData, localExpandedKeys]);
+  }, [searchingLocally, nestedTreeData, localExpandedKeys]);
 
   useEffect(() => {
     if (remoteSearch) return;
@@ -143,84 +148,21 @@ const InnerTree: FC<InnerTreeProps> = ({
     [onExpandedKeysChange, remoteSearch, searchValue]
   );
 
+  const indexes = useMemo(
+    () => buildTreeIndexes(nestedTreeData as TreeDataNode[]),
+    [nestedTreeData]
+  );
+
   const handleTreeCheck = useCallback<HandlerFn<TreeProps, "onCheck">>(
     (ck, info) => {
-      const rawChecked = new Set<Key>(
-        Array.isArray(ck) ? (ck as Key[]) : ((ck?.checked as Key[]) ?? [])
+      const rawChecked = Array.isArray(ck) ? ck : (ck?.checked ?? []);
+
+      const valueKeys = applyCheckedStrategy(
+        rawChecked,
+        showCheckedStrategy,
+        indexes,
+        nestedTreeData as TreeDataNode[]
       );
-
-      const keyToNode = new Map<Key, TreeDataNode>();
-      const childrenMap = new Map<Key, Key[]>();
-      const leafKeys = new Set<Key>();
-
-      const indexNodes = (nodes?: TreeDataNode[]) => {
-        if (!nodes) return;
-        for (const n of nodes) {
-          keyToNode.set(n.key, n);
-          const childKeys = (n.children || []).map(c => c.key);
-          if (childKeys.length) {
-            childrenMap.set(n.key, childKeys);
-            indexNodes(n.children);
-          } else {
-            leafKeys.add(n.key);
-          }
-        }
-      };
-
-      indexNodes(nestedTreeData as TreeDataNode[]);
-
-      const getDescendantLeaves = (k: Key): Key[] => {
-        const node = keyToNode.get(k);
-        if (!node) return [];
-        if (!node.children || node.children.length === 0) return [k];
-        const res: Key[] = [];
-        const stack = [...(childrenMap.get(k) || [])];
-        while (stack.length) {
-          const cur = stack.pop() as Key;
-          const cn = keyToNode.get(cur);
-          if (!cn) continue;
-          if (!cn.children || cn.children.length === 0) {
-            res.push(cur);
-          } else {
-            stack.push(...(childrenMap.get(cur) || []));
-          }
-        }
-        return res;
-      };
-
-      const selectedLeaves = new Set<Key>();
-      rawChecked.forEach(k => {
-        if (leafKeys.has(k)) {
-          selectedLeaves.add(k);
-        } else {
-          getDescendantLeaves(k).forEach(d => selectedLeaves.add(d));
-        }
-      });
-
-      const strategy = showCheckedStrategy || "SHOW_CHILD";
-      let valueKeys: Key[] = [];
-
-      if (strategy === "SHOW_CHILD") {
-        valueKeys = Array.from(selectedLeaves);
-      } else if (strategy === "SHOW_ALL") {
-        valueKeys = Array.from(
-          new Set<Key>([...rawChecked, ...selectedLeaves])
-        );
-      } else {
-        const roots = (nestedTreeData as TreeDataNode[]) || [];
-        const collect = (node: TreeDataNode): Key[] => {
-          const leaves = getDescendantLeaves(node.key);
-          const allLeavesSelected = leaves.every(l => selectedLeaves.has(l));
-          if (allLeavesSelected) return [node.key];
-          if (!node.children || node.children.length === 0) {
-            return selectedLeaves.has(node.key) ? [node.key] : [];
-          }
-          let acc: Key[] = [];
-          for (const ch of node.children) acc = acc.concat(collect(ch));
-          return acc;
-        };
-        valueKeys = Array.from(new Set<Key>(roots.flatMap(r => collect(r))));
-      }
 
       let state: Record<string, any> = {};
 
@@ -241,6 +183,7 @@ const InnerTree: FC<InnerTreeProps> = ({
       multiple,
       setState,
       checkSelectAllStatus,
+      indexes,
       nestedTreeData,
       showCheckedStrategy
     ]
