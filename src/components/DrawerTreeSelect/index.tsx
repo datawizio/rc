@@ -886,6 +886,9 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
             checkable={Boolean(restProps.treeCheckable)}
             checkedKeys={(internalValue as Key[]) || []}
             multiple={multiple}
+            showCheckedStrategy={
+              searchValueRef.current ? "SHOW_CHILD" : showCheckedStrategy
+            }
             onSelect={handleTreeSelect}
             setState={state => dispatch({ type: "setState", payload: state })}
             onExpandedKeysChange={handlerTreeExpand}
