@@ -25,6 +25,7 @@ import type { TreeProps, TreeSelectProps } from "antd";
 import type { DataNode } from "rc-tree-select/es/interface";
 import type { CheckboxChangeEvent } from "antd";
 import type { HandlerFn } from "@/types/utils";
+import type { IDrawerTreeSelectState } from "./hooks/useDrawerTreeSelect";
 import type {
   SelectValues,
   DrawerTreeSelectCompoundComponent,
@@ -571,7 +572,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     [dispatch]
   );
 
-  // TODO
   const handleTreeSelectChange = useCallback<Handler<"onChange">>(
     (value, _labels, extra) => {
       const { triggerValue, checked } = extra;
@@ -580,7 +580,8 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         onCheckedDependentValue(triggerValue, value);
       }
 
-      let state: any = {};
+      let state: Partial<IDrawerTreeSelectState> = {};
+
       if (multiple) {
         state.internalValue = value;
         if (value) {
@@ -591,7 +592,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         state.internalValue = extra.checked ? [extra.triggerValue] : [];
       }
 
-      state.internalTreeDataCount = state.internalValue.length;
+      state.internalTreeDataCount = state.internalValue?.length;
 
       dispatch({
         type: "setState",

@@ -189,7 +189,11 @@ const InnerTree: FC<InnerTreeProps> = ({
     ]
   );
 
-  if (nestedTreeData?.length === 0) {
+  // During local search, if nothing matched, all nodes are effectively hidden
+  if (
+    nestedTreeData?.length === 0 ||
+    (searchingLocally && searchValue && !localExpandedKeys?.length)
+  ) {
     return translate("NO_DATA");
   }
 

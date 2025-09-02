@@ -7,6 +7,16 @@ import type {
   SelectValues
 } from "@/components/DrawerTreeSelect/types";
 
+/**
+ * Get ids of the first-level items (or of a specific level) from a flat, level-sorted list.
+ *
+ * The input list is expected to be ordered by level so that once items of a different
+ * level are seen, iteration can stop early.
+ *
+ * @param items - Flat list of items that contain `id`, `pId`, and `level` fields
+ * @param level - Level to collect. If null, selects items with `pId === null`
+ * @returns Set of item ids belonging to the requested level
+ */
 export const getMainLevelItems = (
   items: any[] | undefined = [],
   level: string | number | null = 1
@@ -23,6 +33,13 @@ export const getMainLevelItems = (
   return set;
 };
 
+/**
+ * Collect ids of all leaf items from a flat list.
+ * A leaf item is expected to have `isLeaf === true`.
+ *
+ * @param items - Flat list of items with `id` and `isLeaf`
+ * @returns Array of leaf ids
+ */
 export const getAllLeafItems = (items: any[] = []) => {
   const array: string[] = [];
   for (const item of items) {
@@ -34,6 +51,13 @@ export const getAllLeafItems = (items: any[] = []) => {
   return array;
 };
 
+/**
+ * Check whether every value from `items` is present in the provided set.
+ *
+ * @param items - Values that should be present
+ * @param set - Set of currently selected values
+ * @returns True if all `items` are present in `set`
+ */
 export const isAllItemsChecked = (
   items: SelectValues,
   set: Set<SelectValues[number]>
@@ -49,6 +73,19 @@ export const isAllItemsChecked = (
   return true;
 };
 
+/**
+ * Determine whether an "empty" filter state should be interpreted as "Select All".
+ *
+ * Rules:
+ * - If `emptyIsAll` is disabled, returns false
+ * - If there is a search query, returns false
+ * - If level is set and not equal to 1, returns false
+ * - If there are shop markers, returns false
+ * - Otherwise, returns true
+ *
+ * @param emptyIsAll - Global flag enabling this behavior
+ * @param filters - Current filter values
+ */
 export const calcEmptyIsAll = (
   emptyIsAll: boolean,
   filters: IDrawerTreeSelectFilters
@@ -59,6 +96,13 @@ export const calcEmptyIsAll = (
   return !(filters.shop_markers && filters.shop_markers.length !== 0);
 };
 
+/**
+ * Build a nested tree from flat simple data
+ * (with fields `id` as key and `pId` as parent key).
+ *
+ * @param simpleData - Flat array with `id`, `pId`, and any `TreeDataNode` fields
+ * @returns Array of root `TreeDataNode` with populated `children`
+ */
 export const buildTreeData = <
   T extends TreeDataNode & Required<SimpleModeConfig>
 >(
@@ -73,6 +117,7 @@ export const buildTreeData = <
 
   simpleData?.forEach(item => {
     const node = nodeMap.get(item.id)!;
+    // If parent is missing (or explicitly 0), treat as a root
     if (item.pId === 0 || !nodeMap.has(item.pId)) {
       roots.push(node);
     } else {
@@ -83,6 +128,13 @@ export const buildTreeData = <
   return roots;
 };
 
+/**
+ * Get the list of related keys (target, its parents, and all its descendants).
+ *
+ * @param treeData - Tree roots
+ * @param targetKey - Key to expand from
+ * @returns Merged array with `targetKey`, `parentKeys`, and `childKeys`
+ */
 export const getRelatedKeys = (treeData: TreeDataNode[], targetKey: Key) => {
   const parentKeys: Key[] = [];
   const childKeys: Key[] = [];
@@ -95,7 +147,8 @@ export const getRelatedKeys = (treeData: TreeDataNode[], targetKey: Key) => {
   ): TreeDataNode | null => {
     for (const node of nodes) {
       if (node.key === key) {
-        parentKeys.push(...path); // Everything in path are parents
+        // Everything in path are parents of the found node
+        parentKeys.push(...path);
         return node;
       }
 
@@ -131,6 +184,12 @@ export type TreeIndexes = {
   leafKeys: Set<Key>;
 };
 
+/**
+ * Build search indexes for a tree to enable fast leaf and children lookups.
+ *
+ * @param roots - Tree roots
+ * @returns An object with key-to-node, children map, and leaf keys set
+ */
 export const buildTreeIndexes = (
   roots: TreeDataNode[] | undefined
 ): TreeIndexes => {
@@ -159,6 +218,14 @@ export const buildTreeIndexes = (
   return { keyToNode, childrenMap, leafKeys };
 };
 
+/**
+ * Get all descendant leaf keys for the given node key.
+ * If the node itself is a leaf, returns an array with only that key.
+ *
+ * @param key - Starting node key
+ * @param indexes - Precomputed tree indexes
+ * @returns Array of leaf keys under the node
+ */
 export const getDescendantLeaves = (key: Key, indexes: TreeIndexes): Key[] => {
   const node = indexes.keyToNode.get(key);
 
@@ -183,6 +250,20 @@ export const getDescendantLeaves = (key: Key, indexes: TreeIndexes): Key[] => {
   return res;
 };
 
+/**
+ * Apply rc-tree-select `CheckedStrategy` to a raw set of checked keys.
+ *
+ * Behavior by strategy:
+ * - SHOW_CHILD: expand non-leaf selections into leaf keys only
+ * - SHOW_ALL: include original selections plus all leaves under any selected parent
+ * - SHOW_PARENT: collapse fully-selected subtrees to the highest possible parent
+ *
+ * @param rawChecked - Iterable of checked keys (may include non-leaf nodes)
+ * @param strategy - Strategy to apply; defaults to SHOW_CHILD
+ * @param indexes - Precomputed tree indexes
+ * @param roots - Tree roots (used by SHOW_PARENT to collapse from roots)
+ * @returns Array of keys after applying the strategy
+ */
 export const applyCheckedStrategy = (
   rawChecked: Iterable<Key>,
   strategy: CheckedStrategy | undefined,
@@ -197,6 +278,7 @@ export const applyCheckedStrategy = (
     if (indexes.leafKeys.has(key)) {
       selectedLeaves.add(key);
     } else {
+      // Expand non-leaf selections into their leaf descendants
       getDescendantLeaves(key, indexes).forEach(d => selectedLeaves.add(d));
     }
   });
