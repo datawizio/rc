@@ -1,11 +1,12 @@
+import clsx from "clsx";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Tree } from "antd";
 import { useConfig } from "@/hooks";
-import { buildTreeData } from "../utils/tree";
+import { flattenOptions } from "@/utils/data/tree";
+import { buildTreeData, getRelatedKeys } from "../utils/tree";
 
 import type { FC, Key } from "react";
-import type { TreeProps } from "antd";
-import type { DataNode } from "antd/es/tree";
+import type { TreeProps, TreeDataNode } from "antd";
 import type { SafeKey } from "rc-tree-select/es/interface";
 import type { HandlerFn } from "@/types/utils";
 
@@ -44,7 +45,6 @@ const InnerTree: FC<InnerTreeProps> = ({
 }) => {
   const { translate } = useConfig();
   const [localExpandedKeys, setLocalExpandedKeys] = useState<Key[]>([]);
-  const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
 
   const nestedTreeData = useMemo(() => {
     return simpleMode ? buildTreeData(treeData) : treeData;
@@ -52,59 +52,90 @@ const InnerTree: FC<InnerTreeProps> = ({
 
   const flatDataList = useMemo(() => {
     if (simpleMode) return treeData ?? [];
-
-    const list: DataNode[] = [];
-    const walk = (nodes: DataNode[] | undefined) => {
-      if (!nodes || !Array.isArray(nodes)) return;
-
-      for (const node of nodes) {
-        list.push(node);
-        if (node.children && node.children.length) {
-          walk(node.children);
-        }
-      }
-    };
-
-    walk(nestedTreeData);
-    return list;
-  }, [nestedTreeData, simpleMode, treeData]);
+    return flattenOptions(treeData);
+  }, [simpleMode, treeData]);
 
   /* Search logic */
 
+  const searchPredicate = useCallback(
+    <T,>(filterValue: T) => {
+      return Boolean(
+        searchValue &&
+          typeof filterValue === "string" &&
+          filterValue.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
+      );
+    },
+    [searchValue]
+  );
+
+  const isLocalSearching = useMemo(
+    () => !remoteSearch && Boolean(searchValue),
+    [remoteSearch, searchValue]
+  );
+
+  const renderedTreeData = useMemo(() => {
+    if (!isLocalSearching) return nestedTreeData;
+
+    const visibleKeySet = new Set(
+      (localExpandedKeys ?? []).map(k => String(k))
+    );
+
+    // Visually hide nodes that are not expanded during local searching (do not filter data)
+    const markHidden = (nodes?: TreeDataNode[]): TreeDataNode[] | undefined => {
+      if (!nodes) return nodes;
+      return nodes.map(node => {
+        const keyStr = String(node.key);
+        const shouldHide = !visibleKeySet.has(keyStr);
+        const children = markHidden(node.children);
+
+        const className = clsx([
+          node.className,
+          shouldHide && "rcv2-tree-hidden"
+        ]);
+
+        return {
+          ...node,
+          style: shouldHide
+            ? { ...(node.style || {}), display: "none" }
+            : node.style,
+          className,
+          children
+        } as TreeDataNode;
+      });
+    };
+
+    return markHidden(nestedTreeData as TreeDataNode[]);
+  }, [isLocalSearching, nestedTreeData, localExpandedKeys]);
+
   useEffect(() => {
     if (remoteSearch) return;
-    const value = searchValue;
 
-    if (!value) {
+    if (!searchValue) {
       setLocalExpandedKeys([]);
-      setAutoExpandParent(false);
       return;
     }
 
     const keysToExpand = flatDataList
       .map(item => {
-        const filterValue = item[treeNodeFilterProp as keyof typeof item];
+        const filterValue = item[treeNodeFilterProp as keyof TreeDataNode];
 
-        if (
-          filterValue &&
-          typeof filterValue === "string" &&
-          filterValue.toLowerCase().indexOf(value.toLowerCase()) > -1
-        ) {
-          return item.key;
+        if (searchPredicate(filterValue)) {
+          return getRelatedKeys(nestedTreeData ?? [], item.key);
         }
 
-        return undefined;
+        return null;
       })
-      .filter((key, i, self): key is Key => !!key && self.indexOf(key) === i);
+      .filter((x): x is Key[] => Boolean(x))
+      .reduce((acc, item) => [...acc, ...item], []);
 
-    setLocalExpandedKeys(keysToExpand);
-    setAutoExpandParent(true);
+    setLocalExpandedKeys(Array.from(new Set(keysToExpand)));
   }, [
     searchValue,
     remoteSearch,
     flatDataList,
     nestedTreeData,
-    treeNodeFilterProp
+    treeNodeFilterProp,
+    searchPredicate
   ]);
 
   /* Handlers */
@@ -113,7 +144,6 @@ const InnerTree: FC<InnerTreeProps> = ({
     expandedKeys => {
       if (!remoteSearch && searchValue) {
         setLocalExpandedKeys(expandedKeys);
-        setAutoExpandParent(false);
         return;
       }
       onExpandedKeysChange?.(expandedKeys as SafeKey[]);
@@ -156,11 +186,13 @@ const InnerTree: FC<InnerTreeProps> = ({
       }
       selectable={false}
       onExpand={handleTreeExpand}
-      treeData={nestedTreeData}
+      treeData={renderedTreeData}
       checkedKeys={checkedKeys || []}
       onCheck={handleTreeCheck}
       checkStrictly={(remoteSearch && Boolean(searchValue)) || checkStrictly}
-      autoExpandParent={autoExpandParent}
+      filterTreeNode={node => {
+        return searchPredicate(node[treeNodeFilterProp as keyof TreeDataNode]);
+      }}
     />
   );
 };

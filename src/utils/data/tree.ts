@@ -19,8 +19,8 @@ interface FilterOptionsConfig {
 }
 
 /**
- * Return flattened list of all nodes in DFS order.
- * Only requirement in current usage is that each item has a `key`.
+ * Return a flattened list of all nodes in DFS order.
+ * The only requirement in current usage is that each item has a `key`.
  */
 export function flattenOptions(treeData: DataNode[] = []): DataNode[] {
   const result: DataNode[] = [];
