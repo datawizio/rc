@@ -98,13 +98,14 @@ export const calcEmptyIsAll = (
 
 /**
  * Build a nested tree from flat simple data
- * (with fields `id` as key and `pId` as parent key).
+ * (with fields `id` as key and `pId` as a parent key).
  *
  * @param simpleData - Flat array with `id`, `pId`, and any `TreeDataNode` fields
  * @returns Array of root `TreeDataNode` with populated `children`
  */
 export const buildTreeData = <
-  T extends TreeDataNode & Required<SimpleModeConfig>
+  T extends Omit<TreeDataNode, "children"> &
+    Required<Pick<SimpleModeConfig, "id" | "pId">>
 >(
   simpleData: T[] | undefined
 ) => {
@@ -117,7 +118,7 @@ export const buildTreeData = <
 
   simpleData?.forEach(item => {
     const node = nodeMap.get(item.id)!;
-    // If parent is missing (or explicitly 0), treat as a root
+    // If a parent is missing (or explicitly 0), treat as a root
     if (item.pId === 0 || !nodeMap.has(item.pId)) {
       roots.push(node);
     } else {
@@ -147,7 +148,7 @@ export const getRelatedKeys = (treeData: TreeDataNode[], targetKey: Key) => {
   ): TreeDataNode | null => {
     for (const node of nodes) {
       if (node.key === key) {
-        // Everything in path are parents of the found node
+        // Everything in the path is parents of the found node
         parentKeys.push(...path);
         return node;
       }
@@ -256,7 +257,7 @@ export const getDescendantLeaves = (key: Key, indexes: TreeIndexes): Key[] => {
  * Behavior by strategy:
  * - SHOW_CHILD: expand non-leaf selections into leaf keys only
  * - SHOW_ALL: include original selections plus all leaves under any selected parent
- * - SHOW_PARENT: collapse fully-selected subtrees to the highest possible parent
+ * - SHOW_PARENT: collapse fully selected subtrees to the highest possible parent
  *
  * @param rawChecked - Iterable of checked keys (may include non-leaf nodes)
  * @param strategy - Strategy to apply; defaults to SHOW_CHILD
@@ -291,7 +292,7 @@ export const applyCheckedStrategy = (
     return Array.from(new Set<Key>([...raw, ...selectedLeaves]));
   }
 
-  // SHOW_PARENT: collapse fully-selected subtrees
+  // SHOW_PARENT: collapse fully selected subtrees
   const collect = (node: TreeDataNode): Key[] => {
     const leaves = getDescendantLeaves(node.key, indexes);
     const allLeavesSelected = leaves.every(l => selectedLeaves.has(l));
