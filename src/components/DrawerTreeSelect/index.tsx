@@ -961,6 +961,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         treeCheckStrictly={
           (remoteSearch && Boolean(searchValueRef.current)) || strictlyMode
         }
+        showSearch={false}
         placeholder={placeholder}
         loading={internalLoading}
         showCheckedStrategy={
