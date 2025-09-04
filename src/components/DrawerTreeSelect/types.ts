@@ -20,8 +20,10 @@ export interface MarkersRenderProps {
   onChange?: (selected: string[]) => void;
 }
 
-export interface DrawerTreeSelectProps<VT>
-  extends Omit<AntTreeSelectProps<VT>, "onChange" | "loadData"> {
+export type DrawerTreeSelectProps<VT> = Omit<
+  AntTreeSelectProps<VT>,
+  "onChange" | "loadData" | "onDeselect"
+> & {
   additionalFilters?: any;
   asyncData?: boolean;
   headerHeight?: number;
@@ -68,7 +70,7 @@ export interface DrawerTreeSelectProps<VT>
   onDrawerCancelCallback?: (payload?: any) => void;
   onDrawerOpenCallback?: (payload?: any) => void;
   onDrawerSubmitCallback?: (payload?: any) => void;
-}
+};
 
 export interface DrawerTreeSelectCompoundComponent<VT>
   extends FC<DrawerTreeSelectProps<VT>> {
