@@ -47,18 +47,15 @@ jobs:
                 - TypeScript type checking
                 - ESLint linting
                 - Prettier formatting
-                - Build verification
-                
-                <details>
-                <summary>Build Output</summary>
-                
-                \`\`\`
-                ${output}
-                \`\`\`
-                
-                </details>`
+                - Build verification`
               });
             } catch (error) {
+              // Truncate error output to avoid GitHub's 65,536 character limit
+              const errorOutput = error.stdout || error.message || 'Unknown error';
+              const truncatedOutput = errorOutput.length > 10000 
+                ? errorOutput.substring(0, 10000) + '\n\n... (output truncated)'
+                : errorOutput;
+              
               github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
@@ -71,7 +68,7 @@ jobs:
                 <summary>Error Details</summary>
                 
                 \`\`\`
-                ${error.stdout || error.message}
+                ${truncatedOutput}
                 \`\`\`
                 
                 </details>`
