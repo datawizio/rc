@@ -1,5 +1,5 @@
 {
-  "name": "@datawizio/react-components",
+  "name": "@datawizio/rc",
   "description": "Datawiz.io components library for React.js",
   "private": true,
   "version": "2.0.0",
@@ -7,7 +7,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/datawizio/react-components"
+    "url": "git+https://github.com/datawizio/rc.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -40,7 +40,10 @@
   "scripts": {
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "format": "prettier . --write"
+    "type-check": "tsc --noEmit",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "ci": "yarn type-check && yarn lint && yarn format:check && yarn build"
   },
   "peerDependencies": {
     "antd": "^5.26.6",
