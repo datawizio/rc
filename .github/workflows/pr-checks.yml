@@ -1,0 +1,79 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches: [master, dev]
+
+jobs:
+  pr-checks:
+    name: PR Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run all code quality checks
+        run: yarn ci
+
+      - name: Comment PR with check results
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const fs = require('fs');
+            const { execSync } = require('child_process');
+            
+            try {
+              // Run checks and capture output
+              const output = execSync('yarn ci', { encoding: 'utf8' });
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## ✅ Code Quality Checks Passed
+                
+                All checks completed successfully:
+                - TypeScript type checking
+                - ESLint linting
+                - Prettier formatting
+                - Build verification
+                
+                <details>
+                <summary>Build Output</summary>
+                
+                \`\`\`
+                ${output}
+                \`\`\`
+                
+                </details>`
+              });
+            } catch (error) {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## ❌ Code Quality Checks Failed
+                
+                Please fix the following issues:
+                
+                <details>
+                <summary>Error Details</summary>
+                
+                \`\`\`
+                ${error.stdout || error.message}
+                \`\`\`
+                
+                </details>`
+              });
+            }
