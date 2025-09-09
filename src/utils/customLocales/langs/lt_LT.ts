@@ -1,7 +1,7 @@
-import Pagination from "../pagination/sq_AL";
-import DatePicker from "../datePicker/sq_AL";
-import TimePicker from "../timePicker/sq_AL";
-import Calendar from "../calendar/sq_AL";
+import Pagination from "../pagination/lt_LT";
+import DatePicker from "../datePicker/lt_LT";
+import TimePicker from "../timePicker/lt_LT";
+import Calendar from "../calendar/lt_LT";
 
 const typeTemplate = "${label} negalioja ${type}";
 
