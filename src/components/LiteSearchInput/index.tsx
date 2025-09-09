@@ -34,7 +34,7 @@ const LiteSearchInput: FC<LiteSearchInputProps> = ({
 }) => {
   const [value, setValue] = useState(() => props.value || "");
 
-  const onSearchDebounced = useDebouncedCallback((value: string) => {
+  const [onSearchDebounced] = useDebouncedCallback((value: string) => {
     onSearch?.(value);
   }, debounceDelay);
 
