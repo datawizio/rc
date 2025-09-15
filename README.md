@@ -6,16 +6,6 @@
 
 A comprehensive React components library built with TypeScript, Ant Design, and modern web technologies. This library provides a collection of reusable, customizable, and production-ready components for building data-driven applications.
 
-## 🚀 Features
-
-- **80+ Components**: Rich set of UI components including forms, tables, charts, and more
-- **TypeScript First**: Full TypeScript support with comprehensive type definitions
-- **Ant Design Based**: Built on top of Ant Design v5 with custom theming
-- **Modern Build**: ES modules and CommonJS support with tree-shaking
-- **Customizable**: Extensive theming and styling options
-- **RTL Support**: Right-to-left language support
-- **React 19 Compatible**: Latest React features support
-
 ## 📦 Installation
 
 > **⚠️ Prerequisites**: Make sure you've configured your `.npmrc` file and authenticated with GitHub Packages (see [NPM Configuration](#npm-configuration) below).

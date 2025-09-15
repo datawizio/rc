@@ -19,7 +19,7 @@ export interface ListProps<T> extends Omit<AntListProps<T>, "renderItem"> {
   dataProvider: (
     state: ListState<T>
   ) => Partial<ListState<T>> | Promise<Partial<ListState<T>>> | void;
-  dataProviderDeps: <R = any>(state: ListState<T>) => R[];
+  dataProviderDeps: (state: ListState<T>) => any[];
   total?: number;
   pageSize?: number;
   currentPage?: number;

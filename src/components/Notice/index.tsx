@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import type { JSX, FC } from "react";
+import type { FC, ReactNode } from "react";
 
 import "./index.less";
 
 export interface NoticeProps {
-  content: JSX.Element | null;
+  content: ReactNode;
   className?: string;
 }
 

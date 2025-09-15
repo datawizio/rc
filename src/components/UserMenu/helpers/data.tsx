@@ -1,9 +1,11 @@
-import { useMemo, type JSX } from "react";
+import { useMemo } from "react";
 import { BESIcon } from "../images/BES";
 import { PaymentIcon } from "../images/Payment";
 import { RolesIcon } from "../images/Roles";
 import { UsersIcon } from "../images/Users";
 import { ConnectorIcon } from "../images/Connector";
+
+import type { ReactElement } from "react";
 
 export interface ILinkGroup {
   title?: string;
@@ -11,7 +13,7 @@ export interface ILinkGroup {
 }
 
 export interface ILinkItem {
-  photo: JSX.Element;
+  photo: ReactElement;
   title: string;
   description: string;
   host: string;

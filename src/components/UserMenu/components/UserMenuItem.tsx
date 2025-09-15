@@ -1,7 +1,7 @@
-import type { JSX, FC } from "react";
+import type { FC, ReactElement } from "react";
 
 export interface UserMenuItemProps {
-  photo: JSX.Element;
+  photo: ReactElement;
   title: string;
   description: string;
   onClick: () => void;

@@ -12,7 +12,8 @@ import type {
   RefAttributes,
   ComponentType,
   ReactNode,
-  ReactElement
+  ReactElement,
+  PropsWithChildren
 } from "react";
 
 import type {
@@ -24,7 +25,7 @@ import type {
 import type { ColumnType, FilterValue } from "antd/es/table/interface";
 
 export type TableCompoundComponent = {
-  ToolBar: ComponentType;
+  ToolBar: ComponentType<PropsWithChildren>;
 } & ForwardRefExoticComponent<TableProps & RefAttributes<TableRef>>;
 
 /* Table types */

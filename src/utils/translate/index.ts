@@ -36,7 +36,7 @@ interface TranslateTableResponseOptions {
 export function translateTableResponse(
   fetcher: (...args: any) => Promise<TableResponse>,
   options?: TranslateTableResponseOptions
-) {
+): (...args: any) => Promise<TableResponse> {
   return async (...args: any) => {
     const response = await fetcher(...args);
 
@@ -59,7 +59,7 @@ export function translateTableResponse(
 export function translateColumns(
   columns: Array<IColumn>,
   options?: TranslateTableResponseOptions
-) {
+): IColumn[] {
   return [...columns].map(column => {
     const nextColumn = { ...column };
 
@@ -74,19 +74,18 @@ export function translateColumns(
       nextColumn.children = translateColumns(column.children, options);
     }
 
+    const filters = column.filters as Record<string, any>;
+
     if (column.filters) {
-      //@ts-ignore
-      const filterData = column.filters.data;
+      const filterData = filters.data;
       if (Array.isArray(filterData) && filterData.length === 0) {
         delete nextColumn.filters;
       } else {
-        //@ts-ignore
-        nextColumn.filters = column.filters.need_translate
+        nextColumn.filters = filters.need_translate
           ? translateObjects(filterData, "text")
           : filterData;
 
-        //@ts-ignore
-        nextColumn.filterMultiple = column.filters.multi_select;
+        nextColumn.filterMultiple = filters.multi_select;
       }
     }
 
@@ -97,12 +96,12 @@ export function translateColumns(
 export function translateDataSource(
   dataSource: Array<IRow>,
   options?: TranslateTableResponseOptions
-) {
+): IRow[] {
   return [...dataSource].map(row => {
     let filteredRow = Object.entries(row);
 
     if (options?.columnsToTranslate?.length) {
-      filteredRow = filteredRow.filter(([dataIndex, _]) => {
+      filteredRow = filteredRow.filter(([dataIndex]) => {
         return options.columnsToTranslate?.includes(dataIndex);
       });
     }

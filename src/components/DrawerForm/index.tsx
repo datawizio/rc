@@ -24,7 +24,7 @@ export interface DrawerFormProps<Values> {
   form?: FormInstance<Values>;
   layout?: "horizontal" | "vertical";
   hideRequiredMark?: boolean;
-  formStore?: Observable<Values>;
+  formStore?: Observable;
   loading?: boolean;
   style?: CSSProperties;
   width?: number;
