@@ -197,7 +197,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     };
   };
 
-  const [autoScrollDebounced] = useDebouncedCallback(
+  const autoScrollDebounced = useDebouncedCallback(
     (col: IColumn, monitor: DropTargetMonitor) => {
       autoScroll()(col, monitor);
     },

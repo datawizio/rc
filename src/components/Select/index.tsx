@@ -51,7 +51,7 @@ const Select: SelectCompoundComponent = ({
     });
   };
 
-  const [loadPage] = useDebouncedCallback(
+  const loadPage = useDebouncedCallback(
     async (searchValue: string, page: number = 0) => {
       if (!loadData) return;
 
