@@ -1,16 +1,75 @@
-import Pagination from "../pagination/sq_AL";
-import DatePicker from "../datePicker/sq_AL";
-import TimePicker from "../timePicker/sq_AL";
-import Calendar from "../calendar/sq_AL";
-
 const typeTemplate = "${label} nuk është një ${type} e vlefshme";
+
+const timePicker = {
+  placeholder: "Zgjidh kohën",
+  rangePlaceholder: ["Koha e fillimit", "Koha e përfundimit"]
+};
+
+const pagination = {
+  items_per_page: "/ faqe",
+  jump_to: "Shko te",
+  jump_to_confirm: "konfirmo",
+  page: "faqe",
+  prev_page: "Faqja e mëparshme",
+  next_page: "Faqja tjetër",
+  prev_5: "5 faqet e mëparshme",
+  next_5: "5 faqet e ardhshme",
+  prev_3: "3 faqet e mëparshme",
+  next_3: "3 faqet e ardhshme"
+};
+
+const datePicker = {
+  lang: {
+    locale: "sq_AL",
+    placeholder: "Zgjidh datën",
+    yearPlaceholder: "Zgjidh vitin",
+    quarterPlaceholder: "Zgjidh tremujorin",
+    monthPlaceholder: "Zgjidh muajin",
+    weekPlaceholder: "Zgjidh javën",
+    rangePlaceholder: ["Data e fillimit", "Data e përfundimit"],
+    rangeYearPlaceholder: ["Viti i fillimit", "Viti i përfundimit"],
+    rangeQuarterPlaceholder: [
+      "Tremujori i fillimit",
+      "Tremujori i përfundimit"
+    ],
+    rangeMonthPlaceholder: ["Muaji i fillimit", "Muaji i përfundimit"],
+    rangeWeekPlaceholder: ["Java e fillimit", "Java e përfundimit"],
+    today: "Sot",
+    now: "Tani",
+    backToToday: "Kthehu te sot",
+    ok: "Ok",
+    clear: "Pastro",
+    month: "Muaj",
+    year: "Vit",
+    timeSelect: "Zgjidh kohën",
+    dateSelect: "Zgjidh datën",
+    weekSelect: "Zgjidh javën",
+    monthSelect: "Zgjidh muajin",
+    yearSelect: "Zgjidh vitin",
+    decadeSelect: "Zgjidh dekadën",
+    yearFormat: "YYYY",
+    dateFormat: "D/M/YYYY",
+    dayFormat: "D",
+    dateTimeFormat: "D/M/YYYY HH:mm:ss",
+    monthBeforeYear: true,
+    previousMonth: "Muaji i kaluar (PageUp)",
+    nextMonth: "Muaji tjetër (PageDown)",
+    previousYear: "Viti i kaluar (Control + majtas)",
+    nextYear: "Viti tjetër (Control + djathtas)",
+    previousDecade: "Dekada e kaluar",
+    nextDecade: "Dekada tjetër",
+    previousCentury: "Shekulli i kaluar",
+    nextCentury: "Shekulli tjetër"
+  },
+  timePickerLocale: timePicker
+};
 
 const localeValues = {
   locale: "sq",
-  Pagination: Pagination,
-  DatePicker: DatePicker,
-  TimePicker: TimePicker,
-  Calendar: Calendar,
+  Pagination: pagination,
+  DatePicker: datePicker,
+  TimePicker: timePicker,
+  Calendar: datePicker,
   global: {
     placeholder: "Ju lutemi zgjidhni"
   },

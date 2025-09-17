@@ -1,16 +1,72 @@
-import Pagination from "../pagination/ka_KA";
-import DatePicker from "../datePicker/ka_KA";
-import TimePicker from "../timePicker/ka_KA";
-import Calendar from "../calendar/ka_KA";
-
 const typeTemplate = "${label} არ არის სწორი ${type}";
+
+const timePicker = {
+  placeholder: "აირჩიეთ დრო",
+  rangePlaceholder: ["დაწყების დრო", "Დროის დასასრული"]
+};
+
+const pagination = {
+  items_per_page: "/ გვერდი",
+  jump_to: "Წადი",
+  jump_to_confirm: "დაადასტუროს",
+  page: "გვერდი",
+  prev_page: "Წინა გვერდი",
+  next_page: "Შემდეგი გვერდი",
+  prev_5: "წინა 5 გვერდი",
+  next_5: "შემდეგი 5 გვერდი",
+  prev_3: "წინა 3 გვერდი",
+  next_3: "შემდეგი 3 გვერდი"
+};
+
+const datePicker = {
+  lang: {
+    locale: "ka_KA",
+    placeholder: "აირჩიეთ თარიღი",
+    yearPlaceholder: "აირჩიეთ წელი",
+    quarterPlaceholder: "აირჩიეთ კვარტალი",
+    monthPlaceholder: "აირჩიეთ თვე",
+    weekPlaceholder: "აირჩიეთ კვირა",
+    rangePlaceholder: ["Დაწყების თარიღი", "Დასრულების თარიღი"],
+    rangeYearPlaceholder: ["დაწყების წელი", "ბოლო წელი"],
+    rangeQuarterPlaceholder: ["მეოთხედის დასაწყისი", "მეოთხედის დასასრული"],
+    rangeMonthPlaceholder: ["თვის დაწყება", "ბოლო თვე"],
+    rangeWeekPlaceholder: ["დაწყების კვირა", "კვირის ბოლო"],
+    today: "დღეს",
+    now: "ახლა",
+    backToToday: "დაუბრუნდით დღეს",
+    ok: "Კარგი",
+    clear: "ნათელია",
+    month: "თვე",
+    year: "წელი",
+    timeSelect: "აირჩიეთ დრო",
+    dateSelect: "აირჩიეთ თარიღი",
+    weekSelect: "აირჩიეთ კვირა",
+    monthSelect: "შეარჩიე თვე",
+    yearSelect: "აირჩიეთ წელი",
+    decadeSelect: "შეარჩიე ათწლეული",
+    yearFormat: "YYYY",
+    dateFormat: "M/D/YYYY",
+    dayFormat: "D",
+    dateTimeFormat: "M/D/YYYY HH:mm:ss",
+    monthBeforeYear: true,
+    previousMonth: "წინა თვე (PageUp)",
+    nextMonth: "შემდეგი თვე (PageDown)",
+    previousYear: "გასულ წელს (Control + left)",
+    nextYear: "შემდეგ წელს (Control + right)",
+    previousDecade: "ბოლო ათწლეული",
+    nextDecade: "შემდეგი ათწლეული",
+    previousCentury: "Ბოლო საუკუნე",
+    nextCentury: "შემდეგი საუკუნე"
+  },
+  timePickerLocale: timePicker
+};
 
 const localeValues = {
   locale: "ka",
-  Pagination: Pagination,
-  DatePicker: DatePicker,
-  TimePicker: TimePicker,
-  Calendar: Calendar,
+  Pagination: pagination,
+  DatePicker: datePicker,
+  TimePicker: timePicker,
+  Calendar: datePicker,
   global: {
     placeholder: "გთხოვთ აირჩიოთ"
   },

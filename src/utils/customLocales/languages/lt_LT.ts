@@ -1,16 +1,72 @@
-import Pagination from "../pagination/lt_LT";
-import DatePicker from "../datePicker/lt_LT";
-import TimePicker from "../timePicker/lt_LT";
-import Calendar from "../calendar/lt_LT";
-
 const typeTemplate = "${label} negalioja ${type}";
+
+const timePicker = {
+  placeholder: "Pasirinkite laiką",
+  rangePlaceholder: ["Pradžios laikas", "Pabaigos laikas"]
+};
+
+const pagination = {
+  items_per_page: "/ puslapis",
+  jump_to: "Eiti į",
+  jump_to_confirm: "patvirtinti",
+  page: "puslapis",
+  prev_page: "Ankstesnis puslapis",
+  next_page: "Kitas puslapis",
+  prev_5: "Ankstesni 5 puslapiai",
+  next_5: "Kiti 5 puslapiai",
+  prev_3: "Ankstesni 3 puslapiai",
+  next_3: "Kiti 3 puslapiai"
+};
+
+const datePicker = {
+  lang: {
+    locale: "lt_LT",
+    placeholder: "Pasirinkite datą",
+    yearPlaceholder: "Pasirinkite metus",
+    quarterPlaceholder: "Pasirinkite ketvirtį",
+    monthPlaceholder: "Pasirinkite mėnesį",
+    weekPlaceholder: "Pasirinkite savaitę",
+    rangePlaceholder: ["Pradžios data", "Pabaigos data"],
+    rangeYearPlaceholder: ["Pradžios metai", "Metų pabaiga"],
+    rangeQuarterPlaceholder: ["Ketvirčio pradžia", "Ketvirčio pabaiga"],
+    rangeMonthPlaceholder: ["Pradėti mėnesį", "Mėnesio pabaiga"],
+    rangeWeekPlaceholder: ["Pradėti savaitę", "Savaitės pabaiga"],
+    today: "Šiandien",
+    now: "Dabar",
+    backToToday: "Grįžti į šiandienę",
+    ok: "Gerai",
+    clear: "Aišku",
+    month: "Mėnuo",
+    year: "Metai",
+    timeSelect: "pasirinkti laiką",
+    dateSelect: "pasirinkite datą",
+    weekSelect: "Pasirinkite savaitę",
+    monthSelect: "Pasirinkite mėnesį",
+    yearSelect: "Pasirinkite metus",
+    decadeSelect: "Pasirinkite dešimtmetį",
+    yearFormat: "YYYY",
+    dateFormat: "M/D/YYYY",
+    dayFormat: "D",
+    dateTimeFormat: "M/D/YYYY HH:mm:ss",
+    monthBeforeYear: true,
+    previousMonth: "Ankstesnis mėnuo (PageUp)",
+    nextMonth: "Kitas mėnuo (PageDown)",
+    previousYear: "Praėjusiais metais (Control + left)",
+    nextYear: "Kitais metais (Control + right)",
+    previousDecade: "Paskutinis dešimtmetis",
+    nextDecade: "Kitas dešimtmetis",
+    previousCentury: "Praėjęs amžius",
+    nextCentury: "Kitas amžius"
+  },
+  timePickerLocale: timePicker
+};
 
 const localeValues = {
   locale: "lt",
-  Pagination: Pagination,
-  DatePicker: DatePicker,
-  TimePicker: TimePicker,
-  Calendar: Calendar,
+  Pagination: pagination,
+  DatePicker: datePicker,
+  TimePicker: timePicker,
+  Calendar: datePicker,
   global: {
     placeholder: "Prašome pasirinkti"
   },

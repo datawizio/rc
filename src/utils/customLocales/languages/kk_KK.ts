@@ -1,16 +1,72 @@
-import Pagination from "../pagination/kk_KK";
-import DatePicker from "../datePicker/kk_KK";
-import TimePicker from "../timePicker/kk_KK";
-import Calendar from "../calendar/kk_KK";
-
 const typeTemplate = "${label} жарамды ${type} емес";
+
+const timePicker = {
+  placeholder: "Уақытты таңдаңыз",
+  rangePlaceholder: ["Басталу уақыты", "Аяқталу уақыты"]
+};
+
+const pagination = {
+  items_per_page: "/ бет",
+  jump_to: "Бару",
+  jump_to_confirm: "растаңыз",
+  page: "бет",
+  prev_page: "Алдыңғы бет",
+  next_page: "Келесі бет",
+  prev_5: "Алдыңғы 5 бет",
+  next_5: "Келесі 5 бет",
+  prev_3: "Алдыңғы 3 бет",
+  next_3: "Келесі 3 бет"
+};
+
+const datePicker = {
+  lang: {
+    locale: "kk_KK",
+    placeholder: "Күнді таңдаңыз",
+    yearPlaceholder: "Жылды таңдаңыз",
+    quarterPlaceholder: "Тоқсанды таңдаңыз",
+    monthPlaceholder: "Айды таңдаңыз",
+    weekPlaceholder: "Апта таңдаңыз",
+    rangePlaceholder: ["Басталатын күн", "Аяқталу күні"],
+    rangeYearPlaceholder: ["Басталу жылы", "Жылдың соңы"],
+    rangeQuarterPlaceholder: ["Тоқсан басталуы", "Тоқсан аяқталуы"],
+    rangeMonthPlaceholder: ["Айдың басталуы", "Аяқталған ай"],
+    rangeWeekPlaceholder: ["Апта басталады", "Апта соңы"],
+    today: "Бүгін",
+    now: "Енді",
+    backToToday: "Бүгінге оралыңыз",
+    ok: "Жарайды ма",
+    clear: "Айқын",
+    month: "Ай",
+    year: "Жыл",
+    timeSelect: "уақытты таңдаңыз",
+    dateSelect: "күнді таңдаңыз",
+    weekSelect: "Аптаны таңдаңыз",
+    monthSelect: "Айды таңдаңыз",
+    yearSelect: "Жыл таңдаңыз",
+    decadeSelect: "Онжылдықты таңдаңыз",
+    yearFormat: "YYYY",
+    dateFormat: "M/D/YYYY",
+    dayFormat: "D",
+    dateTimeFormat: "M/D/YYYY HH:mm:ss",
+    monthBeforeYear: true,
+    previousMonth: "Алдыңғы ай (PageUp)",
+    nextMonth: "Келесі ай (PageDown)",
+    previousYear: "Өткен жыл (Control + left)",
+    nextYear: "Келесі жыл (Control + right)",
+    previousDecade: "Соңғы онжылдық",
+    nextDecade: "Келесі онжылдық",
+    previousCentury: "Өткен ғасыр",
+    nextCentury: "Келесі ғасыр"
+  },
+  timePickerLocale: timePicker
+};
 
 const localeValues = {
   locale: "kk",
-  Pagination: Pagination,
-  DatePicker: DatePicker,
-  TimePicker: TimePicker,
-  Calendar: Calendar,
+  Pagination: pagination,
+  DatePicker: datePicker,
+  TimePicker: timePicker,
+  Calendar: datePicker,
   global: {
     placeholder: "Таңдаңыз"
   },

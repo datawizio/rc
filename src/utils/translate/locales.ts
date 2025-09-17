@@ -39,7 +39,7 @@ export const locales: ILocaleList = {
   },
   ka: {
     name: "ka_KA",
-    getAnt: () => import("../customLocales/langs/ka_KA"),
+    getAnt: () => import("../customLocales/languages/ka_KA"),
     getDayJs: () => import("dayjs/locale/ka")
   },
   ro: {
@@ -74,7 +74,7 @@ export const locales: ILocaleList = {
   },
   kk: {
     name: "kk_KK",
-    getAnt: () => import("../customLocales/langs/kk_KK"),
+    getAnt: () => import("../customLocales/languages/kk_KK"),
     getDayJs: () => import("dayjs/locale/kk")
   },
   ms: {
@@ -149,7 +149,7 @@ export const locales: ILocaleList = {
   },
   sq: {
     name: "sq_AL",
-    getAnt: () => import("../customLocales/langs/sq_AL"),
+    getAnt: () => import("../customLocales/languages/sq_AL"),
     getDayJs: () => import("dayjs/locale/sq")
   },
   sr: {
