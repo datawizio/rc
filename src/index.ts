@@ -70,7 +70,7 @@ export { default as TimeRangePicker } from "./components/TimeRangePicker";
 export { default as TopBar } from "./components/TopBar";
 export { default as Transfer } from "./components/Transfer";
 export { default as TransferTable } from "./components/TransferTable";
-// export { default as TransferFilter } from "./components/TransferFilter";
+export { default as TransferFilter } from "./components/TransferFilter";
 export { default as Tree } from "./components/Tree";
 export { default as TreeSearch } from "./components/TreeSearch";
 export { default as TreeSelect } from "./components/TreeSelect";

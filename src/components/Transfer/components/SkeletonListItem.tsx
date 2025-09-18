@@ -1,10 +1,7 @@
 import Skeleton from "@/components/Skeleton";
-import type { FC, Key } from "react";
+import { randomInteger } from "@/utils/random";
 
-const randomInteger = (min: number, max: number) => {
-  const rand = min + Math.random() * (max + 1 - min);
-  return Math.floor(rand);
-};
+import type { FC, Key } from "react";
 
 const renderItem = (key: Key) => {
   const width = randomInteger(250, 350);
