@@ -55,7 +55,7 @@ const HelpMenu: FC<IHelpMenu> = ({
         <Dropdown
           {...visibleProps}
           onOpenChange={onVisibleChange}
-          overlay={menu} // TODO
+          overlay={menu}
           trigger={["click"]}
           placement="bottomRight"
         >

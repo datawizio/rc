@@ -11,12 +11,12 @@ jobs:
     name: Release Package
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    
+
     permissions:
       contents: write
       packages: write
       id-token: write
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,10 +27,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@datawizio'
+          node-version-file: ".nvmrc"
+          cache: "yarn"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@datawizio"
 
       - name: Configure Git
         run: |
@@ -95,9 +95,9 @@ jobs:
           release_name: "Release v${{ env.NEW_VERSION }}"
           body: |
             ## Changes in v${{ env.NEW_VERSION }}
-            
+
             This release includes the latest changes from the ${{ github.ref_name }} branch.
-            
+
             ### Installation
             ```bash
             npm install @datawizio/rc@${{ env.NEW_VERSION }}
