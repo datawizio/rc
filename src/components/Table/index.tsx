@@ -9,7 +9,7 @@ import TableWrapper from "./components/TableWrapper";
 import HeaderWrapper from "./components/HeaderWrapper";
 
 import { useMemo, useReducer, useCallback, useImperativeHandle } from "react";
-
+import { merge } from "lodash";
 import { Table as AntdTable } from "antd";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -85,7 +85,7 @@ const tableDefaultProps: Partial<TableProps> = {
 };
 
 const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
-  const props = { ...tableDefaultProps, ...customProps };
+  const props = merge(tableDefaultProps, customProps);
 
   const {
     errorRender,

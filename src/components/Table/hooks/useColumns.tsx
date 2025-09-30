@@ -13,10 +13,18 @@ export const useColumns = (
     visibleColumnsKeys,
     sortParams,
     filterParams,
-    columnsWidth
+    columnsWidth,
+    dTypesConfig
   } = state;
 
-  const { sortable, columnsConfig, isResizableColumns } = props;
+  const {
+    sortable,
+    columnsConfig,
+    isResizableColumns,
+    cellRenderProps,
+    rowPrefix,
+    rowPrefixDeps
+  } = props;
 
   const initializedColumns = useMemo(() => {
     function initColumns(columns?: IColumn[], level = 1) {
@@ -64,6 +72,10 @@ export const useColumns = (
                   columnLevel={level}
                   column={nextColumn}
                   yIndex={nextColumn.fixed === "left" ? 0 : idx + 1}
+                  dTypesConfig={dTypesConfig}
+                  cellRenderProps={cellRenderProps}
+                  rowPrefix={rowPrefix}
+                  rowPrefixDeps={rowPrefixDeps}
                 />
               );
             };
@@ -85,10 +97,14 @@ export const useColumns = (
     return initColumns(columns ?? []);
   }, [
     columns,
-    sortable,
     columnsConfig,
-    isResizableColumns,
-    visibleColumnsKeys
+    visibleColumnsKeys,
+    sortable,
+    dTypesConfig,
+    cellRenderProps,
+    rowPrefix,
+    rowPrefixDeps,
+    isResizableColumns
   ]);
 
   const { nextColumns, nextColumnWidth } = useMemo(() => {

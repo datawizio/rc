@@ -1,14 +1,14 @@
 import clsx from "clsx";
-import Select from "@/components/Select";
 import Dropdown from "./components/Dropdown";
 import Template from "./components/Template";
 
+import { Select } from "antd";
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { TagsOutlined } from "@ant-design/icons";
 import { useDeepEqualMemo, useConfig } from "@/hooks";
 import { useTable } from "@/components/Table/hooks/useTable";
 
-import type { FC, ReactNode, MouseEvent } from "react";
+import type { FC, MouseEvent } from "react";
 import type { MaybePromise } from "@/types/utils";
 import type { LiteColumn, TableTemplate } from "./types";
 import type {
@@ -60,19 +60,6 @@ const pickState = (
   };
 };
 
-const SelectValue: FC<{ value: ReactNode }> = ({ value }) => {
-  const { translate } = useConfig();
-
-  return (
-    <div className="table-templates__value">
-      <TagsOutlined className="table-templates__icon" />
-      <span className="table-templates__value-title">
-        {value || translate("TEMPLATES")}
-      </span>
-    </div>
-  );
-};
-
 export interface TableTemplatesProps {
   fetchAfterApply?: boolean;
   sortFirstColumn?: boolean;
@@ -92,7 +79,6 @@ const TableTemplates: FC<TableTemplatesProps> = ({
   ...props
 }) => {
   const { translate } = useConfig();
-
   const { tableState, dispatch, baseTableState, tableProps } = useTable();
 
   const [templates, setTemplates] = useState<TableTemplate[]>([]);
@@ -292,8 +278,9 @@ const TableTemplates: FC<TableTemplatesProps> = ({
         listHeight={150}
         onChange={value => handleSelect(value as number)}
         className="table-templates__selector"
-        value={(<SelectValue value={selectedTemplate?.title} />) as any}
+        value={selectedTemplate?.id || translate("TEMPLATES")}
         onOpenChange={state => setIsDropdownOpen(state)}
+        prefix={<TagsOutlined className="table-templates__icon" />}
         popupRender={originNode => (
           <Dropdown onCreate={handleCreate} isOpen={isDropdownOpen}>
             {originNode}

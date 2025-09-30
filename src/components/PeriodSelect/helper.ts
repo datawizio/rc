@@ -30,9 +30,9 @@ export const getPrevPeriod = ({
   period
 }: {
   date: PeriodEnum | DateRange;
-  period: DateRangeType;
+  period: DateRangeType | null;
   clientDate: string;
-  prev_period: PrevPeriodEnum;
+  prev_period: PrevPeriodEnum | null;
 }) => {
   const newPrevPeriod: DateRangeType<Dayjs> = {
     startDate: null,
@@ -203,36 +203,36 @@ export const getPrevPeriod = ({
     }
   }
 
-  const periodEnd = period.endDate ?? clientDate;
+  const periodEnd = period?.endDate ?? clientDate;
 
   switch (prev_period) {
     case "prev_last_week": {
-      newPrevPeriod.startDate = dayjs(period.startDate).subtract(1, "week");
+      newPrevPeriod.startDate = dayjs(period?.startDate).subtract(1, "week");
       newPrevPeriod.endDate = dayjs(periodEnd).subtract(1, "week");
       break;
     }
 
     case "prev_last_month": {
-      newPrevPeriod.startDate = dayjs(period.startDate).subtract(1, "month");
+      newPrevPeriod.startDate = dayjs(period?.startDate).subtract(1, "month");
       newPrevPeriod.endDate = dayjs(periodEnd).subtract(1, "month");
       break;
     }
 
     case "prev_last_quarter": {
-      newPrevPeriod.startDate = dayjs(period.startDate).subtract(1, "quarter");
+      newPrevPeriod.startDate = dayjs(period?.startDate).subtract(1, "quarter");
       newPrevPeriod.endDate = dayjs(periodEnd).subtract(1, "quarter");
       break;
     }
 
     case "same_weekday_prev_year": {
-      newPrevPeriod.startDate = dayjs(period.startDate).subtract(52, "week");
+      newPrevPeriod.startDate = dayjs(period?.startDate).subtract(52, "week");
       newPrevPeriod.endDate = dayjs(periodEnd).subtract(52, "week");
       break;
     }
 
     case "prev_last_year": {
-      const diff = dayjs(periodEnd).diff(period.startDate, "day");
-      newPrevPeriod.startDate = dayjs(period.startDate).subtract(1, "year");
+      const diff = dayjs(periodEnd).diff(period?.startDate, "day");
+      newPrevPeriod.startDate = dayjs(period?.startDate).subtract(1, "year");
       newPrevPeriod.endDate = dayjs(newPrevPeriod.startDate).add(+diff, "day");
       break;
     }

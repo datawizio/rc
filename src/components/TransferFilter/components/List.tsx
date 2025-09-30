@@ -547,10 +547,9 @@ export default class TransferList extends PureComponent<
   }
 
   generateLevelOptions(levels: number[] = []) {
-    const text = `${i18n.t("LEVEL_N")} %s`;
     return levels.map(level => ({
       value: level,
-      label: text.replace("%s", String(level))
+      label: i18n.t("LEVEL_N", { level })
     }));
   }
 

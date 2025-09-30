@@ -59,13 +59,14 @@ export interface IntervalItemProps {
   onChange: (value: Dayjs) => void;
 }
 
-export interface FieldDatePickerProps extends FormFieldProps<Dayjs | null> {
-  format?: string;
-  fullWidth?: boolean;
-  inputReadOnly?: boolean;
-  type?: CalendarType;
-  disabledDate?: (currentDate: Dayjs) => boolean;
-}
+export type FieldDatePickerProps = FormFieldProps<Dayjs | null> &
+  DatePickerProps & {
+    format?: string;
+    fullWidth?: boolean;
+    inputReadOnly?: boolean;
+    type?: CalendarType;
+    disabledDate?: (currentDate: Dayjs) => boolean;
+  };
 
 export interface FieldTextProps extends FormFieldProps<string> {
   type?: string;

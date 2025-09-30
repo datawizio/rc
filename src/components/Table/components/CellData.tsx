@@ -1,17 +1,20 @@
 import React, { useMemo } from "react";
-import { useTable } from "@/components/Table/hooks/useTable";
 import { defineCellType } from "../utils/utils";
 import { formatNumericValue, isNumeric } from "@/utils/helpers";
-import type { IRow, IColumn } from "../types";
 
-export interface CellDataProps<T = any> {
+import type { IRow, IColumn, TableProps } from "../types";
+
+export type CellDataProps<T = any> = Pick<
+  TableProps,
+  "dTypesConfig" | "cellRenderProps" | "rowPrefix" | "rowPrefixDeps"
+> & {
   value: T;
   row: IRow;
   column: IColumn;
   yIndex: number;
   xIndex: number;
   columnLevel: number;
-}
+};
 
 const CellData: React.FC<CellDataProps> = ({
   value,
@@ -19,13 +22,12 @@ const CellData: React.FC<CellDataProps> = ({
   column,
   xIndex,
   yIndex,
-  columnLevel
+  columnLevel,
+  dTypesConfig,
+  cellRenderProps,
+  rowPrefix,
+  rowPrefixDeps
 }) => {
-  const {
-    tableState: { dTypesConfig },
-    tableProps: { cellRenderProps, rowPrefix, rowPrefixDeps }
-  } = useTable();
-
   const typeConfig = useMemo(() => {
     return dTypesConfig?.[defineCellType(value, column)];
   }, [dTypesConfig, value, column]);

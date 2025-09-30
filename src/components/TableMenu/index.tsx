@@ -7,10 +7,10 @@ import {
   VerticalAlignBottomOutlined
 } from "@ant-design/icons";
 import { Dropdown, Menu, message } from "antd";
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { saveAs } from "file-saver";
 import { useConfig } from "@/hooks";
-import { useTable } from "@/components/Table/hooks/useTable";
+import { TableContext } from "@/components/Table/context";
 
 import type { FC, MouseEvent } from "react";
 import type { MaybePromise } from "@/types/utils";
@@ -58,7 +58,7 @@ const TableMenu: FC<TableMenuProps> = ({
   ...restProps
 }) => {
   const { translate } = useConfig();
-  const context = useTable();
+  const context = useContext(TableContext);
 
   const { expand_horizontally, expand_tree, vertical_axis_metrics } = settings;
   const {

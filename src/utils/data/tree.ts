@@ -84,3 +84,22 @@ export function filterOptions(
 
   return dfs(treeData);
 }
+
+export const findItemInTreeById = <T extends Record<string, any>>(
+  items: T[] | null | undefined,
+  id: number
+): T | undefined => {
+  if (!items) return;
+
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].id === id) {
+      return items[i];
+    }
+
+    const found = findItemInTreeById<T>(items[i].children, id);
+
+    if (found) {
+      return found;
+    }
+  }
+};
