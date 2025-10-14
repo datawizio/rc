@@ -30,11 +30,19 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
     colorLink: cssVar("--primary-color")
   };
 
+  const components: ThemeConfig["components"] = {
+    Table: {
+      headerBorderRadius: 0,
+      borderRadius: 0
+    }
+  };
+
   const themeConfig: ThemeConfig = {
     cssVar: { key: ANTD_THEME_CLASS },
     hashed: false,
     algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
     token: tokens,
+    components: components,
     ...props.theme
   };
 

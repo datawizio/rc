@@ -9,7 +9,7 @@ import TableWrapper from "./components/TableWrapper";
 import HeaderWrapper from "./components/HeaderWrapper";
 
 import { useMemo, useReducer, useCallback, useImperativeHandle } from "react";
-import { merge } from "lodash";
+import { mergeWith } from "lodash";
 import { Table as AntdTable } from "antd";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -63,7 +63,7 @@ const tableDefaultProps: Partial<TableProps> = {
   compressColumns: false,
   showSorterTooltip: false,
 
-  size: "small",
+  size: "middle",
   width: "auto",
   height: "auto",
   tableLayout: "fixed",
@@ -85,7 +85,16 @@ const tableDefaultProps: Partial<TableProps> = {
 };
 
 const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
-  const props = merge(tableDefaultProps, customProps);
+  const props = useMemo(() => {
+    return mergeWith(
+      {},
+      tableDefaultProps,
+      customProps,
+      (objValue, srcValue) => {
+        return srcValue !== undefined ? srcValue : objValue;
+      }
+    );
+  }, [customProps]);
 
   const {
     errorRender,

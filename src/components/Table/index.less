@@ -77,14 +77,6 @@
     }
   }
 
-  .virtuallist {
-    .ant-table-tbody {
-      .ant-table-row {
-        height: 50px;
-      }
-    }
-  }
-
   .dw-table__column,
   th {
     min-width: 100px;
@@ -159,11 +151,11 @@
 
     .ant-table-selection {
       display: flex;
-    }
-  }
 
-  tr.dw-row-total > td {
-    background-color: var(--ant-color-bg-solid);
+      &:has(input[type="checkbox"]) {
+        align-items: center;
+      }
+    }
   }
 
   &__cell {

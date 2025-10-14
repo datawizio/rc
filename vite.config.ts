@@ -5,7 +5,7 @@ import { libInjectCss } from "vite-plugin-lib-inject-css";
 import { glob } from "glob";
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
-import { peerDependencies } from "./package.json";
+import { dependencies, peerDependencies } from "./package.json";
 
 const entryFiles = await glob("./src/**/*.{ts,tsx,less}", {
   ignore: [
@@ -37,7 +37,7 @@ const copyLessFiles = () => {
   };
 };
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     libInjectCss(),
@@ -88,10 +88,11 @@ export default defineConfig({
       external: [
         "react/jsx-runtime",
         "react/jsx-dev-runtime",
+        ...Object.keys(dependencies || {}),
         ...Object.keys(peerDependencies || {})
       ]
     },
-    sourcemap: true, // TODO: import.meta.env.NODE_ENV === 'development'
+    sourcemap: mode === "development",
     emptyOutDir: true
   }
-});
+}));

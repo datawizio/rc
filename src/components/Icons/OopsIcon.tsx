@@ -197,9 +197,9 @@ const MyIcon = () => (
       <path
         d="M357.29 265.35C356.878 264.589 356.75 263.706 356.93 262.86C357.097 262.03 357.568 261.292 358.25 260.79"
         stroke="black"
-        stroke-width="0.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
+        strokeWidth="0.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
       />
       <path
         d="M494.416 373.971L480.765 392.12L507.057 411.897L520.709 393.748L494.416 373.971Z"

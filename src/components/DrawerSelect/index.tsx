@@ -933,7 +933,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     onClick: handleSelectClick,
     allowClear: internalValue && internalValue.length > 0,
     onChange: handleChange,
-    showSearch: false
+    showSearch: false,
+    suffixIcon: null
   };
 
   return (

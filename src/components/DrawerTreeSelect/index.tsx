@@ -972,6 +972,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         tagRender={tagRender}
         maxTagPlaceholder={maxTagPlaceholder}
         maxTagCount={maxTagCount}
+        suffixIcon={null}
       />
       {dropdownRender()}
     </>
