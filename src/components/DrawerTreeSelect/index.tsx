@@ -163,7 +163,15 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     showLevels && internalLevels && internalLevels.length > 1;
 
   const internalTreeData = useMemo(() => {
-    const td = treeData || stateTreeData;
+    const td = (treeData || stateTreeData)?.map((item): DataNode => {
+      const resolvedKey = item.key || item.id;
+
+      return {
+        ...item,
+        key: resolvedKey,
+        value: item.value || resolvedKey
+      };
+    });
 
     if (
       !disableParentsOnSearch ||
@@ -972,7 +980,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         tagRender={tagRender}
         maxTagPlaceholder={maxTagPlaceholder}
         maxTagCount={maxTagCount}
-        suffixIcon={null}
       />
       {dropdownRender()}
     </>
