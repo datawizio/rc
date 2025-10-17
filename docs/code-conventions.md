@@ -5,7 +5,6 @@ Library. These are not strict rules but shared practices that make our codebase 
 predictable, and easier to maintain. If you ever have a good reason to deviate, that's fine — but
 always do it consciously, not accidentally.
 
-
 ## Imports
 
 We recommend keeping imports clean and structured. The usual order is:
@@ -23,24 +22,24 @@ imports.
 
 ```ts
 import * as Flags from "country-flag-icons/react/3x2";
-import React from 'react';
-import Button from '@/components/Button';
+import React from "react";
+import Button from "@/components/Button";
 
-import { useTheme } from '@/hooks/useTheme';
+import { useTheme } from "@/hooks/useTheme";
 
-import type { FC } from 'react';
+import type { FC } from "react";
 
-import './index.less';
+import "./index.less";
 ```
 
 ❌ **Don't**:
 
 ```ts
-import React, { FC } from 'react';
-import './index.less';
+import React, { FC } from "react";
+import "./index.less";
 import * as Flags from "country-flag-icons/react/3x2";
-import { useTheme } from '../../hooks/useTheme';
-import Button from '../Button';
+import { useTheme } from "../../hooks/useTheme";
+import Button from "../Button";
 ```
 
 We also recommend avoiding relative imports like `../..` in favor of the `@/` alias. This keeps
@@ -53,17 +52,16 @@ alongside our own internal components to avoid name collisions.
 ✅ **Do**:
 
 ```ts
-import Button from '@/components/Button';
-import { Button as AntButton } from 'antd/es/button';
+import Button from "@/components/Button";
+import { Button as AntButton } from "antd/es/button";
 ```
 
 ❌ **Don't**:
 
 ```ts
-import MyButton from '@/components/Button';
-import { Button } from 'antd/lib/button';
+import MyButton from "@/components/Button";
+import { Button } from "antd/lib/button";
 ```
-
 
 ## Functions and Components
 
@@ -113,7 +111,6 @@ export default Button;
 Default exports are reserved only for React components. Hooks, helpers, and types should always use
 named exports.
 
-
 ## Types
 
 We recommend avoiding `any` because it disables type safety. If you don't know the type, prefer
@@ -131,17 +128,16 @@ const numbers: number[] = [1, 2, 3];
 ✅ **Special case**:
 
 ```ts
-type Values = Array<T['prop']>;
+type Values = Array<T["prop"]>;
 ```
 
-React provides multiple primitives for typing children. In most cases, prefer `ReactNode` because it
+React provides multiple primitives for typing items that can be rendered. In most cases, prefer `ReactNode` because it
 supports text, numbers, fragments, and components. Use `ReactElement` when you want to enforce that
-the child is a valid React element, and use `JSX.Element` only if absolutely needed.
+the item is a valid React element, and use `JSX.Element` only if absolutely needed.
 
 All types and interfaces should be exported so they can be reused across the library. Keep them in
 `types.ts` files next to the implementation or in `./src/types/` folder instead of separate `.d.ts`
 files.
-
 
 ## Theming and Context
 
@@ -157,7 +153,7 @@ const theme = useTheme();
 ❌ **Don't**:
 
 ```ts
-const theme = localStorage.getItem('theme');
+const theme = localStorage.getItem("theme");
 ```
 
 When working with React contexts, avoid calling `useContext` directly in every component. Instead,
@@ -183,7 +179,6 @@ const config = useConfig();
 const config = useContext(ConfigContext);
 ```
 
-
 ## Folder and File Structure
 
 Each component should live in its own folder, and that folder should contain everything related to
@@ -208,7 +203,7 @@ This structure ensures that all logic, styles, and helpers that belong to a comp
 inside its folder. Subcomponents stay inside the components folder, so they don't pollute the global
 namespace. Hooks and utils are separated for clarity and reusability within the component itself.
 Styles are kept in `.less` files, with a dedicated `rtl.less` to handle right-to-left support. The
-types.ts file contains all exported types for the component, making it easy to find and reuse them.
+`types.ts` file contains all exported types for the component, making it easy to find and reuse them.
 
 > 👉 **Why this matters?** Having everything in one place keeps components modular. It makes it easier
 > for new developers to find the relevant code, encourages encapsulation, and avoids scattering
