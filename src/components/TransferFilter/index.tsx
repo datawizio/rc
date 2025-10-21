@@ -35,7 +35,7 @@ const TransferFilter: FC<TransferFilterProps> = ({
   loadDataByIds,
   disableRoots
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const [
     {
@@ -304,9 +304,9 @@ const TransferFilter: FC<TransferFilterProps> = ({
         titleText={sourceTitle}
         type={type}
         value={sourceValue}
-        noDataText={translate("NO_DATA")}
-        searchText={translate("SEARCH")}
-        selectedText={translate("SELECTED")}
+        noDataText={t("NO_DATA")}
+        searchText={t("SEARCH")}
+        selectedText={t("SELECTED")}
         $filters={sourceFilters}
         loadData={sourceLoadData}
         onItemSelect={onLeftItemSelect}
@@ -338,9 +338,9 @@ const TransferFilter: FC<TransferFilterProps> = ({
         type="list"
         value={targetValue}
         $filters={targetFilters}
-        noDataText={translate("NO_DATA")}
-        searchText={translate("SEARCH")}
-        selectedText={translate("SELECTED")}
+        noDataText={t("NO_DATA")}
+        searchText={t("SEARCH")}
+        selectedText={t("SELECTED")}
         pagination={pagination}
         loadData={targetLoadData}
         loadDataByIds={loadDataByIds}
