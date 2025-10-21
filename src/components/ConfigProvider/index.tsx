@@ -26,6 +26,8 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   const isDark = customTheme === "dark";
 
   const tokens: ThemeConfig["token"] = {
+    borderRadius: 4,
+    colorText: "rgba(0, 0, 0, 0.65)",
     colorPrimary: cssVar("--primary-color"),
     colorLink: cssVar("--primary-color")
   };
