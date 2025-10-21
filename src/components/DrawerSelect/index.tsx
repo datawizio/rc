@@ -14,10 +14,10 @@ import { useRef, useCallback, useMemo, useEffect } from "react";
 
 import type { FC, ReactNode, UIEvent, ChangeEvent } from "react";
 import type { SelectProps, CheckboxChangeEvent } from "antd";
-import type { AntTreeNode } from "antd/lib/tree";
-import type { BaseOptionType, DefaultOptionType } from "antd/lib/select";
+import type { AntTreeNode } from "antd/es/tree";
+import type { BaseOptionType, DefaultOptionType } from "antd/es/select";
 import type { HandlerFn } from "@/types/utils";
-import type { SelectValue } from "antd/lib/select";
+import type { SelectValue } from "antd/es/select";
 import type { SafeKey } from "rc-tree-select/es/interface";
 import type { IDrawerSelectState, SelectValues } from "./hooks/useDrawerSelect";
 

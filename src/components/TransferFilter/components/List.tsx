@@ -9,8 +9,8 @@ import { createRef, isValidElement, PureComponent } from "react";
 import { isLocalDataSource, searchByArticle } from "../helper";
 
 import type { ChangeEvent, ReactElement, ReactNode } from "react";
-import type { DataNode } from "antd/lib/tree";
-import type { SelectValue } from "antd/lib/tree-select";
+import type { DataNode } from "antd/es/tree";
+import type { SelectValue } from "antd/es/tree-select";
 import type { EventDataNode } from "rc-tree/es/interface";
 import type { PaginationType } from "antd/es/transfer/interface";
 import type { Observable, Subscription } from "@/types/store";

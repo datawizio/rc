@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { Dayjs } from "dayjs";
 import type { SelectProps, FormRule, DatePickerProps } from "antd";
-import type { SwitchSize } from "antd/lib/switch";
+import type { SwitchSize } from "antd/es/switch";
 import type { CalendarType } from "@/types/calendar";
 import type { InfoTooltipProps } from "@/components/InfoTooltip";
 import type { DrawerSelectProps } from "../DrawerSelect";

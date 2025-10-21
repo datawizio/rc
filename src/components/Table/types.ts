@@ -1,6 +1,6 @@
 import { ColumnIcons } from "./utils/columnIcons";
 
-import type { TableProps as AntdTableProps, ColumnProps } from "antd/lib/table";
+import type { TableProps as AntdTableProps, ColumnProps } from "antd/es/table";
 import type { MaybePromise, Overwrite } from "@/types/utils";
 import type {
   TableTemplateState,
@@ -20,7 +20,7 @@ import type {
   SortOrder,
   SorterResult,
   TableLocale
-} from "antd/lib/table/interface";
+} from "antd/es/table/interface";
 
 import type { ColumnType, FilterValue } from "antd/es/table/interface";
 

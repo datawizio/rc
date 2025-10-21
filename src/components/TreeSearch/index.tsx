@@ -5,7 +5,7 @@ import { Empty } from "antd";
 import { unTree, flattenOptions, filterOptions } from "@/utils/data/tree";
 import { useConfig } from "@/hooks";
 
-import type { AntTreeNodeProps, DataNode } from "antd/lib/tree";
+import type { AntTreeNodeProps, DataNode } from "antd/es/tree";
 import type { TreeProps } from "@/components/Tree";
 import type {
   FC,

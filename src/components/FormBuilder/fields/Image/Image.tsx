@@ -4,7 +4,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Preview } from "./Preview";
 import { useConfig } from "@/hooks";
 
-import type { RcFile } from "antd/lib/upload";
+import type { RcFile } from "antd/es/upload";
 import type { ImageProps } from "../../types";
 
 const beforeUpload = (file: RcFile) => {

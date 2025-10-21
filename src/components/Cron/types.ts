@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { ButtonProps } from "antd";
-import type { SelectProps, DefaultOptionType } from "antd/lib/select";
+import type { SelectProps, DefaultOptionType } from "antd/es/select";
 
 export interface CronProps {
   /**

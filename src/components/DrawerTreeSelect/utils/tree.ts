@@ -1,7 +1,7 @@
 import type { Key } from "react";
 import type { TreeDataNode } from "antd";
-import type { CheckedStrategy } from "rc-tree-select/lib/utils/strategyUtil";
-import type { SimpleModeConfig } from "rc-tree-select/lib/interface";
+import type { CheckedStrategy } from "rc-tree-select/es/utils/strategyUtil";
+import type { SimpleModeConfig } from "rc-tree-select/es/interface";
 import type {
   IDrawerTreeSelectFilters,
   SelectValues

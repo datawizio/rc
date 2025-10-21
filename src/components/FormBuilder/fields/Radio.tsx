@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import Radio from "@/components/Radio";
 import { Form } from "antd";
 
-import type { RadioChangeEvent } from "antd/lib/radio";
+import type { RadioChangeEvent } from "antd/es/radio";
 import type { FieldRadioProps } from "../types";
 
 export const FieldRadio: React.FC<FieldRadioProps> = React.memo(

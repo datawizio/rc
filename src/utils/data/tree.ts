@@ -1,4 +1,4 @@
-import type { DataNode } from "antd/lib/tree";
+import type { DataNode } from "antd/es/tree";
 
 export const unTree = (tree?: DataNode[]) => {
   let list: DataNode[] = [];

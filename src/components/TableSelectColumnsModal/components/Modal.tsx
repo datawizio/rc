@@ -12,7 +12,7 @@ import { useTable } from "@/components/Table/hooks/useTable";
 import type { FC } from "react";
 import type { TableSelectColumnsModalProps } from "../index";
 import type { IColumn } from "@/components/Table/types";
-import type { Key } from "antd/lib/table/interface";
+import type { Key } from "antd/es/table/interface";
 
 export interface TableSelectColumnsModalModalProps
   extends TableSelectColumnsModalProps {

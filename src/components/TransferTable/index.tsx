@@ -5,8 +5,8 @@ import { useConfig } from "@/hooks";
 import type { FC, ReactNode, Key } from "react";
 import type { TableProps, TransferProps } from "antd";
 import type { SelectAllLabel, TransferDirection } from "antd/es/transfer";
-import type { TransferListProps } from "antd/lib/transfer";
-import type { TableRowSelection } from "antd/lib/table/interface";
+import type { TransferListProps } from "antd/es/transfer";
+import type { TableRowSelection } from "antd/es/table/interface";
 
 type TableChangeParameters = Parameters<NonNullable<TableProps["onChange"]>>;
 

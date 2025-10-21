@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 
-import type { AntTreeNode } from "antd/lib/tree";
-import type { DefaultOptionType, SelectValue } from "antd/lib/select";
+import type { AntTreeNode } from "antd/es/tree";
+import type { DefaultOptionType, SelectValue } from "antd/es/select";
 
 export type SelectValues = Extract<SelectValue, unknown[]>;
 
