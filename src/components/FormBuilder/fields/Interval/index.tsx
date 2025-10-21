@@ -37,16 +37,16 @@ export const FieldInterval: FC<FieldIntervalProps> = ({
   maxDate,
   onChange
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const handleChange = (value: IntervalType) => {
     onChange?.({ name, value });
   };
 
   const internalRules = useMemo(() => {
-    const validatorRule = intervalValidation(translate);
+    const validatorRule = intervalValidation(t);
     return rules ? rules.concat([validatorRule]) : [validatorRule];
-  }, [rules, translate]);
+  }, [rules, t]);
 
   return (
     <Form.Item

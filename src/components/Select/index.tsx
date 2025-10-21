@@ -23,7 +23,7 @@ const Select: SelectCompoundComponent = ({
   children,
   ...restProps
 }) => {
-  const { translate: t } = useConfig();
+  const { t } = useConfig();
 
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<any[]>([]);

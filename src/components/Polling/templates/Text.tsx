@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Button, Input } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
 import type { StepProps } from "../types";
 
 const Text: FC<StepProps> = ({ onSubmit }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
   const [textValue, setTextValue] = useState<string>("");
 
   const handleSubmit = () => {

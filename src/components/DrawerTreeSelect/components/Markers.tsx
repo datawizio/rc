@@ -1,7 +1,7 @@
 import React from "react";
 import TreeSelect from "@/components/TreeSelect";
 import { useCallback } from "react";
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 
 export interface MarkersProps {
   value?: string[] | number[];
@@ -20,7 +20,7 @@ const Markers: React.FC<MarkersProps> = ({
   placeholder,
   style
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
 
   const handleSearch = useCallback((inputValue: string, treeNode: any) => {
     return treeNode.title.toLowerCase().includes(inputValue.toLowerCase());

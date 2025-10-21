@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import Button from "@/components/Button";
 
-import { useTranslation } from "react-i18next";
 import { UndoOutlined } from "@ant-design/icons";
+import { useConfig } from "@/hooks";
 import { EnvelopeIcon } from "@/components/Icons/EnvelopeIcon";
 import { DeleteIcon } from "@/components/Icons/DeleteIcon";
 import { MailIcon } from "@/components/Icons/MailIcon";
@@ -28,7 +28,7 @@ const ListActions: React.FC<ListActionsProps> = ({
   onRestore,
   onDelete
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
   const { state } = useContext(NotificationsListContext);
 
   const checkedKeysData = state?.dataSource?.filter(item =>

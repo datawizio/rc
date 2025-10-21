@@ -22,7 +22,7 @@ const ClientSelect: FC<ClientSelectProps> = ({
   theme,
   onChange
 }) => {
-  const { translate: t } = useConfig();
+  const { t } = useConfig();
 
   const handleChange = (value: SelectValue) => {
     const arr = window.location.pathname.split("/").slice(3);

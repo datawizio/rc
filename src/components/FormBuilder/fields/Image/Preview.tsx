@@ -10,15 +10,15 @@ export interface PreviewProps {
 }
 
 export const Preview: FC<PreviewProps> = ({ value, onDelete }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     Modal.confirm({
-      title: translate("DELETE_CONFIRM_PHOTO"),
+      title: t("DELETE_CONFIRM_PHOTO"),
       icon: <ExclamationCircleOutlined />,
-      okText: translate("YES"),
-      cancelText: translate("CANCEL"),
+      okText: t("YES"),
+      cancelText: t("CANCEL"),
       onOk: () => onDelete(),
       onCancel: () => void 0
     });

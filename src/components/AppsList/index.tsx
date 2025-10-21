@@ -38,7 +38,7 @@ const AppsList: FC<AppsListProps> = ({
   onSelect,
   disabledApps
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   return (
     <Row className="row-apps">
@@ -54,7 +54,7 @@ const AppsList: FC<AppsListProps> = ({
           />
         ))
       ) : (
-        <div className="no-apps">{translate("HAVENT_APPS")}</div>
+        <div className="no-apps">{t("HAVENT_APPS")}</div>
       )}
     </Row>
   );

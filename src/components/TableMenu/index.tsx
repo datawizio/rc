@@ -57,7 +57,7 @@ const TableMenu: FC<TableMenuProps> = ({
   nonExpandableMetrics = new Set(),
   ...restProps
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const context = useContext(TableContext);
 
   const { expand_horizontally, expand_tree, vertical_axis_metrics } = settings;
@@ -93,7 +93,7 @@ const TableMenu: FC<TableMenuProps> = ({
         const messageKey = "exporting-" + file;
 
         const hideLoadingMessageFn = message.loading({
-          content: translate("LOADING"),
+          content: t("LOADING"),
           key: messageKey,
           duration: duration
         });
@@ -108,7 +108,7 @@ const TableMenu: FC<TableMenuProps> = ({
 
         saveAs(new Blob([fileData]), file);
 
-        message.success({ content: translate("SUCCESS"), key: messageKey });
+        message.success({ content: t("SUCCESS"), key: messageKey });
 
         if (exportHandlerCallback && fileData) {
           await exportHandlerCallback(new Blob([fileData]), file);
@@ -116,14 +116,7 @@ const TableMenu: FC<TableMenuProps> = ({
       }
     },
     // eslint-disable-next-line
-    [
-      tableState,
-      translate,
-      exportHandler,
-      filename,
-      getFilename,
-      exportHandlerCallback
-    ]
+    [tableState, t, exportHandler, filename, getFilename, exportHandlerCallback]
   );
 
   const handleTotalClick = useCallback(
@@ -206,14 +199,14 @@ const TableMenu: FC<TableMenuProps> = ({
             checked={Boolean(tableState?.fixedTotal)}
             onClick={handleTotalClick}
           >
-            {translate("FIXED_TOTAL")}
+            {t("FIXED_TOTAL")}
           </Checkbox>
         </Menu.Item>
       )}
       {expand_table_vertically && (
         <Menu.Item key="expand_table_vertically" className="menu-item-checkbox">
           <Checkbox onClick={onExpandVertical}>
-            {translate("EXPAND_THE_TABLE_VERTICALLY")}
+            {t("EXPAND_THE_TABLE_VERTICALLY")}
           </Checkbox>
         </Menu.Item>
       )}
@@ -223,7 +216,7 @@ const TableMenu: FC<TableMenuProps> = ({
           className="menu-item-checkbox"
         >
           <Checkbox onClick={onExpandHorizontal}>
-            {translate("EXPAND_TABLE_HORIZONTALLY")}
+            {t("EXPAND_TABLE_HORIZONTALLY")}
           </Checkbox>
         </Menu.Item>
       )}
@@ -241,7 +234,7 @@ const TableMenu: FC<TableMenuProps> = ({
             />
           }
         >
-          {translate("SAVE_XLS")}
+          {t("SAVE_XLS")}
         </Menu.Item>
       )}
       {show_send_to_email &&
@@ -251,7 +244,7 @@ const TableMenu: FC<TableMenuProps> = ({
             title={
               <>
                 <SendOutlined className={"table-menu-dropdown__icon__send"} />
-                {translate("SEND_XLS")}
+                {t("SEND_XLS")}
               </>
             }
           >
@@ -260,20 +253,20 @@ const TableMenu: FC<TableMenuProps> = ({
                 key="without_expand_tree"
                 onClick={() => onSendClick?.()}
               >
-                {translate("WITHOUT_EXPAND_TREE")}
+                {t("WITHOUT_EXPAND_TREE")}
               </Menu.Item>
             )}
             {send_xlsx_expand_submenu && (
               <Menu.SubMenu
                 key="send_xlsx_expand_submenu"
-                title={translate("APPLY_EXPAND_TREE")}
+                title={t("APPLY_EXPAND_TREE")}
               >
                 {expand_tree_horizontally && (
                   <Menu.Item
                     key="expand_tree_horizontally"
                     onClick={() => onSendClick?.("horizontally")}
                   >
-                    {translate("EXPAND_TREE_HORIZONTALLY")}
+                    {t("EXPAND_TREE_HORIZONTALLY")}
                   </Menu.Item>
                 )}
                 {expand_tree_grouped && (
@@ -281,7 +274,7 @@ const TableMenu: FC<TableMenuProps> = ({
                     key="expand_tree_grouped"
                     onClick={() => onSendClick?.("grouped")}
                   >
-                    {translate("EXPAND_TREE_GROUPED")}
+                    {t("EXPAND_TREE_GROUPED")}
                   </Menu.Item>
                 )}
               </Menu.SubMenu>
@@ -294,7 +287,7 @@ const TableMenu: FC<TableMenuProps> = ({
               <SendOutlined className={"table-menu-dropdown__icon__send"} />
             }
           >
-            {translate("SEND_XLS")}
+            {t("SEND_XLS")}
           </Menu.Item>
         ))}
     </Menu>

@@ -122,7 +122,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
 
   const isAsync = props.async;
 
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const [baseState, dispatch] = useReducer(reducer, props, initializer);
 
   const columnsState = useColumns(baseState, props);
@@ -220,9 +220,9 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
 
   const totalRenderer = useCallback(
     (total: number, [current, to]: [number, number]) => {
-      return translate(locale.total, { current, to, total });
+      return t(locale.total, { current, to, total });
     },
-    [translate, locale.total]
+    [t, locale.total]
   );
 
   const expandIconRender = useCallback<HandlerFn<TableProps, "expandIcon">>(

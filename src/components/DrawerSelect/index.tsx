@@ -143,13 +143,13 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
   markersFilterName,
   ...restProps
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
-  const drawerSearchPlaceholder = translate("SEARCH");
-  const loadingText = translate("LOADING");
-  const submitText = translate("SUBMIT");
-  const cancelText = translate("CANCEL");
-  const selectAllText = translate("ALL");
+  const drawerSearchPlaceholder = t("SEARCH");
+  const loadingText = t("LOADING");
+  const submitText = t("SUBMIT");
+  const cancelText = t("CANCEL");
+  const selectAllText = t("ALL");
 
   const [
     {
@@ -564,7 +564,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       ) {
         const messageKey = "select-over-then-" + maxSelectedCount;
         message.error({
-          content: translate("COUNT_MUST_BE_SMALLER_THEN", {
+          content: t("COUNT_MUST_BE_SMALLER_THEN", {
             maxCount: maxSelectedCount
           }),
           key: messageKey
@@ -601,7 +601,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       dispatch,
       drawerVisible,
       showSelectAll,
-      translate,
+      t,
       triggerOnChange,
       checkSelectAllStatus
     ]
@@ -624,7 +624,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       ) {
         const messageKey = "select-over-then-" + maxSelectedCount;
         message.error({
-          content: translate("COUNT_MUST_BE_SMALLER_THEN", {
+          content: t("COUNT_MUST_BE_SMALLER_THEN", {
             maxCount: maxSelectedCount
           }),
           key: messageKey
@@ -657,7 +657,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       dispatch,
       drawerVisible,
       showSelectAll,
-      translate,
+      t,
       triggerOnChange,
       checkSelectAllStatus,
       optionsState
@@ -909,9 +909,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         </div>
         {multiple && (
           <div className="drawer-select-selected">
-            <div className="drawer-select-selected-title">
-              {translate("SELECTED")}
-            </div>
+            <div className="drawer-select-selected-title">{t("SELECTED")}</div>
             <div className="drawer-select-selected-count">
               {internalValue ? internalValue.length : 0}
             </div>

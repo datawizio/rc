@@ -78,7 +78,7 @@ const TableTemplates: FC<TableTemplatesProps> = ({
   onSelect,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const { tableState, dispatch, baseTableState, tableProps } = useTable();
 
   const [templates, setTemplates] = useState<TableTemplate[]>([]);
@@ -270,7 +270,7 @@ const TableTemplates: FC<TableTemplatesProps> = ({
   return (
     <div
       className={className}
-      title={translate(
+      title={t(
         selectedTemplate ? "CHANGE_TEMPLATE_BTN_TITLE" : "TEMPLATES_BTN_TITLE"
       )}
     >
@@ -278,7 +278,7 @@ const TableTemplates: FC<TableTemplatesProps> = ({
         listHeight={150}
         onChange={value => handleSelect(value as number)}
         className="table-templates__selector"
-        value={selectedTemplate?.id || translate("TEMPLATES")}
+        value={selectedTemplate?.id || t("TEMPLATES")}
         onOpenChange={state => setIsDropdownOpen(state)}
         prefix={<TagsOutlined className="table-templates__icon" />}
         popupRender={originNode => (

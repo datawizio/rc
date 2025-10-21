@@ -21,7 +21,7 @@ const TimeRangePicker: FC<TimeRangePickerProps> = ({
   fullWidth,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const handleChange: HandlerFn<AntTimeRangePickerProps, "onChange"> = (
     _,
@@ -51,7 +51,7 @@ const TimeRangePicker: FC<TimeRangePickerProps> = ({
         }
       }}
       mode={undefined}
-      placeholder={[translate("START_TIME"), translate("END_TIME")]}
+      placeholder={[t("START_TIME"), t("END_TIME")]}
     />
   );
 };

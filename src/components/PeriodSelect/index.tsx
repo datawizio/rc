@@ -48,7 +48,7 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
   allowEmptyEndDate,
   datePickerPlaceholder
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const {
     initialSelectedPeriod,
@@ -177,14 +177,12 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
   return (
     <div className="period-picker-wrapper">
       <div className="period-container">
-        <span className="period-title">{translate(periodLabel)}</span>
+        <span className="period-title">{t(periodLabel)}</span>
         <Select onChange={handlePeriodChange} value={selectedPeriod}>
           {PERIOD_OPTIONS.map((option, i) => {
             return (
               <Option key={i} value={option}>
-                {translate(
-                  option === "date" ? "SET_DATE" : option.toUpperCase()
-                )}
+                {t(option === "date" ? "SET_DATE" : option.toUpperCase())}
               </Option>
             );
           })}
@@ -222,7 +220,7 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
         )}
       </div>
       <div className="prev-period-container">
-        <span className="period-title">{translate(prevPeriodLabel)}</span>
+        <span className="period-title">{t(prevPeriodLabel)}</span>
 
         <Select
           onChange={handlePrevPeriodChange}
@@ -231,9 +229,7 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
         >
           {PREV_PERIOD_OPTIONS.map((option, i) => (
             <Option key={i} disabled={isDisabledOption(option)} value={option}>
-              {translate(
-                option === "prev_date" ? "SET_DATE" : option.toUpperCase()
-              )}
+              {t(option === "prev_date" ? "SET_DATE" : option.toUpperCase())}
             </Option>
           ))}
         </Select>

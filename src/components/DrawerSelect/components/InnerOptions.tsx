@@ -42,7 +42,7 @@ const InnerOptions: FC<InnerOptionsProps> = ({
   onCheck,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const [notHiddenKeys, setNotHiddenKeys] = useState<Set<Key> | null>(null);
 
   const nestedTreeData = useMemo(() => {
@@ -139,7 +139,7 @@ const InnerOptions: FC<InnerOptionsProps> = ({
     nestedTreeData?.length === 0 ||
     (searchingLocally && searchValue && !notHiddenKeys?.size)
   ) {
-    return translate("NO_DATA");
+    return t("NO_DATA");
   }
 
   return (

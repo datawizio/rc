@@ -1,8 +1,8 @@
 import Step from "./components/Step";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Row, notification } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
+import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
 import type {
@@ -21,7 +21,7 @@ const Polling: FC<PollingProps> = ({
   onPollingHide,
   onPollingShow
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
   const [activeStepIdx, setActiveStepIdx] = useState<number>(0);
   const [pollingShown, setPollingShown] = useState<boolean>(!!questions.length);
 

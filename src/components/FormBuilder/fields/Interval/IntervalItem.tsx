@@ -13,7 +13,7 @@ export const IntervalItem: FC<IntervalItemProps> = ({
   maxDate,
   onChange
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   return (
     <>
@@ -25,7 +25,7 @@ export const IntervalItem: FC<IntervalItemProps> = ({
           );
         }}
         picker={picker}
-        placeholder={translate("UNLIMITED")}
+        placeholder={t("UNLIMITED")}
         value={value}
         onChange={onChange}
         format={format}

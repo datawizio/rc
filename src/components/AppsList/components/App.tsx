@@ -47,7 +47,7 @@ export const App: FC<CardAppProps> = ({
   disabled = false,
   onButtonClick
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const theme = useTheme();
   const [client, setClient] = useState<number>();
 
@@ -84,16 +84,16 @@ export const App: FC<CardAppProps> = ({
             <div className="card-app-name">{name}</div>
           )}
         </div>
-        <div className="card-app-description">{translate(description)}</div>
+        <div className="card-app-description">{t(description)}</div>
         {showClientSelect && clients && clients.length > 1 && (
           <div className="card-app-clients">
             <Select
-              placeholder={translate("SELECT_CLIENT")}
+              placeholder={t("SELECT_CLIENT")}
               showSearch
               optionFilterProp="label"
               onChange={value => handleChangeClient(value as number)}
               value={client}
-              notFoundContent={translate("NO_DATA")}
+              notFoundContent={t("NO_DATA")}
             >
               {clients.map(client => (
                 <Select.Option
@@ -121,7 +121,7 @@ export const App: FC<CardAppProps> = ({
               disabled={disabled}
               onClick={handleButtonClick}
             >
-              {translate(allowed ? "NAVIGATE_TO" : "LEARN_MORE")}
+              {t(allowed ? "NAVIGATE_TO" : "LEARN_MORE")}
             </Button>
           </div>
         )}

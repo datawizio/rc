@@ -52,7 +52,7 @@ const InnerTree: FC<InnerTreeProps> = ({
   checkSelectAllStatus,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const [localExpandedKeys, setLocalExpandedKeys] = useState<Key[]>([]);
 
   const nestedTreeData = useMemo(() => {
@@ -194,7 +194,7 @@ const InnerTree: FC<InnerTreeProps> = ({
     nestedTreeData?.length === 0 ||
     (searchingLocally && searchValue && !localExpandedKeys?.length)
   ) {
-    return translate("NO_DATA");
+    return t("NO_DATA");
   }
 
   return (

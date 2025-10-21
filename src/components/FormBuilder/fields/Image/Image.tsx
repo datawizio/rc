@@ -27,7 +27,7 @@ export const Image: React.FC<ImageProps> = ({
   placeholder,
   onChange
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const upload = (file: RcFile) => {
     const reader = new FileReader();
@@ -54,9 +54,9 @@ export const Image: React.FC<ImageProps> = ({
   return (
     <ImgCrop
       cropShape="round"
-      modalTitle={translate("EDIT_IMAGE")}
-      modalOk={translate("SUBMIT")}
-      modalCancel={translate("CANCEL")}
+      modalTitle={t("EDIT_IMAGE")}
+      modalOk={t("SUBMIT")}
+      modalCancel={t("CANCEL")}
     >
       <Upload.Dragger
         beforeUpload={beforeUpload}

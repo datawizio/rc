@@ -87,13 +87,13 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   maxTagCount = 10,
   ...restProps
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
-  const drawerSearchPlaceholder = translate("SEARCH");
-  const loadingText = translate("LOADING");
-  const submitText = translate("SUBMIT");
-  const cancelText = translate("CANCEL");
-  const selectAllText = translate("ALL");
+  const drawerSearchPlaceholder = t("SEARCH");
+  const loadingText = t("LOADING");
+  const submitText = t("SUBMIT");
+  const cancelText = t("CANCEL");
+  const selectAllText = t("ALL");
 
   const [
     {
@@ -921,7 +921,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
             data-error={limitExceeded}
           >
             <div className="drawer-tree-select-selected-title">
-              {translate("SELECTED")}
+              {t("SELECTED")}
             </div>
             <div className="drawer-tree-select-selected-count">
               {selectAllState === "checked" && !markersChanged.current

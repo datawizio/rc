@@ -25,14 +25,12 @@ export const FieldPhone: FC<FieldPhoneProps> = ({
   placeholder,
   onChange
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const internalRules = useMemo(() => {
-    const validation = phoneValidation(
-      translate("PHONE_NUMBER_VALIDATION_MESSAGE")
-    );
+    const validation = phoneValidation(t("PHONE_NUMBER_VALIDATION_MESSAGE"));
     return rules ? rules.concat([validation]) : [validation];
-  }, [rules, translate]);
+  }, [rules, t]);
 
   const handleChange = (value: string) => {
     onChange?.({ name, value });

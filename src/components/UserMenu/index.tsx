@@ -36,7 +36,7 @@ const UserMenu: FC<UserMenuProps> = ({
   permissions,
   path
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const checkPermission = useCallback(
     (item: ILinkItem) => {
@@ -66,7 +66,7 @@ const UserMenu: FC<UserMenuProps> = ({
         <span className="user-menu-info-email">{email}</span>
         {expireDateTo && (
           <span className="user-menu-info-date">
-            {translate("ACCOUNT_IS_ACTIVE_TO")}:{" "}
+            {t("ACCOUNT_IS_ACTIVE_TO")}:{" "}
             {dayjs(expireDateTo).format(DATE_FORMAT)}
           </span>
         )}
@@ -77,15 +77,15 @@ const UserMenu: FC<UserMenuProps> = ({
           <div key={index} className="user-menu-items-group">
             {group.title && (
               <span className="user-menu-items-group-title">
-                {translate(group.title)}
+                {t(group.title)}
               </span>
             )}
             {group.items.map((item, index) => (
               <UserMenuItem
                 key={index}
                 photo={item.photo}
-                title={translate(item.title)}
-                description={translate(item.description)}
+                title={t(item.title)}
+                description={t(item.description)}
                 onClick={() => handleItemClick?.(item)}
               />
             ))}
@@ -95,7 +95,7 @@ const UserMenu: FC<UserMenuProps> = ({
 
       <div className="user-menu-button">
         <Button icon={<LogOutIcon />} onClick={handleLogOutClick}>
-          {translate("LOGOUT")}
+          {t("LOGOUT")}
         </Button>
       </div>
     </div>

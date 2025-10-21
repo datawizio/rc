@@ -17,7 +17,7 @@ export type ConfigProviderProps = Partial<ConfigContextValue> &
 initTheme();
 
 const ConfigProvider: FC<ConfigProviderProps> = ({
-  translate,
+  t,
   direction,
   children,
   ...props
@@ -51,11 +51,11 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   const contextValue = useMemo<ConfigContextValue>(() => {
     const nextValue = defaultContextValue;
 
-    if (translate) nextValue.translate = translate;
+    if (t) nextValue.t = t;
     if (direction) nextValue.direction = direction;
 
     return nextValue;
-  }, [direction, translate]);
+  }, [direction, t]);
 
   return (
     <ConfigContext.Provider value={contextValue}>

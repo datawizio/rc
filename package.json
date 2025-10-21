@@ -68,7 +68,6 @@
     "react-color": "^2.19.3",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-i18next": "^15.7.3",
     "react-loading-skeleton": "^3.5.0",
     "use-debounce": "^10.0.6",
     "uuid": "^13.0.0",

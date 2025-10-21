@@ -1,7 +1,7 @@
 import LiteSearchInput from "@/components/LiteSearchInput";
 import { useCallback, useEffect, useMemo } from "react";
 import { Collapse, Empty, List } from "antd";
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 import { MAX_LENGTH_ITEM_LIST } from "@/components/RuleInfo/helpers";
 import { useRuleContext } from "@/components/RuleInfo/hooks/useRuleContext";
 import type { DimensionsType, ListType } from "@/components/RuleInfo/types";
@@ -11,7 +11,7 @@ import "./index.less";
 const ROW_HEIGHT = 62;
 
 export const CollapseList = () => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
   const { ruleInfoState, dispatch } = useRuleContext();
   const { filters, dimensions, countValues } = ruleInfoState;
 

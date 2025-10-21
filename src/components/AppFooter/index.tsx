@@ -10,11 +10,11 @@ export interface AppFooterProps {
 
 const AppFooter: FC<AppFooterProps> = ({ text }) => {
   const year = useMemo(() => new Date().getFullYear(), []);
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   return (
     <AntLayout.Footer className="main-footer">
-      {text || translate("COPYRIGHT", { year })}
+      {text || t("COPYRIGHT", { year })}
     </AntLayout.Footer>
   );
 };

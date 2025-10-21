@@ -36,7 +36,7 @@ const Operation = ({
   moveToRight,
   moveAllToRight
 }: TransferOperationProps) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   return (
     <div className={className} style={style}>
@@ -45,7 +45,7 @@ const Operation = ({
         size="small"
         disabled={disabled || !rightActive}
         onClick={moveAllToRight}
-        title={tooltips ? translate(tooltips.throwAll) : ""}
+        title={tooltips ? t(tooltips.throwAll) : ""}
         icon={
           direction !== "rtl" ? <DoubleRightOutlined /> : <DoubleLeftOutlined />
         }
@@ -55,7 +55,7 @@ const Operation = ({
         size="small"
         disabled={disabled || !rightActive}
         onClick={moveToRight}
-        title={tooltips ? translate(tooltips.throwChosen) : ""}
+        title={tooltips ? t(tooltips.throwChosen) : ""}
         icon={direction !== "rtl" ? <RightOutlined /> : <LeftOutlined />}
       />
       <Button
@@ -63,7 +63,7 @@ const Operation = ({
         size="small"
         disabled={disabled || !leftActive}
         onClick={moveToLeft}
-        title={tooltips ? translate(tooltips.throwChosen) : ""}
+        title={tooltips ? t(tooltips.throwChosen) : ""}
         icon={direction !== "rtl" ? <LeftOutlined /> : <RightOutlined />}
       />
       <Button
@@ -71,7 +71,7 @@ const Operation = ({
         size="small"
         disabled={disabled || !leftActive}
         onClick={moveAllToLeft}
-        title={tooltips ? translate(tooltips.throwAll) : ""}
+        title={tooltips ? t(tooltips.throwAll) : ""}
         icon={
           direction !== "rtl" ? <DoubleLeftOutlined /> : <DoubleRightOutlined />
         }

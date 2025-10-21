@@ -111,7 +111,7 @@ const TreeSearch: FC<TreeSearchProps> = ({
 }) => {
   const { searchInputPlaceholder, emptySearchResultText } = locale;
 
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const timeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const [internalCheckedKeys, setInternalCheckedKeys] =
@@ -320,7 +320,7 @@ const TreeSearch: FC<TreeSearchProps> = ({
           ) : (
             <SearchInput
               onChange={handleSearchInputChange}
-              placeholder={translate(
+              placeholder={t(
                 searchInputPlaceholder ?? defaultLocale.searchInputPlaceholder
               )}
             />
@@ -341,7 +341,7 @@ const TreeSearch: FC<TreeSearchProps> = ({
         />
       ) : (
         <Empty
-          description={translate(
+          description={t(
             emptySearchResultText ?? defaultLocale.emptySearchResultText
           )}
         />

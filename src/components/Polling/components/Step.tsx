@@ -1,15 +1,15 @@
 import Text from "../templates/Text";
 import Marks from "../templates/Marks";
 
-import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { Col } from "antd";
+import { useMemo } from "react";
+import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
 import type { StepProps } from "../types";
 
 const Step: FC<StepProps> = ({ step, ...props }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
 
   const template = useMemo(() => {
     switch (step.feedback_type) {

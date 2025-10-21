@@ -38,7 +38,7 @@ const DateRangePicker: IDateRangePicker = ({
   maxDate: propsMaxDate,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const getPresets = useCallback(() => {
     // Presets absent
@@ -124,12 +124,12 @@ const DateRangePicker: IDateRangePicker = ({
     const translatedPresetMap = new Map();
 
     defaultPresetMap.forEach((value, key) => {
-      const translatedKey = translate(key);
+      const translatedKey = t(key);
       translatedPresetMap.set(translatedKey, value);
     });
 
     return Object.fromEntries(translatedPresetMap.entries());
-  }, [getPresets, translate]);
+  }, [getPresets, t]);
 
   const formatDate = useCallback(
     (date: DateType | null | undefined) => {

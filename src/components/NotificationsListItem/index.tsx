@@ -4,7 +4,7 @@ import List from "@/components/List";
 
 import { useMemo } from "react";
 import { Typography } from "antd";
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 
 import type { FC, ReactNode } from "react";
 import type { INotification, RenderItemProps } from "@/types/notifications";
@@ -29,7 +29,7 @@ const ListItem: FC<ListItemProps> = ({
   actions,
   showCheckbox
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
 
   const className = clsx([
     !item.read && "list-item-unread",

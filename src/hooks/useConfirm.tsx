@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 import type { ModalFuncProps } from "antd";
 
 export const useConfirm = () => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   return useCallback(
     (
@@ -17,16 +17,16 @@ export const useConfirm = () => {
       options?: ModalFuncProps
     ) => {
       Modal.confirm({
-        title: typeof msg === "string" ? translate(msg) : msg,
+        title: typeof msg === "string" ? t(msg) : msg,
         content,
         icon: <ExclamationCircleOutlined />,
-        okText: translate("YES"),
-        cancelText: translate("CANCEL"),
+        okText: t("YES"),
+        cancelText: t("CANCEL"),
         onOk: okFn,
         onCancel: () => void 0,
         ...options
       });
     },
-    [translate]
+    [t]
   );
 };

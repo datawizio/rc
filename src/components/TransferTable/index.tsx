@@ -30,15 +30,15 @@ const TransferTable: FC<TransferTableProps> = ({
   transferTableProps,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const label = useCallback<Exclude<SelectAllLabel, ReactNode>>(
     ({ selectedCount, totalCount }) => (
       <>
-        {translate("SELECTED")}: {selectedCount} / {totalCount}
+        {t("SELECTED")}: {selectedCount} / {totalCount}
       </>
     ),
-    [translate]
+    [t]
   );
 
   const selectAllLabels = useMemo(() => {

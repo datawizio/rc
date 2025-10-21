@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 
 import "./index.less";
 
@@ -23,7 +23,7 @@ const ColoredTags: React.FC<ColoredTagsProps> = ({
   suffix,
   ...props
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
   const childrenArray = React.Children.toArray(children);
 
   return (

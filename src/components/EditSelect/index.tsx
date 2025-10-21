@@ -45,7 +45,7 @@ const EditSelect: FC<EditSelectProps> = ({
   onSave,
   onDelete
 }) => {
-  const { translate: t } = useConfig();
+  const { t } = useConfig();
 
   const [editingOption, setEditingOption] = useState<IOption>({
     key: "new",
