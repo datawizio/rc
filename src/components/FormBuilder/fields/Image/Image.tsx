@@ -1,33 +1,38 @@
 import ImgCrop from "antd-img-crop";
-import { Upload, message } from "antd";
+import { App, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { Preview } from "./Preview";
 import { useConfig } from "@/hooks";
 
+import type { FC } from "react";
 import type { RcFile } from "antd/es/upload";
 import type { ImageProps } from "../../types";
 
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-
-  return isJpgOrPng && isLt2M;
-};
-
-export const Image: React.FC<ImageProps> = ({
+export const Image: FC<ImageProps> = ({
   name,
   value,
   placeholder,
   onChange
 }) => {
   const { t } = useConfig();
+  const { message } = App.useApp();
+
+  const beforeUpload = (file: RcFile) => {
+    const hasAllowedType =
+      file.type === "image/jpeg" || file.type === "image/png";
+
+    if (!hasAllowedType) {
+      void message.error("You can only upload JPG/PNG file!");
+    }
+
+    const isLessThan2M = file.size / 1024 / 1024 < 2;
+
+    if (!isLessThan2M) {
+      void message.error("Image must smaller than 2MB!");
+    }
+
+    return hasAllowedType && isLessThan2M;
+  };
 
   const upload = (file: RcFile) => {
     const reader = new FileReader();

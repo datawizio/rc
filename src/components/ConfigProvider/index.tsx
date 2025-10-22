@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ConfigProvider as AntdConfigProvider, theme } from "antd";
+import { ConfigProvider as AntdConfigProvider, App, theme } from "antd";
 import { useTheme } from "@/hooks";
 import { ANTD_THEME_CLASS, cssVar, initTheme } from "@/utils/theme";
 import ConfigContext, { defaultContextValue } from "./context";
@@ -27,7 +27,7 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
 
   const tokens: ThemeConfig["token"] = {
     borderRadius: 4,
-    colorText: "rgba(0, 0, 0, 0.65)",
+    colorText: cssVar("--text-color"),
     colorPrimary: cssVar("--primary-color"),
     colorLink: cssVar("--primary-color")
   };
@@ -60,7 +60,7 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   return (
     <ConfigContext.Provider value={contextValue}>
       <AntdConfigProvider {...props} theme={themeConfig}>
-        {children}
+        <App>{children}</App>
       </AntdConfigProvider>
     </ConfigContext.Provider>
   );

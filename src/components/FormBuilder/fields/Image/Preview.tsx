@@ -1,4 +1,4 @@
-import { Modal } from "antd";
+import { App } from "antd";
 import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { useConfig } from "@/hooks";
 
@@ -11,10 +11,11 @@ export interface PreviewProps {
 
 export const Preview: FC<PreviewProps> = ({ value, onDelete }) => {
   const { t } = useConfig();
+  const { modal } = App.useApp();
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    Modal.confirm({
+    modal.confirm({
       title: t("DELETE_CONFIRM_PHOTO"),
       icon: <ExclamationCircleOutlined />,
       okText: t("YES"),

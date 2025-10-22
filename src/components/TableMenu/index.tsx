@@ -6,7 +6,7 @@ import {
   SendOutlined,
   VerticalAlignBottomOutlined
 } from "@ant-design/icons";
-import { Dropdown, Menu, message } from "antd";
+import { App, Dropdown, Menu } from "antd";
 import { useCallback, useContext, useMemo } from "react";
 import { saveAs } from "file-saver";
 import { useConfig } from "@/hooks";
@@ -58,6 +58,7 @@ const TableMenu: FC<TableMenuProps> = ({
   ...restProps
 }) => {
   const { t } = useConfig();
+  const { message } = App.useApp();
   const context = useContext(TableContext);
 
   const { expand_horizontally, expand_tree, vertical_axis_metrics } = settings;
@@ -116,7 +117,15 @@ const TableMenu: FC<TableMenuProps> = ({
       }
     },
     // eslint-disable-next-line
-    [tableState, t, exportHandler, filename, getFilename, exportHandlerCallback]
+    [
+      t,
+      tableState,
+      exportHandler,
+      filename,
+      getFilename,
+      exportHandlerCallback,
+      message
+    ]
   );
 
   const handleTotalClick = useCallback(

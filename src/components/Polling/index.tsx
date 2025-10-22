@@ -1,6 +1,6 @@
 import Step from "./components/Step";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Row, notification } from "antd";
+import { App, Row } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { useConfig } from "@/hooks";
 
@@ -22,6 +22,7 @@ const Polling: FC<PollingProps> = ({
   onPollingShow
 }) => {
   const { t } = useConfig();
+  const { notification } = App.useApp();
   const [activeStepIdx, setActiveStepIdx] = useState<number>(0);
   const [pollingShown, setPollingShown] = useState<boolean>(!!questions.length);
 
@@ -61,7 +62,7 @@ const Polling: FC<PollingProps> = ({
         message: t("THANKS_FOR_FEEDBACK")
       });
     }
-  }, [activeStepIdx, steps, t]);
+  }, [activeStepIdx, notification, steps, t]);
 
   const submit = useCallback(
     (value: string | number | null = null, polled: boolean = true) => {

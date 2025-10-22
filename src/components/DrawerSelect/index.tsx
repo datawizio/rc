@@ -6,7 +6,7 @@ import Checkbox from "@/components/Checkbox";
 import Markers from "@/components/DrawerTreeSelect/components/Markers";
 import InnerOptions from "./components/InnerOptions";
 
-import { Skeleton, Tag, message, Select } from "antd";
+import { App, Skeleton, Tag, Select } from "antd";
 import { uniqBy } from "lodash";
 import { useConfig } from "@/hooks";
 import { useDrawerSelect } from "./hooks/useDrawerSelect";
@@ -144,12 +144,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
   ...restProps
 }) => {
   const { t } = useConfig();
-
-  const drawerSearchPlaceholder = t("SEARCH");
-  const loadingText = t("LOADING");
-  const submitText = t("SUBMIT");
-  const cancelText = t("CANCEL");
-  const selectAllText = t("ALL");
+  const { message } = App.useApp();
 
   const [
     {
@@ -799,7 +794,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       if (!optionsState || optionsState.length === 0) {
         return (
           <span className="ant-select-selection-placeholder">
-            {loadingText}
+            {t("LOADING")}
           </span>
         );
       }
@@ -817,7 +812,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         </span>
       );
     },
-    [maxTagLength, optionsState, loadingText]
+    [maxTagLength, optionsState, t]
   );
 
   const listHeight =
@@ -844,9 +839,9 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         }
         actions={
           <>
-            <Button onClick={handleDrawerCancel}>{cancelText}</Button>
+            <Button onClick={handleDrawerCancel}>{t("CANCEL")}</Button>
             <Button onClick={handleDrawerSubmit} type="primary">
-              {submitText}
+              {t("SUBMIT")}
             </Button>
           </>
         }
@@ -865,7 +860,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         )}
         {!hideSearch && (
           <SearchInput
-            placeholder={drawerSearchPlaceholder}
+            placeholder={t("SEARCH")}
             value={searchValue}
             onChange={handleSearchInputChange}
             loading={internalLoading}
@@ -881,7 +876,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
               checked={selectAllState === "checked"}
               indeterminate={selectAllState === "indeterminate"}
             >
-              {selectAllText}
+              {t("ALL")}
             </Checkbox>
           </div>
         ) : null}
