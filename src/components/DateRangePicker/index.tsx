@@ -3,7 +3,8 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import DatePicker from "@/components/DatePicker";
 
-import { useCallback, useMemo } from "react";
+import { Tag } from "antd";
+import { useCallback, useMemo, useState } from "react";
 import { useConfig } from "@/hooks";
 import {
   DefaultPreset,
@@ -13,7 +14,7 @@ import {
 
 import type { Dayjs } from "dayjs";
 import type { HandlerFn } from "@/types/utils";
-import type { DateType } from "@/types/date";
+import type { DateType, DateRange } from "@/types/date";
 import type { DateRangePickerProps, IDateRangePicker } from "./types";
 
 import "./index.less";
@@ -39,6 +40,8 @@ const DateRangePicker: IDateRangePicker = ({
   ...props
 }) => {
   const { t } = useConfig();
+  const [isOpen, setIsOpen] = useState(false);
+  const [previewRange, setPreviewRange] = useState<DateRange | null>(null);
 
   const getPresets = useCallback(() => {
     // Presets absent
@@ -121,14 +124,14 @@ const DateRangePicker: IDateRangePicker = ({
     if (!presetRanges) return;
 
     const defaultPresetMap = new Map(Object.entries(presetRanges));
-    const translatedPresetMap = new Map();
+    const translatedPresets: Array<{ label: string; value: DateRange }> = [];
 
     defaultPresetMap.forEach((value, key) => {
       const translatedKey = t(key);
-      translatedPresetMap.set(translatedKey, value);
+      translatedPresets.push({ label: translatedKey, value });
     });
 
-    return Object.fromEntries(translatedPresetMap.entries());
+    return translatedPresets;
   }, [getPresets, t]);
 
   const formatDate = useCallback(
@@ -148,10 +151,10 @@ const DateRangePicker: IDateRangePicker = ({
 
   const isDisabledDate = useCallback(
     (date: Dayjs) => {
-      const formatedDate = formatDate(date.format("DD-MM-YYYY"));
+      const formattedDate = formatDate(date.format("DD-MM-YYYY"));
       return Boolean(
-        (maxDate && formatedDate?.isAfter(maxDate)) ||
-          (minDate && formatedDate?.isBefore(minDate))
+        (maxDate && formattedDate?.isAfter(maxDate)) ||
+          (minDate && formattedDate?.isBefore(minDate))
       );
     },
     [maxDate, minDate, formatDate]
@@ -173,17 +176,55 @@ const DateRangePicker: IDateRangePicker = ({
 
   const RangePicker = DatePicker.Picker[type].RangePicker;
 
+  const renderExtraFooter = () => (
+    <>
+      {translatedPreset?.map(({ label, value }) => {
+        return (
+          <Tag
+            key={label}
+            color="purple"
+            onMouseEnter={() => setPreviewRange(value)}
+            onMouseLeave={() => setPreviewRange(null)}
+            onClick={() => {
+              const [valueFrom, valueTo] = value;
+              const dateStrings: [string, string] = [
+                valueFrom?.format(format) ?? "",
+                valueTo?.format(format) ?? ""
+              ];
+
+              onChange(value, dateStrings);
+
+              // Close panel after applying preset
+              if (props.open === undefined) {
+                setIsOpen(false);
+              }
+              props.onOpenChange?.(false);
+            }}
+          >
+            {label}
+          </Tag>
+        );
+      })}
+    </>
+  );
+
   return (
     <RangePicker
       {...props}
       format={format}
       inputReadOnly={inputReadOnly}
-      presets={translatedPreset}
+      renderExtraFooter={renderExtraFooter}
       className={clsx(fullWidth && "ant-picker-full-width")}
       classNames={{ popup: { root: "dw-range-picker-dropdown" } }}
       onChange={onChange}
-      value={[dateFrom, dateTo]}
+      value={previewRange ?? [dateFrom, dateTo]}
       disabledDate={isDisabledDate}
+      open={props.open ?? isOpen}
+      onOpenChange={open => {
+        props.onOpenChange?.(open);
+        if (props.open === undefined) setIsOpen(open);
+        if (!open) setPreviewRange(null);
+      }}
     />
   );
 };
