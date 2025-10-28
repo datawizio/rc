@@ -2,6 +2,7 @@ import React from "react";
 import TreeSelect from "@/components/TreeSelect";
 import { useCallback } from "react";
 import { useConfig } from "@/hooks";
+import { prepareTreeData } from "@/utils/data/tree";
 
 export interface MarkersProps {
   value?: string[] | number[];
@@ -34,7 +35,7 @@ const Markers: React.FC<MarkersProps> = ({
   return (
     <TreeSelect
       value={value}
-      treeData={treeData}
+      treeData={prepareTreeData(treeData)}
       treeCheckable={true}
       placeholder={placeholder ?? t("SHOP_MARKERS")}
       showCheckedStrategy="SHOW_PARENT"

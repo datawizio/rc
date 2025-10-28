@@ -28,6 +28,6 @@ export const useConfirm = () => {
         ...options
       });
     },
-    [t]
+    [modal, t]
   );
 };

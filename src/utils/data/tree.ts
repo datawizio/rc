@@ -1,4 +1,7 @@
-import type { DataNode } from "antd/es/tree";
+import type { TreeDataNode } from "antd";
+import type { DataNode as TreeSelectDataNode } from "rc-tree-select/es/interface";
+
+export type DataNode = TreeDataNode & TreeSelectDataNode;
 
 export const unTree = (tree?: DataNode[]) => {
   let list: DataNode[] = [];
@@ -85,7 +88,7 @@ export function filterOptions(
   return dfs(treeData);
 }
 
-export const findItemInTreeById = <T extends Record<string, any>>(
+export const findItemInTreeById = <T extends DataNode>(
   items: T[] | null | undefined,
   id: number
 ): T | undefined => {
@@ -96,10 +99,36 @@ export const findItemInTreeById = <T extends Record<string, any>>(
       return items[i];
     }
 
-    const found = findItemInTreeById<T>(items[i].children, id);
+    const found = findItemInTreeById(items[i].children as T[], id);
 
     if (found) {
       return found;
     }
   }
+};
+
+/**
+ * Return a new tree where each node has a `value` prop.
+ * If `value` is missing, it will be set to `node.id ?? node.key`.
+ */
+export const prepareTreeData = (treeData: DataNode[] = []): DataNode[] => {
+  const walk = (node: DataNode): DataNode => {
+    const children = node.children || [];
+    const hasOwnValue = Object.prototype.hasOwnProperty.call(node, "value");
+
+    const base: DataNode = hasOwnValue
+      ? node
+      : { ...node, value: node.id ?? node.key };
+
+    if (children.length) {
+      return {
+        ...base,
+        children: children.map(walk)
+      };
+    }
+
+    return base;
+  };
+
+  return treeData.map(walk);
 };
