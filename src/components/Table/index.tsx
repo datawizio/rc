@@ -402,6 +402,10 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
               <AntdTable
                 {...restProps}
                 {...state}
+                style={{
+                  ...restProps.style,
+                  "--dw-table-height": `${height}px`
+                }}
                 virtual={virtual}
                 scroll={
                   virtual
