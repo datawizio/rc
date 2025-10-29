@@ -4,15 +4,28 @@
   }
 
   &__modal {
+    .ant-modal-title {
+      line-height: 1;
+    }
+
     .ant-modal-footer {
       display: flex;
       justify-content: center;
+    }
+
+    .ant-modal-content {
+      padding-bottom: 12px;
     }
 
     .ant-modal-body {
       overflow: hidden;
       height: 500px;
       position: relative;
+      padding: 24px 0;
+    }
+
+    .ant-tree {
+      margin-left: -4px;
     }
 
     .ant-tree-list {
@@ -24,8 +37,7 @@
 
     &-selected {
       position: absolute;
-      top: 65px;
-      right: 24px;
+      top: 80px;
       display: flex;
       background: var(--ant-color-bg-container);
       justify-content: flex-end;

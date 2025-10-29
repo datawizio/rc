@@ -404,7 +404,8 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
                 {...state}
                 style={{
                   ...restProps.style,
-                  "--dw-table-height": `${height}px`
+                  "--dw-table-height":
+                    typeof height === "number" ? `${height}px` : height
                 }}
                 virtual={virtual}
                 scroll={
