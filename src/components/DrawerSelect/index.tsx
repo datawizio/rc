@@ -6,14 +6,14 @@ import Checkbox from "@/components/Checkbox";
 import Markers from "@/components/DrawerTreeSelect/components/Markers";
 import InnerOptions from "./components/InnerOptions";
 
-import { App, Skeleton, Tag, Select } from "antd";
+import { App, Skeleton, Tag, Select, Tree } from "antd";
 import { uniqBy } from "lodash";
 import { useConfig } from "@/hooks";
 import { useDrawerSelect } from "./hooks/useDrawerSelect";
 import { useRef, useCallback, useMemo, useEffect, useState } from "react";
 
 import type { FC, ReactNode, UIEvent, ChangeEvent } from "react";
-import type { SelectProps, CheckboxChangeEvent } from "antd";
+import type { SelectProps, CheckboxChangeEvent, GetRef } from "antd";
 import type { AntTreeNode } from "antd/es/tree";
 import type { BaseOptionType, DefaultOptionType } from "antd/es/select";
 import type { HandlerFn } from "@/types/utils";
@@ -173,6 +173,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
 
   const [scrollLoading, setScrollLoading] = useState(false);
 
+  const optionsRef = useRef<GetRef<typeof Tree>>(null);
   const selectedOptions = useRef<DefaultOptionType[]>([]);
   const firstLoadedOptions = useRef<DefaultOptionType[]>([]);
 
@@ -377,6 +378,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
 
   const closeDrawer = useCallback(() => {
     setTimeout(() => {
+      optionsRef.current?.scrollTo({ top: 0 });
+
       const activeElement = document.activeElement as HTMLElement;
       activeElement.blur();
     }, 100);
@@ -834,7 +837,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     198 -
     (multiple ? 27 : 0) -
     (showMarkers ? 60 : 0) -
-    (showSelectAll && markersSelected.current.length ? 28 : 0);
+    (showSelectAll && markersSelected.current.length ? 28 : 0) -
+    (labelPropOptions ? 30 : 0);
 
   const dropdownRender = () => {
     return (
@@ -896,6 +900,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         ) : null}
         {(!internalLoading || scrollLoading) && (
           <InnerOptions
+            ref={optionsRef}
             options={optionsState}
             remoteSearch={!!loadData}
             searchValue={searchValue}
