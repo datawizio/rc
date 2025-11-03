@@ -139,7 +139,7 @@ const InnerOptions: FC<InnerOptionsProps> = ({
     nestedTreeData?.length === 0 ||
     (searchingLocally && searchValue && !notHiddenKeys?.size)
   ) {
-    return t("NO_DATA");
+    return <div className="drawer-select-list-placeholder">{t("NO_DATA")}</div>;
   }
 
   return (

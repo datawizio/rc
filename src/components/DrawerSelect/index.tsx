@@ -10,7 +10,7 @@ import { App, Skeleton, Tag, Select } from "antd";
 import { uniqBy } from "lodash";
 import { useConfig } from "@/hooks";
 import { useDrawerSelect } from "./hooks/useDrawerSelect";
-import { useRef, useCallback, useMemo, useEffect } from "react";
+import { useRef, useCallback, useMemo, useEffect, useState } from "react";
 
 import type { FC, ReactNode, UIEvent, ChangeEvent } from "react";
 import type { SelectProps, CheckboxChangeEvent } from "antd";
@@ -170,6 +170,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     selected: undefined,
     optionsState: []
   });
+
+  const [scrollLoading, setScrollLoading] = useState(false);
 
   const selectedOptions = useRef<DefaultOptionType[]>([]);
   const firstLoadedOptions = useRef<DefaultOptionType[]>([]);
@@ -558,7 +560,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         checkedKeys.length > maxSelectedCount
       ) {
         const messageKey = "select-over-then-" + maxSelectedCount;
-        message.error({
+        void message.error({
           content: t("COUNT_MUST_BE_SMALLER_THEN", {
             maxCount: maxSelectedCount
           }),
@@ -619,7 +621,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         value.length > maxSelectedCount
       ) {
         const messageKey = "select-over-then-" + maxSelectedCount;
-        message.error({
+        void message.error({
           content: t("COUNT_MUST_BE_SMALLER_THEN", {
             maxCount: maxSelectedCount
           }),
@@ -669,7 +671,10 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       if (page === totalPages - 1) return;
 
       if (target.scrollTop + target.offsetHeight >= target.scrollHeight - 100) {
-        void loadPage(searchValue, page + 1);
+        setScrollLoading(true);
+        loadPage(searchValue, page + 1).then(() => {
+          setScrollLoading(false);
+        });
       }
     },
     [internalLoading, page, loadPage, searchValue, totalPages]
@@ -786,6 +791,13 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     // eslint-disable-next-line
   }, [asyncData, additionalFilters]);
 
+  useEffect(() => {
+    if (!asyncData && loadData) {
+      void loadPage(searchValue, 0, true);
+    }
+    // eslint-disable-next-line
+  }, [searchValue, asyncData]);
+
   // -------- RENDERS ---------
 
   const tagRender = useCallback<Handler<"tagRender">>(
@@ -882,26 +894,35 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
             </Checkbox>
           </div>
         ) : null}
-        <InnerOptions
-          options={optionsState}
-          remoteSearch={!!loadData}
-          searchValue={searchValue}
-          height={listHeight}
-          value={(internalValue as SafeKey[]) || []}
-          keyProp={valueProp}
-          labelProp={optionLabelProp || "label"}
-          filterProp={optionFilterProp || "label"}
-          onCheck={handleTreeCheck}
-          onScroll={handleScroll}
-        />
+        {(!internalLoading || scrollLoading) && (
+          <InnerOptions
+            options={optionsState}
+            remoteSearch={!!loadData}
+            searchValue={searchValue}
+            height={listHeight}
+            value={(internalValue as SafeKey[]) || []}
+            keyProp={valueProp}
+            labelProp={optionLabelProp || "label"}
+            filterProp={optionFilterProp || "label"}
+            onCheck={handleTreeCheck}
+            onScroll={handleScroll}
+          />
+        )}
         <div className="drawer-select-loader-container">
           {internalLoading && (
-            <Skeleton
-              title={{ width: 300 }}
-              paragraph={{ rows: 1 }}
-              loading={true}
-              active
-            />
+            <>
+              {!scrollLoading && (
+                <div className="drawer-select-list-placeholder">
+                  {t("LOADING")}
+                </div>
+              )}
+              <Skeleton
+                title={{ width: 330 }}
+                paragraph={{ rows: 1 }}
+                loading={true}
+                active
+              />
+            </>
           )}
         </div>
         {multiple && (
