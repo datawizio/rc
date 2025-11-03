@@ -3,14 +3,11 @@ name: Release
 on:
   push:
     branches: [master, dev]
-  pull_request:
-    branches: [master, dev]
 
 jobs:
   release:
     name: Release Package
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     permissions:
       contents: write
