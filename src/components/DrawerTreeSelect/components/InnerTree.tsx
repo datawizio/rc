@@ -194,7 +194,9 @@ const InnerTree: FC<InnerTreeProps> = ({
     nestedTreeData?.length === 0 ||
     (searchingLocally && searchValue && !localExpandedKeys?.length)
   ) {
-    return t("NO_DATA");
+    return (
+      <div className="drawer-tree-select-list-placeholder">{t("NO_DATA")}</div>
+    );
   }
 
   return (

@@ -88,11 +88,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   ...restProps
 }) => {
   const { t } = useConfig();
-
-  const drawerSearchPlaceholder = t("SEARCH");
-  const loadingText = t("LOADING");
-  const submitText = t("SUBMIT");
-  const cancelText = t("CANCEL");
   const selectAllText = t("ALL");
 
   const [
@@ -751,7 +746,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
           "ant-select-selection-placeholder": true,
           "drawer-tree-select-loading-placeholder": true
         });
-        return <span className={loadingTextClasses}>{loadingText}</span>;
+        return <span className={loadingTextClasses}>{t("LOADING")}</span>;
       }
 
       if (isSelectedAll || showAllRef.current) {
@@ -779,7 +774,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
 
       return <></>;
     },
-    [internalLoading, isSelectedAll, loadingText, maxTagLength, placeholder]
+    [internalLoading, isSelectedAll, maxTagLength, placeholder, t]
   );
 
   const maxTagPlaceholder = useCallback<Handler<"maxTagPlaceholder">>(
@@ -817,13 +812,13 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         }
         actions={
           <>
-            <Button onClick={handlerDrawerCancel}>{cancelText}</Button>
+            <Button onClick={handlerDrawerCancel}>{t("CANCEL")}</Button>
             <Button
               onClick={handlerDrawerSubmit}
               type="primary"
               disabled={limitExceeded}
             >
-              {submitText}
+              {t("SUBMIT")}
             </Button>
           </>
         }
@@ -855,7 +850,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
           />
         )}
         <SearchInput
-          placeholder={drawerSearchPlaceholder}
+          placeholder={t("SEARCH")}
           value={searchValueRef.current}
           onChange={handlerSearchInputChange}
           loading={internalLoading}
@@ -881,7 +876,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
             </Checkbox>
           </div>
         )}
-        {fakeVisible && (
+        {fakeVisible && !internalLoading && (
           <InnerTree
             treeData={internalTreeData}
             simpleMode={Boolean(restProps.treeDataSimpleMode)}
@@ -907,12 +902,17 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         )}
         <div className="drawer-select-loader-container">
           {internalLoading && (
-            <Skeleton
-              title={{ width: 300 }}
-              paragraph={{ rows: 1 }}
-              loading={true}
-              active
-            />
+            <>
+              <div className="drawer-tree-select-list-placeholder">
+                {t("LOADING")}
+              </div>
+              <Skeleton
+                title={{ width: 330 }}
+                paragraph={{ rows: 1 }}
+                loading={true}
+                active
+              />
+            </>
           )}
         </div>
         {(multiple || maxSelected) && (

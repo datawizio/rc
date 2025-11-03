@@ -7,7 +7,16 @@
   font-size: 1px;
 }
 
+.ant-form-item-control-input:has(.drawer-tree-select) * {
+  transition: none !important;
+}
+
 .drawer-tree-select {
+  &-list-placeholder {
+    color: var(--ant-color-text-placeholder);
+    margin-bottom: 10px;
+  }
+
   .ant-select-selection-item {
     .ant-select-selection-item-content {
       border: 0;
