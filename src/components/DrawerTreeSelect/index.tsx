@@ -787,6 +787,9 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     [internalLoading, isSelectedAll]
   );
 
+  const checkStrictly =
+    (remoteSearch && Boolean(searchValueRef.current)) || strictlyMode;
+
   const limitExceeded =
     multiple &&
     !!maxSelected &&
@@ -884,7 +887,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
             searchValue={searchValueRef.current}
             treeNodeFilterProp={restProps.treeNodeFilterProp}
             height={listHeight}
-            checkStrictly={strictlyMode}
+            checkStrictly={checkStrictly}
             internalTreeDefaultExpandedKeys={internalTreeDefaultExpandedKeys}
             defaultExpandedKeys={treeDefaultExpandedKeys}
             checkable={Boolean(restProps.treeCheckable)}
@@ -966,9 +969,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         classNames={{ popup: { root: "drawer-tree-select-dropdown-fake" } }}
         open={false}
         multiple={multiple}
-        treeCheckStrictly={
-          (remoteSearch && Boolean(searchValueRef.current)) || strictlyMode
-        }
+        treeCheckStrictly={checkStrictly}
         showSearch={false}
         placeholder={placeholder}
         loading={internalLoading}

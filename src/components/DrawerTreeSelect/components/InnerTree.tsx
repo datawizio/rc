@@ -212,7 +212,7 @@ const InnerTree: FC<InnerTreeProps> = ({
       treeData={renderedTreeData}
       checkedKeys={checkedKeys || []}
       onCheck={handleTreeCheck}
-      checkStrictly={(remoteSearch && Boolean(searchValue)) || checkStrictly}
+      checkStrictly={checkStrictly}
       filterTreeNode={node => {
         return searchPredicate(node[treeNodeFilterProp as keyof TreeDataNode]);
       }}
