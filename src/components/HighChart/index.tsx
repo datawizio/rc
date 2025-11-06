@@ -40,9 +40,12 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
           containerRef.current.style.visibility = "hidden";
         }
 
-        chartRef.current = Highcharts[
-          constructorType as keyof typeof Highcharts
-        ](containerRef.current, config || { title: { text: "" } });
+        const type = constructorType as keyof typeof Highcharts;
+
+        chartRef.current = Highcharts[type](
+          containerRef.current,
+          config || { title: { text: "" } }
+        );
       }
 
       return () => {
@@ -64,7 +67,7 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
             }
 
             if (chartRef.current) {
-              await chartRef.current.setSize();
+              chartRef.current.setSize();
 
               if (
                 chartRef.current &&
