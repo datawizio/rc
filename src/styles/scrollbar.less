@@ -1,6 +1,6 @@
 ::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
+  height: var(--scrollbar-size);
+  width: var(--scrollbar-size);
 }
 
 ::-webkit-scrollbar-track {
@@ -15,6 +15,21 @@
   background-color: rgba(0, 0, 0, 0.45);
   border-radius: 100px;
   height: 100px;
+}
+
+html,
+body {
+  overflow: visible;
+}
+
+html:has(.ant-drawer, .ant-modal) {
+  overflow: hidden;
+
+  body {
+    overflow: hidden;
+    touch-action: none;
+    width: calc(100% - var(--scrollbar-size));
+  }
 }
 
 .ant-select-tree-list-holder,
