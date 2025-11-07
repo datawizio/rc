@@ -19,6 +19,7 @@ export const FieldSlider: React.FC<FieldSliderProps> = React.memo(
           rules={rules}
           name={name}
           label={label}
+          required={false}
           className="dw-slider-input"
         >
           <InputNumber
