@@ -64,9 +64,7 @@ const NotificationButton: FC<NotificationButtonProps> = ({
 
   useEffect(() => {
     if (!faviconBadgerOptions) return;
-    faviconBadge.updateOptions(
-      Object.assign(badgeOptions, faviconBadgerOptions)
-    );
+    faviconBadge.updateOptions({ ...badgeOptions, ...faviconBadgerOptions });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useDeepEqualMemo(faviconBadgerOptions)]);
 

@@ -40,8 +40,8 @@ class Badger implements Required<BadgerOptions> {
   private badgeSize!: number;
   private offset!: Point2D;
   private img!: HTMLImageElement;
-  private _value: string | number = "";
-  private faviconEL: HTMLLinkElement | null =
+  private internalValue: string | number = "";
+  private faviconElement: HTMLLinkElement | null =
     document.querySelector("link[rel$='icon']");
 
   constructor(options: BadgerOptions = {}) {
@@ -54,7 +54,8 @@ class Badger implements Required<BadgerOptions> {
     this.size = mergedOptions.size;
     this.onChange = mergedOptions.onChange;
     this.withCount = mergedOptions.withCount;
-    this.src = mergedOptions.src || this.faviconEL?.getAttribute("href") || "";
+    this.src =
+      mergedOptions.src || this.faviconElement?.getAttribute("href") || "";
 
     const ctx = this.canvas.getContext("2d");
     if (!ctx) throw new Error("Could not get 2D context from canvas.");
@@ -100,7 +101,7 @@ class Badger implements Required<BadgerOptions> {
     this.ctx.font = `bold ${this.badgeSize * 0.82}px Arial`;
     this.ctx.fillStyle = this.color;
     this.ctx.fillText(
-      this._value.toString(),
+      this.internalValue.toString(),
       this.badgeSize / 2 + this.offset.x,
       this.badgeSize / 2 + this.offset.y + margin
     );
@@ -108,13 +109,13 @@ class Badger implements Required<BadgerOptions> {
   }
 
   private drawFavicon() {
-    this.faviconEL?.setAttribute("href", this.dataURL);
+    this.faviconElement?.setAttribute("href", this.dataURL);
   }
 
   private draw() {
     this.drawIcon();
-    if (this._value) this.drawShape();
-    if (this._value && this.withCount) this.drawVal();
+    if (this.internalValue) this.drawShape();
+    if (this.internalValue && this.withCount) this.drawVal();
     this.drawFavicon();
   }
 
@@ -142,8 +143,8 @@ class Badger implements Required<BadgerOptions> {
   }
 
   public update() {
-    if (typeof this._value === "number") {
-      this._value = Math.min(99, this._value);
+    if (typeof this.internalValue === "number") {
+      this.internalValue = Math.min(99, this.internalValue);
     }
 
     if (this.img?.complete && this.img.naturalWidth > 0) {
@@ -166,16 +167,23 @@ class Badger implements Required<BadgerOptions> {
   }
 
   public get value(): string | number {
-    return this._value;
+    return this.internalValue;
   }
 
   public set value(val: string | number) {
-    this._value = val;
+    this.internalValue = val;
     this.update();
   }
 
   public updateOptions(options: BadgerOptions = {}) {
     const merged = { ...defaultOptions, ...options };
+
+    // Preserve current src if none provided to avoid wiping the favicon
+    if (options.src === undefined || options.src === "") {
+      merged.src =
+        this.src || this.faviconElement?.getAttribute("href") || merged.src;
+    }
+
     Object.assign(this, merged);
     this.update();
   }
