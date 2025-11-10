@@ -313,6 +313,7 @@ const TableMenu: FC<TableMenuProps> = ({
     <div className="table-menu table-toolbar--right">
       <Dropdown overlay={menu} trigger={["click"]}>
         <Button
+          type="link"
           className="table-menu__button"
           icon={<DownOutlined className={"table-menu__icon"} />}
           border={false}

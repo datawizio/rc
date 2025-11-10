@@ -40,10 +40,10 @@
     "build": "tsc -b && vite build",
     "build:dev": "yarn build --mode development",
     "lint": "eslint .",
-    "type-check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "ci": "yarn type-check && yarn lint && yarn format:check && yarn build"
+    "ci": "yarn typecheck && yarn lint && yarn format:check && yarn build"
   },
   "peerDependencies": {
     "antd": "^5.26.6",

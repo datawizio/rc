@@ -1,10 +1,14 @@
+@import "./variables";
+
+// Basic scrollbar styles
+
 ::-webkit-scrollbar {
   height: var(--scrollbar-size);
   width: var(--scrollbar-size);
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #fff;
+  background-color: var(--scrollbar-track-color);
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -17,20 +21,32 @@
   height: 100px;
 }
 
+// Disable scroll when modal or drawer is opened
+
 html,
 body {
   overflow: visible;
 }
 
-html:has(.ant-drawer, .ant-modal) {
-  overflow: hidden;
-
+html {
   body {
+    background-color: var(--scrollbar-track-color);
+  }
+
+  &:has(.ant-drawer, .ant-modal) {
     overflow: hidden;
-    touch-action: none;
-    width: calc(100% - var(--scrollbar-size));
+  }
+
+  &.chrome {
+    body:has(.ant-drawer, .ant-modal) {
+      overflow: hidden;
+      touch-action: none;
+      width: calc(100% - var(--scrollbar-size));
+    }
   }
 }
+
+// Scroll customizations for specific components
 
 .ant-select-tree-list-holder,
 .rc-virtual-list-holder {
