@@ -3,12 +3,20 @@
     background-color: transparent;
 
     & > .ant-collapse-item {
+      & > .ant-collapse-header {
+        color: var(--text-color-title);
+      }
+
       & > .ant-collapse-content {
         & > .ant-collapse-content-box {
           padding: 0;
 
           & > .list-search {
             padding: 8px 16px;
+          }
+
+          .ant-list-item {
+            height: 40px;
           }
         }
       }

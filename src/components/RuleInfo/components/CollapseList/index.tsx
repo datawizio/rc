@@ -8,7 +8,7 @@ import type { DimensionsType, ListType } from "@/components/RuleInfo/types";
 
 import "./index.less";
 
-const ROW_HEIGHT = 62;
+const ROW_HEIGHT = 40;
 
 export const CollapseList = () => {
   const { t } = useConfig();
@@ -111,7 +111,7 @@ export const CollapseList = () => {
   const renderFilterItems = useMemo(() => {
     if (!Array.isArray(filters)) return null;
 
-    filters?.map(filter => {
+    return filters?.map(filter => {
       if (!filter.originalName) return;
 
       return (
