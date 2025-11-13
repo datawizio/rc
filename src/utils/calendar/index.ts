@@ -1,5 +1,6 @@
-import { Dayjs } from "dayjs";
 import { fiscalCalendar } from "../fiscalCalendar";
+
+import type { Dayjs } from "dayjs";
 import type { CalendarType } from "@/types/calendar";
 
 class Calendar {
