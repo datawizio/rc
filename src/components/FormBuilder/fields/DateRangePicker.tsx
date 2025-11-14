@@ -17,42 +17,44 @@ export interface DateRangePickerParams {
   to: Dayjs | null;
 }
 
-export type FieldDateRangePickerProps = FormFieldProps<DateRangePickerParams> &
+export type FieldDateRangePickerProps = Overwrite<
   Overwrite<
     ComponentProps<typeof DateRangePicker>,
-    {
-      type?: CalendarType;
-      format?: string;
-      inputReadOnly?: boolean;
-      storeFormat?: string;
-      maxDateForPresets?: string;
-      maxDate?: string;
-      minDate?: string;
-      defaultPickerValue?: any;
-      ranges?: PresetsRangeType;
-      presets?: string[];
-      useDefaultPreset?: boolean;
-      allowClear?: boolean;
-      defaultPresetExceptions?: string[];
-      currDateRange?: {
-        date_from: DateType;
-        date_to: DateType;
-      };
-      getPopupContainer?: () => HTMLElement | null;
-      useCurrentDayPreset?: boolean;
-    }
-  >;
+    FormFieldProps<DateRangePickerParams>
+  >,
+  {
+    type?: CalendarType;
+    format?: string;
+    inputReadOnly?: boolean;
+    storeFormat?: string;
+    maxDateForPresets?: string;
+    maxDate?: string;
+    minDate?: string;
+    defaultPickerValue?: any;
+    ranges?: PresetsRangeType;
+    presets?: string[];
+    useDefaultPreset?: boolean;
+    allowClear?: boolean;
+    defaultPresetExceptions?: string[];
+    currDateRange?: {
+      date_from: DateType;
+      date_to: DateType;
+    };
+    getPopupContainer?: () => HTMLElement | null;
+    useCurrentDayPreset?: boolean;
+  }
+>;
 
-export type FieldProps = Omit<
+export type FieldProps = Overwrite<
   FormFieldProps<DateRangePickerParams>,
-  "onChange"
-> & {
-  format?: string;
-  storeFormat?: string;
-  value: DateRangePickerParams;
-  useCurrentDayPreset?: boolean;
-  onChange?: (dates: DateRange | null) => void;
-};
+  {
+    format?: string;
+    storeFormat?: string;
+    value: DateRangePickerParams;
+    useCurrentDayPreset?: boolean;
+    onChange?: (dates: DateRange | null) => void;
+  }
+>;
 
 const Field: React.FC<FieldProps> = ({
   format,
