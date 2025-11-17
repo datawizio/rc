@@ -13,7 +13,8 @@ import type {
   ComponentType,
   ReactNode,
   ReactElement,
-  PropsWithChildren
+  PropsWithChildren,
+  CSSProperties
 } from "react";
 
 import type {
@@ -51,9 +52,12 @@ export type TableProps<RT = any> = Overwrite<
   AntdTableProps<RT>,
   OverwrittenTableProps<RT>
 > & {
-  width?: string | number;
-  height?: string | number;
+  width?: CSSProperties["width"];
+  height?: CSSProperties["height"];
   searchValue?: string;
+  vid?: string;
+  virtualDebug?: boolean;
+  overscanRowCount?: number;
   async?: boolean;
   autoColWidth?: boolean;
   compressColumns?: boolean;

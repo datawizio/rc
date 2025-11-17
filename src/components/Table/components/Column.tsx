@@ -252,11 +252,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
 
   useEffect(() => {
     if (!isHeader) return;
-    const colKey = model.dataIndex
-      ? model.dataIndex
-      : model.key
-        ? model.key
-        : model.originalKey;
+    const colKey = model.dataIndex || model.key || model.originalKey;
 
     const sortersEl = columnRef.current?.getElementsByClassName(
       "ant-table-column-sorters"

@@ -19,6 +19,7 @@ import { useDataSource } from "./hooks/useDataSource";
 import { usePropsToState } from "./hooks/usePropsToState";
 import { useAsyncProviders } from "./hooks/useAsyncProviders";
 import { TableContext } from "./context";
+import { useVT } from "./components/Virtual";
 import { isSafari } from "@/utils/navigatorInfo";
 import { useConfig } from "@/hooks";
 
@@ -98,7 +99,9 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
 
   const {
     errorRender,
+    vid,
     virtual,
+    virtualDebug,
     width = "auto",
     height = "auto",
     locale = { total: "TABLE_TOTAL" },
@@ -117,6 +120,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
     sortColumnCallback,
     isTotalRow,
     calcColumnWidth,
+    overscanRowCount,
     ...restProps
   } = props;
 
@@ -266,6 +270,16 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
     [state.loadingRows]
   );
 
+  const [vt] = useVT(
+    () => ({
+      id: vid,
+      scroll: { y: height },
+      overscanRowCount: overscanRowCount ?? 1,
+      debug: virtualDebug
+    }),
+    [height, vid]
+  );
+
   const customComponents = useMemo<TableProps["components"]>(() => {
     if (virtual) {
       return {
@@ -285,10 +299,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
             );
           }
         },
-        body: {
-          cell: props => <Cell {...props} />,
-          row: props => <Row {...props} isTotalRow={isTotalRow} />
-        }
+        ...vt
       };
     }
 
@@ -315,7 +326,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [virtual, components, height, width, isTotalRow]);
+  }, [virtual, components, vt, height, width, isTotalRow]);
 
   const className = useMemo(
     () =>
@@ -375,11 +386,6 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
     }
   }));
 
-  const totalColumnsWidth = columnsState.columns?.reduce(
-    (acc, col) => acc + (columnsState.columnsWidth?.[col.dataIndex] ?? 0),
-    0
-  );
-
   return (
     <div className="dw-table-container">
       <DndProvider backend={HTML5Backend}>
@@ -402,17 +408,11 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
               <AntdTable
                 {...restProps}
                 {...state}
-                style={{
-                  ...restProps.style,
-                  "--dw-table-height":
-                    typeof height === "number" ? `${height}px` : height
-                }}
-                virtual={virtual}
                 scroll={
                   virtual
                     ? {
                         y: height,
-                        x: totalColumnsWidth
+                        x: 500
                       }
                     : undefined
                 }
