@@ -32,13 +32,29 @@
     .ant-tree {
       background: transparent;
       margin-left: -4px;
+
+      &-checkbox {
+        align-self: flex-start;
+        margin-top: 4px;
+      }
     }
 
     .ant-tree-list {
       height: 400px;
-      overflow: auto;
+      overflow-x: clip;
+      overflow-y: auto;
       margin-top: 0;
       margin-left: -20px;
+
+      .ant-tree-treenode .ant-tree-title {
+        display: flex;
+        align-items: flex-start;
+
+        .anticon {
+          margin-top: 5px;
+          margin-right: 5px;
+        }
+      }
     }
 
     &-selected {

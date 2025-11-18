@@ -291,7 +291,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
                 {...props}
                 calcColumnWidth={calcColumnWidth}
                 virtual={virtual}
-                isHeader
+                isHeader={true}
                 onWidthChange={onColumnWidthChange ?? (() => {})}
               />
             ) : (
@@ -311,7 +311,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
           return props.model ? (
             <Column
               calcColumnWidth={calcColumnWidth}
-              isHeader
+              isHeader={true}
               {...props}
               onWidthChange={onColumnWidthChange}
             />
@@ -342,9 +342,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
           "dw-table--compress-columns": compressColumns,
           "dw-table--safari": isSafari(),
           "dw-table--virtual": virtual,
-          "dw-table--small":
-            height &&
-            (typeof height === "string" ? parseInt(height) : height) < 200
+          "dw-table--small": height && parseInt(height as string) < 200
         },
         props.className
       ),
