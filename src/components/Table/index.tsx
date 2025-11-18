@@ -19,7 +19,7 @@ import { useDataSource } from "./hooks/useDataSource";
 import { usePropsToState } from "./hooks/usePropsToState";
 import { useAsyncProviders } from "./hooks/useAsyncProviders";
 import { TableContext } from "./context";
-import { useVT } from "./components/Virtual";
+import { useVirtualTable } from "./components/Virtual";
 import { isSafari } from "@/utils/navigatorInfo";
 import { useConfig } from "@/hooks";
 
@@ -270,11 +270,11 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
     [state.loadingRows]
   );
 
-  const [vt] = useVT(
+  const [vt] = useVirtualTable(
     () => ({
       id: vid,
       scroll: { y: height },
-      overscanRowCount: overscanRowCount ?? 1,
+      overscanRowCount: overscanRowCount ?? 5,
       debug: virtualDebug
     }),
     [height, vid]
