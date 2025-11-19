@@ -96,16 +96,18 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     sortParamsPriority
   ]);
 
-  const columnWithIconShown = useMemo(
+  const showColumnIcon = useMemo(
     () => !!model.icon && !!columnIcons[model.icon],
     [model]
   );
 
+  const minWidth = model.colMinWidth || 100;
+
   const calculateWidth = useCallback(
     (target: HTMLElement | null) => {
-      return getColumnWidth(target, model.colMinWidth ?? 100, Boolean(virtual));
+      return getColumnWidth(target, minWidth, Boolean(virtual));
     },
-    [model.colMinWidth, virtual]
+    [minWidth, virtual]
   );
 
   const [, dragRef] = useDrag({
@@ -251,19 +253,29 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
 
     const colKey = model.dataIndex || model.key || model.originalKey;
 
-    const sortersEl = columnRef.current?.getElementsByClassName(
-      "ant-table-column-sorters"
-    ) as HTMLCollectionOf<HTMLElement>;
+    const sortersElements = columnRef.current?.querySelectorAll<HTMLElement>(
+      ".ant-table-column-sorters"
+    );
 
-    if (sortersEl && sortersEl.length > 0) {
-      sortersEl[0].style.setProperty("min-width", "0%");
+    if (sortersElements && sortersElements.length > 0) {
+      sortersElements[0].style.setProperty("min-width", "0%");
+
       setTimeout(() => {
-        sortersEl[0].style.setProperty("min-width", "100%");
+        sortersElements[0].style.setProperty("min-width", "100%");
       }, 1000);
     }
 
     const fn = () => {
       const columnWidth = calculateWidth(columnRef.current);
+
+      // If the native resize set `width` below the minimum, immediately clamp it on the element.
+      if (columnRef.current) {
+        const styleWidth = parseInt(columnRef.current.style?.width);
+
+        if (styleWidth < minWidth) {
+          columnRef.current.style.width = minWidth + "px";
+        }
+      }
 
       if (
         columnRef?.current &&
@@ -345,7 +357,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
   ]);
 
   const styles = useMemo(() => {
-    function getWidth() {
+    const getWidth = () => {
       const columnsWidthPreset = columnsWidth?.[model.key as SafeKey];
 
       if (columnsWidthPreset) {
@@ -378,7 +390,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       }
 
       return {};
-    }
+    };
 
     if (model.parent_key) {
       return {};
@@ -390,14 +402,11 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       conf.width = calcColumnWidth(conf.width);
     }
 
-    if (model.colMinWidth) {
-      conf.minWidth = model.colMinWidth + "px";
-    }
-
     if (typeof conf.width === "number") {
       lastWidthRef.current = conf.width;
     }
 
+    conf.minWidth = minWidth + "px";
     return conf;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -406,8 +415,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     model.max_value,
     model.colWidth,
     columnsForceUpdate,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    columnsWidth?.[model.key as SafeKey]
+    columnsWidth?.[model.key as SafeKey] // eslint-disable-line
   ]);
 
   return (
@@ -426,7 +434,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         } as CSSProperties
       }
     >
-      {columnWithIconShown ? (
+      {showColumnIcon ? (
         <div
           className={clsx(
             "icon-column-container",
