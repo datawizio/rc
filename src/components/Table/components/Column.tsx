@@ -277,7 +277,12 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         }
       }
 
+      // The width should only be changed for the current column (when `startedResize.current = true`)
+      // or when the table is not in virtual mode (i.e. the resizing is handled by the browser).
+      const shouldResize = !virtual || startedResize.current;
+
       if (
+        shouldResize &&
         columnRef?.current &&
         typeof columnWidth === "number" &&
         lastWidthRef.current !== columnWidth &&
@@ -286,7 +291,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         dispatch({
           type: "columnWidthChange",
           payload: {
-            key: colKey as string,
+            key: colKey,
             width: columnWidth
           }
         });
