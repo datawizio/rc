@@ -39,6 +39,9 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
     Table: {
       headerBorderRadius: 0,
       borderRadius: 0
+    },
+    Form: {
+      itemMarginBottom: 14
     }
   };
 

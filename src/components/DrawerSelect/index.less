@@ -32,13 +32,9 @@
     }
   }
 
-  span {
-    & > .ant-select-selection-placeholder {
+  .ant-select-selection-overflow {
+    &-item:has(.ant-select-selection-placeholder):not(:first-child) {
       display: none;
-    }
-
-    &:first-of-type > .ant-select-selection-placeholder {
-      display: block;
     }
   }
 
