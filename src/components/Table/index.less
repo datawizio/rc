@@ -183,6 +183,10 @@
     }
   }
 
+  .ant-table-selection-column {
+    min-width: 22px !important;
+  }
+
   &__cell {
     display: flex;
     align-items: center;
@@ -228,12 +232,19 @@
   table {
     table-layout: fixed;
     width: max-content;
+
     @media (max-width: @screen-xs) {
       table-layout: auto !important;
     }
   }
 
   td {
+    position: relative;
+    overflow: hidden;
+    white-space: pre-line;
+    text-overflow: ellipsis;
+    min-width: 100px;
+
     .row-prefix {
       float: left;
 
@@ -249,12 +260,6 @@
     .anticon-loading {
       margin-right: 11px;
     }
-
-    position: relative;
-    overflow: hidden;
-    white-space: pre-line;
-    text-overflow: ellipsis;
-    min-width: 100px;
   }
 
   &--nestedable {
