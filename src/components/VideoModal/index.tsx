@@ -8,6 +8,8 @@ import type { FC } from "react";
 import type { PlayerReference } from "video-react";
 import type { VideoModalProps } from "./types";
 
+import "./index.less";
+
 const VideoModal: FC<VideoModalProps> = ({
   open,
   setOpen,
