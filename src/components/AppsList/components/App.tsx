@@ -116,7 +116,7 @@ export const App: FC<CardAppProps> = ({
         {showButton && (
           <div className="card-app-actions">
             <Button
-              type={"primary"}
+              type="primary"
               block
               disabled={disabled}
               onClick={handleButtonClick}

@@ -94,7 +94,7 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
     }));
 
     if (loading) {
-      return <Skeleton height={height} width={"100%"} />;
+      return <Skeleton height={height} width="100%" />;
     }
 
     return config && config.error ? (

@@ -232,15 +232,13 @@ const TableMenu: FC<TableMenuProps> = ({
       {(fixed_total ||
         expand_table_vertically ||
         expand_table_horizontally) && (
-        <Menu.Divider className={"table-menu-dropdown__divider"} />
+        <Menu.Divider className="table-menu-dropdown__divider" />
       )}
       {show_export_xls !== false && (
         <Menu.Item
           key="export_xlsx"
           icon={
-            <VerticalAlignBottomOutlined
-              className={"table-menu-dropdown__icon"}
-            />
+            <VerticalAlignBottomOutlined className="table-menu-dropdown__icon" />
           }
         >
           {t("SAVE_XLS")}
@@ -252,7 +250,7 @@ const TableMenu: FC<TableMenuProps> = ({
             key="send_xlsx_submenu"
             title={
               <>
-                <SendOutlined className={"table-menu-dropdown__icon__send"} />
+                <SendOutlined className="table-menu-dropdown__icon__send" />
                 {t("SEND_XLS")}
               </>
             }
@@ -292,9 +290,7 @@ const TableMenu: FC<TableMenuProps> = ({
         ) : (
           <Menu.Item
             key="send_xlsx"
-            icon={
-              <SendOutlined className={"table-menu-dropdown__icon__send"} />
-            }
+            icon={<SendOutlined className="table-menu-dropdown__icon__send" />}
           >
             {t("SEND_XLS")}
           </Menu.Item>
@@ -310,12 +306,16 @@ const TableMenu: FC<TableMenuProps> = ({
     fixed_total;
 
   return hasMenuItem ? (
-    <div className="table-menu table-toolbar--right">
-      <Dropdown overlay={menu} trigger={["click"]}>
+    <div className="table-menu table-toolbar--right" id="table-menu">
+      <Dropdown
+        overlay={menu}
+        trigger={["click"]}
+        getPopupContainer={() => document.getElementById("table-menu")!}
+      >
         <Button
           type="link"
           className="table-menu__button"
-          icon={<DownOutlined className={"table-menu__icon"} />}
+          icon={<DownOutlined className="table-menu__icon" />}
           border={false}
           {...restProps}
         />
