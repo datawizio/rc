@@ -21,25 +21,25 @@ const ApiError: ApiErrorComponent = ({ errors }) => {
 
 ApiError.showError = (errors: string) => {
   notification.error({
-    message: <ApiError errors={errors} />
+    title: <ApiError errors={errors} />
   });
 };
 
 ApiError.showNotification = (
-  message: string,
+  title: string,
   description?: string | null,
   type?: "error" | "warning",
   duration: number = 6
 ) => {
-  const notificationFn =
+  const notificationFunction =
     type === "error" ? notification.error : notification.warning;
 
   const descriptionContent = description ? (
     <div dangerouslySetInnerHTML={{ __html: description }}></div>
   ) : null;
 
-  notificationFn({
-    message,
+  notificationFunction({
+    title,
     description: descriptionContent,
     duration,
     style: {

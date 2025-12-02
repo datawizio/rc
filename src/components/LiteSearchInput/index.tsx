@@ -5,8 +5,7 @@ import type { InputHTMLAttributes, FC, ChangeEvent } from "react";
 
 import "./index.less";
 
-export interface LiteSearchInputProps
-  extends InputHTMLAttributes<HTMLInputElement> {
+export interface LiteSearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   /**
    * Delay (in milliseconds) before triggering the `onSearch` callback.
    * @default 0
