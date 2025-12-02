@@ -46,12 +46,12 @@
     "ci": "yarn typecheck && yarn lint && yarn format:check && yarn build"
   },
   "peerDependencies": {
-    "antd": "^5.26.6",
+    "antd": "^6.0.0",
     "exceljs": "^4.4.0",
-    "highcharts": "^12.3.0",
-    "i18next": "^25.3.2",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "highcharts": "^12.4.0",
+    "i18next": "^25.7.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "peerDependenciesMeta": {
     "exceljs": {
