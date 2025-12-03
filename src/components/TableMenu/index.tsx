@@ -308,7 +308,7 @@ const TableMenu: FC<TableMenuProps> = ({
   return hasMenuItem ? (
     <div className="table-menu table-toolbar--right" id="table-menu">
       <Dropdown
-        overlay={menu}
+        popupRender={() => menu}
         trigger={["click"]}
         getPopupContainer={() => document.getElementById("table-menu")!}
       >

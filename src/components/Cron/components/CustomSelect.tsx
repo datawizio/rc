@@ -277,7 +277,7 @@ const CustomSelect: FC<CustomSelectProps> = ({
       onSelect={onOptionClick}
       onDeselect={onOptionClick}
       disabled={disabled}
-      dropdownAlign={
+      popupAlign={
         (unit.type === "minutes" || unit.type === "hours") &&
         period !== "day" &&
         period !== "hour"

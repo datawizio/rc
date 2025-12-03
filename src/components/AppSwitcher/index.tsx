@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import Icon from "@ant-design/icons";
+import Button from "@/components/Button";
+
 import { useMemo, type FC } from "react";
 import { Col, Dropdown, Row, Typography } from "antd";
 import { useConfig } from "@/hooks";
@@ -119,19 +121,19 @@ const AppSwitcher: FC<IAppSwitcher> = ({ apps, client, theme, onAppClick }) => {
   return (
     <>
       <Dropdown
-        overlay={overlay}
+        popupRender={() => overlay}
         trigger={["click"]}
         placement="bottomCenter"
-        overlayClassName="app-switcher__dropdown"
+        classNames={{ root: "app-switcher__dropdown" }}
       >
-        <a
-          href="#1"
+        <Button
+          type="link"
           className={className}
           onClick={e => e.preventDefault()}
           title={t("CHANGE_APP_BTN_TITLE")}
         >
           <Icon component={AppSwitcherSvg} />
-        </a>
+        </Button>
       </Dropdown>
       <div className="divider"></div>
     </>
