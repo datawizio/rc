@@ -1,27 +1,24 @@
-import clsx from "clsx";
-import Select from "@/components/Select";
-import { Badge } from "antd";
+import { Select, Badge } from "antd";
 import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
-import type { SelectValue } from "antd/es/select";
-import type { Theme } from "@/utils/theme";
+import type { DefaultOptionType, SelectValue } from "antd/es/select";
 
 import "./index.less";
 
+export type ClientsListItem = {
+  id: number;
+  name: string;
+  is_active: boolean;
+};
+
 export interface ClientSelectProps {
-  clients: { id: number; name: string; is_active: boolean }[];
+  clients: ClientsListItem[];
   client: number;
-  theme?: Theme;
   onChange?: (url: string) => void;
 }
 
-const ClientSelect: FC<ClientSelectProps> = ({
-  clients,
-  client,
-  theme,
-  onChange
-}) => {
+const ClientSelect: FC<ClientSelectProps> = ({ clients, client, onChange }) => {
   const { t } = useConfig();
 
   const handleChange = (value: SelectValue) => {
@@ -29,10 +26,11 @@ const ClientSelect: FC<ClientSelectProps> = ({
     onChange?.(`/c/${value}/${arr.join("/")}`);
   };
 
-  const className = clsx({
-    "client-select": true,
-    "dw-dark": theme === "dark"
-  });
+  const options = clients.map<DefaultOptionType>(client => ({
+    label: client.name,
+    value: client.id,
+    isActive: client.is_active
+  }));
 
   return (
     <>
@@ -41,29 +39,25 @@ const ClientSelect: FC<ClientSelectProps> = ({
       ) : (
         <Select
           value={client}
-          showSearch
-          optionFilterProp="label"
+          variant="borderless"
+          showSearch={{ optionFilterProp: "label" }}
           notFoundContent={t("NO_DATA")}
           onChange={handleChange}
-          className={className}
-        >
-          {clients.map(client => (
-            <Select.Option
-              key={client.id}
-              value={client.id}
-              label={client.name}
-            >
+          className="client-select"
+          options={options}
+          optionRender={option => (
+            <>
               <Badge
                 style={{ width: 14 }}
                 status="default"
-                color={client.is_active ? "purple" : undefined}
+                color={option.data.isActive ? "purple" : undefined}
               />
-              {client.name}
-            </Select.Option>
-          ))}
-        </Select>
+              {option.label}
+            </>
+          )}
+        />
       )}
-      <div className="divider"></div>
+      <div className="divider" />
     </>
   );
 };
