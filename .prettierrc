@@ -9,5 +9,14 @@
   "proseWrap": "always",
   "arrowParens": "avoid",
   "trailingComma": "none",
-  "quoteProps": "preserve"
+  "quoteProps": "preserve",
+  "overrides": [
+    {
+      "files": "*.md",
+      "options": {
+        "printWidth": 100,
+        "proseWrap": "preserve"
+      }
+    }
+  ]
 }

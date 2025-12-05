@@ -209,10 +209,9 @@ Styles are kept in `.less` files, with a dedicated `rtl.less` to handle right-to
 > for new developers to find the relevant code, encourages encapsulation, and avoids scattering
 > related logic across the project.
 
-
 ## Code Style
 
-Prefer not to use `eslint-disable-next-line` or `@ts-expect-error` as a shortcut to silence errors. 
+Prefer not to use `eslint-disable-next-line` or `@ts-expect-error` as a shortcut to silence errors.
 If a rule doesn't fit, try to think of a better solution rather than hiding the problems.
 
 Formatting is handled automatically by Prettier and ESLint, so don't worry about code style
