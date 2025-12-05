@@ -82,6 +82,26 @@ jobs:
           git push origin ${{ github.ref_name }}
           git push origin "v${{ env.NEW_VERSION }}"
 
+      - name: Generate changelog
+        if: steps.version.outputs.bump_type != 'none'
+        id: changelog
+        run: |
+          # Get the previous tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "No previous tag found, getting all commits"
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" -n 50)
+          else
+            echo "Previous tag: $PREVIOUS_TAG"
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" ${PREVIOUS_TAG}..HEAD^)
+          fi
+
+          # Handle multiline output for GitHub Actions
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         if: steps.version.outputs.bump_type != 'none'
         uses: actions/create-release@v1
@@ -94,6 +114,9 @@ jobs:
             ## Changes in v${{ env.NEW_VERSION }}
 
             This release includes the latest changes from the ${{ github.ref_name }} branch.
+
+            ### Changelog
+            ${{ steps.changelog.outputs.CHANGELOG }}
 
             ### Installation
             ```bash
