@@ -1,5 +1,5 @@
 import { Typography } from "antd";
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 import type { FC } from "react";
 
 import "./index.less";
@@ -12,7 +12,7 @@ export interface ExpandButtonProps {
 }
 
 const ExpandButton: FC<ExpandButtonProps> = ({ listOpen, setListOpen }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
 
   const handleClick = (isOpen: boolean) => () => {
     setListOpen(isOpen);

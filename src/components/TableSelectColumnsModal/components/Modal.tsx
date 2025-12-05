@@ -12,7 +12,7 @@ import { useTable } from "@/components/Table/hooks/useTable";
 import type { FC } from "react";
 import type { TableSelectColumnsModalProps } from "../index";
 import type { IColumn } from "@/components/Table/types";
-import type { Key } from "antd/lib/table/interface";
+import type { Key } from "antd/es/table/interface";
 
 export interface TableSelectColumnsModalModalProps
   extends TableSelectColumnsModalProps {
@@ -56,7 +56,7 @@ export const TableSelectColumnsModalModal: FC<
   titleRender,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const { tableState, dispatch, baseTableState } = useTable();
 
   const columnsCount = useMemo(() => {
@@ -201,14 +201,14 @@ export const TableSelectColumnsModalModal: FC<
       <Button
         border={false}
         onClick={() => setIsOpened(true)}
-        title={translate("COLUMNS_BTN_TITLE")}
+        title={t("COLUMNS_BTN_TITLE")}
       >
         <ProfileOutlined className="select-columns__icon" />
-        {translate(locale.openButton)}
+        {t(locale.openButton)}
       </Button>
       <Modal
         open={isOpened}
-        title={translate(locale.headerModal)}
+        title={t(locale.headerModal)}
         className={modalClassNames}
         destroyOnHidden={true}
         onCancel={handleCancel}
@@ -221,7 +221,7 @@ export const TableSelectColumnsModalModal: FC<
             }
             onClick={handleApply}
           >
-            {translate(locale.apply)}
+            {t(locale.apply)}
           </Button>
         }
       >
@@ -234,7 +234,7 @@ export const TableSelectColumnsModalModal: FC<
           checkedKeys={checkedKeys}
           onExpand={setExpandedKeys}
           expandedKeys={expandedKeys}
-          checkAllTitle={translate(locale.checkAll)}
+          checkAllTitle={t(locale.checkAll)}
           maxCheckedKeys={maxCheckedKeys}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
@@ -243,8 +243,7 @@ export const TableSelectColumnsModalModal: FC<
         {showSelectedCount && (
           <div className={selectedInfoClassNames}>
             <div className="select-columns__modal-selected-inner">
-              {translate("SELECTED")}: {visibleColumnsKeysLength} /{" "}
-              {maxCheckedKeys}
+              {t("SELECTED")}: {visibleColumnsKeysLength} / {maxCheckedKeys}
             </div>
           </div>
         )}

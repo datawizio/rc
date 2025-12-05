@@ -24,7 +24,7 @@ export interface DrawerFormProps<Values> {
   form?: FormInstance<Values>;
   layout?: "horizontal" | "vertical";
   hideRequiredMark?: boolean;
-  formStore?: Observable<Values>;
+  formStore?: Observable;
   loading?: boolean;
   style?: CSSProperties;
   width?: number;
@@ -60,7 +60,7 @@ const DrawerForm = <T extends object = any>({
   onValuesChange,
   validateTrigger
 }: PropsWithChildren<DrawerFormProps<T>>) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const unwatchForm = useMemo(() => {
     if (!formStore || !formStore.watch) {
@@ -97,19 +97,19 @@ const DrawerForm = <T extends object = any>({
       actions
     ) : (
       <>
-        <Button onClick={handleFormClose} title={translate("CANCEL_BTN_TITLE")}>
-          {translate("CANCEL")}
+        <Button onClick={handleFormClose} title={t("CANCEL_BTN_TITLE")}>
+          {t("CANCEL")}
         </Button>
         <Button
           onClick={handleFormSubmit}
           type="primary"
           disabled={submitDisabled}
         >
-          {translate("SUBMIT")}
+          {t("SUBMIT")}
         </Button>
       </>
     );
-  }, [actions, handleFormClose, translate, handleFormSubmit, submitDisabled]);
+  }, [actions, handleFormClose, t, handleFormSubmit, submitDisabled]);
 
   return (
     <Drawer

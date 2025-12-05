@@ -2,7 +2,7 @@ import React from "react";
 import Button from "@/components/Button";
 import ColoredTags from "@/components/ColoredTags";
 
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 import { RuleInfoSection } from "@/components/RuleInfo/components/RuleInfoSection";
 import { ignoredFilters } from "@/utils/filter/constants";
 import {
@@ -30,7 +30,7 @@ const RuleInfoTable: React.FC<RuleInfoTableProps> = ({
   onShowRuleDetailsClick,
   onShowDimensionTableClick
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
 
   const showAllButton = !!widget_params.filters?.length && (
     <Button

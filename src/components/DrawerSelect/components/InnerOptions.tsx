@@ -3,8 +3,8 @@ import { Tree } from "antd";
 import { useConfig } from "@/hooks";
 import { buildTreeData } from "@/components/DrawerTreeSelect/utils/tree";
 
-import type { FC, Key } from "react";
-import type { TreeProps, TreeDataNode } from "antd";
+import type { FC, Key, Ref } from "react";
+import type { TreeProps, TreeDataNode, GetRef } from "antd";
 import type { SafeKey, SimpleModeConfig } from "rc-tree-select/es/interface";
 import type { HandlerFn } from "@/types/utils";
 import type { DefaultOptionType } from "antd/es/select";
@@ -21,6 +21,7 @@ export type InnerOptionsProps = Omit<
   | "checkStrictly"
   | "filterTreeNode"
 > & {
+  ref?: Ref<GetRef<typeof Tree>>;
   options: DefaultOptionType[];
   value: SafeKey[];
   remoteSearch?: boolean;
@@ -32,6 +33,7 @@ export type InnerOptionsProps = Omit<
 };
 
 const InnerOptions: FC<InnerOptionsProps> = ({
+  ref,
   options,
   value,
   remoteSearch,
@@ -42,7 +44,7 @@ const InnerOptions: FC<InnerOptionsProps> = ({
   onCheck,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const [notHiddenKeys, setNotHiddenKeys] = useState<Set<Key> | null>(null);
 
   const nestedTreeData = useMemo(() => {
@@ -139,12 +141,13 @@ const InnerOptions: FC<InnerOptionsProps> = ({
     nestedTreeData?.length === 0 ||
     (searchingLocally && searchValue && !notHiddenKeys?.size)
   ) {
-    return translate("NO_DATA");
+    return <div className="drawer-select-list-placeholder">{t("NO_DATA")}</div>;
   }
 
   return (
     <Tree
       {...props}
+      ref={ref}
       multiple={true}
       selectable={false}
       checkable={true}
@@ -153,6 +156,7 @@ const InnerOptions: FC<InnerOptionsProps> = ({
       onCheck={handleTreeCheck}
       checkStrictly={true}
       virtual={!searchingLocally}
+      blockNode={true}
     />
   );
 };

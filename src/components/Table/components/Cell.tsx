@@ -1,4 +1,4 @@
-import { useMemo, isValidElement } from "react";
+import React, { useMemo, isValidElement } from "react";
 import { useTable } from "@/components/Table/hooks/useTable";
 
 import type { IColumn } from "@/components/Table/types";
@@ -24,14 +24,17 @@ const Cell: FC<PropsWithChildren<HTMLAttributes<HTMLTableCellElement>>> = ({
 
     if (isValidElement<{ column: IColumn }>(child)) {
       const column = child?.props.column;
-      const columnKey = column && (column.key as SafeKey);
 
-      if (columnKey) {
-        const width = columnsWidth?.[columnKey];
-        if (width != null) output.width = `${width}px`;
-        return output;
+      if (column && column.key) {
+        const width = columnsWidth?.[column.key as SafeKey];
+
+        if (width !== undefined && width !== null) {
+          output.width = `${width}px`;
+        }
       }
     }
+
+    return output;
   }, [children, columnsWidth]);
 
   return (
@@ -41,4 +44,4 @@ const Cell: FC<PropsWithChildren<HTMLAttributes<HTMLTableCellElement>>> = ({
   );
 };
 
-export default Cell;
+export default React.memo(Cell);

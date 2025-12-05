@@ -1,4 +1,9 @@
+// The `.theme-light` and `.theme-dark` classes are applied to the body element.
+// Therefore, the associated custom properties (variables) are only available within
+// the scope of the body and cannot be accessed outside of it.
+
 .theme-light {
+  --text-color: rgba(0, 0, 0, 0.65);
   --primary-color: #722ed1;
   --primary-medium-color: #975fe4;
   --primary-light-color: #e3d1ff;
@@ -38,6 +43,7 @@
   --ant-tag-background-color: #f5f5f5;
   --ant-tag-border-color: #f0f0f0;
 
+  --skeleton-bg-color: rgb(238, 238, 238);
   --skeleton-bg-img: linear-gradient(
     90deg,
     rgb(238, 238, 238),
@@ -45,14 +51,19 @@
     rgb(238, 238, 238)
   );
 
-  --skeleton-bg-color: rgb(238, 238, 238);
+  --scrollbar-size: 8px;
   --scrollbar-track-color: #fff;
 
   --notifications-primary-bg: #fcf6ff;
   --notifications-secondary-bg: #f5f6f8;
+
+  --box-shadow-lg:
+    0 3px 6px -4px rgba(0, 0, 0, 0.48), 0 6px 16px 0 rgba(0, 0, 0, 0.32),
+    0 9px 28px 8px rgba(0, 0, 0, 0.2);
 }
 
 .theme-dark {
+  --text-color: rgba(255, 255, 255, 0.65);
   --primary-color: #975fe4;
   --primary-medium-color: #975fe4;
   --primary-light-color: #e3d1ff;
@@ -92,6 +103,7 @@
   --ant-tag-background-color: rgba(255, 255, 255, 0.08);
   --ant-tag-border-color: #303030;
 
+  --skeleton-bg-color: rgb(70 70 70);
   --skeleton-bg-img: linear-gradient(
     90deg,
     rgb(66 66 66),
@@ -99,9 +111,13 @@
     rgb(66 66 66)
   );
 
-  --skeleton-bg-color: rgb(70 70 70);
+  --scrollbar-size: 8px;
   --scrollbar-track-color: #a0a0a0;
 
   --notifications-primary-bg: #1f1f1f;
   --notifications-secondary-bg: #434343;
+
+  --box-shadow-lg:
+    0 3px 6px -4px rgba(0, 0, 0, 0.48), 0 6px 16px 0 rgba(0, 0, 0, 0.32),
+    0 9px 28px 8px rgba(0, 0, 0, 0.2);
 }

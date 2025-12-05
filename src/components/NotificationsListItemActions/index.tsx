@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
-import { useTranslation } from "react-i18next";
 import { UndoOutlined } from "@ant-design/icons";
+import { useConfig } from "@/hooks";
 import { DeleteIcon } from "@/components/Icons/DeleteIcon";
 import { EnvelopeIcon } from "@/components/Icons/EnvelopeIcon";
 import { MailIcon } from "@/components/Icons/MailIcon";
@@ -31,7 +31,7 @@ const ListItemActions: FC<ListItemActionsProps> = ({
   onMarkAsRead,
   onMarkAsUnread
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
 
   return (
     <div className="list-item-actions">

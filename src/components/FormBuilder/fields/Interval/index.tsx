@@ -6,7 +6,7 @@ import { useConfig } from "@/hooks";
 import type { FC } from "react";
 import type { FormRule } from "antd";
 import type { TFunction } from "i18next";
-import type { ValidatorRule } from "rc-field-form/lib/interface";
+import type { ValidatorRule } from "rc-field-form/es/interface";
 import type { FieldIntervalProps, IntervalType } from "../../types";
 
 import "./index.less";
@@ -37,16 +37,16 @@ export const FieldInterval: FC<FieldIntervalProps> = ({
   maxDate,
   onChange
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const handleChange = (value: IntervalType) => {
     onChange?.({ name, value });
   };
 
   const internalRules = useMemo(() => {
-    const validatorRule = intervalValidation(translate);
+    const validatorRule = intervalValidation(t);
     return rules ? rules.concat([validatorRule]) : [validatorRule];
-  }, [rules, translate]);
+  }, [rules, t]);
 
   return (
     <Form.Item

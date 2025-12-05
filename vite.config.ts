@@ -2,15 +2,10 @@ import fs from "fs-extra";
 import dts from "vite-plugin-dts";
 import react from "@vitejs/plugin-react-swc";
 import { libInjectCss } from "vite-plugin-lib-inject-css";
-import { theme } from "antd";
-import { convertLegacyToken, defaultTheme } from "@ant-design/compatible";
 import { glob } from "glob";
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
-import { peerDependencies } from "./package.json";
-
-const mapV4Token = theme.getDesignToken(defaultTheme);
-const v4Vars = convertLegacyToken(mapV4Token);
+import { dependencies, peerDependencies } from "./package.json";
 
 const entryFiles = await glob("./src/**/*.{ts,tsx,less}", {
   ignore: [
@@ -42,7 +37,7 @@ const copyLessFiles = () => {
   };
 };
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     libInjectCss(),
@@ -57,8 +52,7 @@ export default defineConfig({
       less: {
         math: "always",
         relativeUrls: true,
-        javascriptEnabled: true,
-        modifyVars: v4Vars
+        javascriptEnabled: true
       }
     }
   },
@@ -91,9 +85,14 @@ export default defineConfig({
           entryFileNames: "[name].cjs"
         }
       ],
-      external: ["react/jsx-runtime", ...Object.keys(peerDependencies || {})]
+      external: [
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        ...Object.keys(dependencies || {}),
+        ...Object.keys(peerDependencies || {})
+      ]
     },
-    sourcemap: true, // TODO: import.meta.env.NODE_ENV === 'development'
+    sourcemap: mode === "development",
     emptyOutDir: true
   }
-});
+}));

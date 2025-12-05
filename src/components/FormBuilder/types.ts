@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { Dayjs } from "dayjs";
 import type { SelectProps, FormRule, DatePickerProps } from "antd";
-import type { SwitchSize } from "antd/lib/switch";
+import type { SwitchSize } from "antd/es/switch";
 import type { CalendarType } from "@/types/calendar";
 import type { InfoTooltipProps } from "@/components/InfoTooltip";
 import type { DrawerSelectProps } from "../DrawerSelect";
@@ -59,13 +59,14 @@ export interface IntervalItemProps {
   onChange: (value: Dayjs) => void;
 }
 
-export interface FieldDatePickerProps extends FormFieldProps<Dayjs | null> {
-  format?: string;
-  fullWidth?: boolean;
-  inputReadOnly?: boolean;
-  type?: CalendarType;
-  disabledDate?: (currentDate: Dayjs) => boolean;
-}
+export type FieldDatePickerProps = FormFieldProps<Dayjs | null> &
+  DatePickerProps & {
+    format?: string;
+    fullWidth?: boolean;
+    inputReadOnly?: boolean;
+    type?: CalendarType;
+    disabledDate?: (currentDate: Dayjs) => boolean;
+  };
 
 export interface FieldTextProps extends FormFieldProps<string> {
   type?: string;

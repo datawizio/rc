@@ -12,7 +12,7 @@ import {
 import type { FC, Key } from "react";
 import type { TreeProps, TreeDataNode } from "antd";
 import type { SafeKey } from "rc-tree-select/es/interface";
-import type { CheckedStrategy } from "rc-tree-select/lib/utils/strategyUtil";
+import type { CheckedStrategy } from "rc-tree-select/es/utils/strategyUtil";
 import type { HandlerFn } from "@/types/utils";
 import type { IDrawerTreeSelectState } from "../hooks/useDrawerTreeSelect";
 import type { SelectValues } from "../types";
@@ -52,7 +52,7 @@ const InnerTree: FC<InnerTreeProps> = ({
   checkSelectAllStatus,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const [localExpandedKeys, setLocalExpandedKeys] = useState<Key[]>([]);
 
   const nestedTreeData = useMemo(() => {
@@ -194,7 +194,9 @@ const InnerTree: FC<InnerTreeProps> = ({
     nestedTreeData?.length === 0 ||
     (searchingLocally && searchValue && !localExpandedKeys?.length)
   ) {
-    return translate("NO_DATA");
+    return (
+      <div className="drawer-tree-select-list-placeholder">{t("NO_DATA")}</div>
+    );
   }
 
   return (
@@ -210,7 +212,7 @@ const InnerTree: FC<InnerTreeProps> = ({
       treeData={renderedTreeData}
       checkedKeys={checkedKeys || []}
       onCheck={handleTreeCheck}
-      checkStrictly={(remoteSearch && Boolean(searchValue)) || checkStrictly}
+      checkStrictly={checkStrictly}
       filterTreeNode={node => {
         return searchPredicate(node[treeNodeFilterProp as keyof TreeDataNode]);
       }}

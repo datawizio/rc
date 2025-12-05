@@ -2,10 +2,9 @@ import clsx from "clsx";
 import Button from "@/components/Button";
 
 import { useCallback, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Tooltip } from "antd";
 import { CloseOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { useTheme } from "@/hooks";
+import { useConfig, useTheme } from "@/hooks";
 
 import type { ReactNode, MouseEvent, FC } from "react";
 import type { TooltipProps } from "antd";
@@ -31,7 +30,7 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
   className,
   getPopupContainer
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
   const theme = useTheme();
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
@@ -60,7 +59,8 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
         {detailedLink && (
           <p className="info-tooltip-detailed">
             <a href={detailedLink} target="_blank" rel="noreferrer">
-              {detailedTextKey ? t(detailedTextKey) : t("DETAILED")}...
+              {detailedTextKey ? t(detailedTextKey) : t("DETAILED")}
+              ...
             </a>
           </p>
         )}

@@ -1,6 +1,6 @@
 import { useEffect, type FC } from "react";
 import { Modal } from "antd";
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 
 import "./index.less";
 
@@ -26,7 +26,7 @@ const BookMeetingModal: FC<BookMeetingModalProps> = ({
   app = "BES",
   titleKey = "BOOK_MEETING_TITLE"
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
 
   const script: HTMLScriptElement = document.createElement("script");
   script.src = SRC;

@@ -1,6 +1,6 @@
 import { ColumnIcons } from "./utils/columnIcons";
 
-import type { TableProps as AntdTableProps, ColumnProps } from "antd/lib/table";
+import type { TableProps as AntdTableProps, ColumnProps } from "antd/es/table";
 import type { MaybePromise, Overwrite } from "@/types/utils";
 import type {
   TableTemplateState,
@@ -12,19 +12,21 @@ import type {
   RefAttributes,
   ComponentType,
   ReactNode,
-  ReactElement
+  ReactElement,
+  PropsWithChildren,
+  CSSProperties
 } from "react";
 
 import type {
   SortOrder,
   SorterResult,
   TableLocale
-} from "antd/lib/table/interface";
+} from "antd/es/table/interface";
 
 import type { ColumnType, FilterValue } from "antd/es/table/interface";
 
 export type TableCompoundComponent = {
-  ToolBar: ComponentType;
+  ToolBar: ComponentType<PropsWithChildren>;
 } & ForwardRefExoticComponent<TableProps & RefAttributes<TableRef>>;
 
 /* Table types */
@@ -50,9 +52,12 @@ export type TableProps<RT = any> = Overwrite<
   AntdTableProps<RT>,
   OverwrittenTableProps<RT>
 > & {
-  width?: string | number;
-  height?: string | number;
+  width?: CSSProperties["width"];
+  height?: CSSProperties["height"];
   searchValue?: string;
+  vid?: string;
+  virtualDebug?: boolean;
+  overscanRowCount?: number;
   async?: boolean;
   autoColWidth?: boolean;
   compressColumns?: boolean;

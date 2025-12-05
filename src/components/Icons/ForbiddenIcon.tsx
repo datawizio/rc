@@ -40,76 +40,76 @@ const MyIcon = () => (
       fill="white"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M345 132.586H170V119.96C170 117.221 172.758 115 176.159 115H338.841C342.242 115 345 117.221 345 119.96V132.586Z"
       fill="#253368"
     />
     <g filter="url(#filter2_d_8823_33230)">
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M338.841 251H176.159C172.758 251 170 248.821 170 246.132V130.241H345V246.132C345 248.821 342.242 251 338.841 251Z"
         fill="#C8D5F3"
       />
     </g>
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M197.077 122.62C197.077 124.239 195.703 125.551 194.008 125.551C192.314 125.551 190.94 124.239 190.94 122.62C190.94 121.002 192.314 119.689 194.008 119.689C195.703 119.689 197.077 121.002 197.077 122.62Z"
       fill="#FAAD14"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M182.886 122.62C182.886 124.239 181.513 125.551 179.818 125.551C178.124 125.551 176.75 124.239 176.75 122.62C176.75 121.002 178.124 119.689 179.818 119.689C181.513 119.689 182.886 121.002 182.886 122.62Z"
       fill="#FA3014"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M210.538 122.62C210.538 124.239 209.165 125.551 207.47 125.551C205.775 125.551 204.402 124.239 204.402 122.62C204.402 121.002 205.775 119.689 207.47 119.689C209.165 119.689 210.538 121.002 210.538 122.62Z"
       fill="#7CB305"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M175.943 248.656C174.694 248.656 173.682 247.789 173.682 246.72V134.522C173.682 133.453 174.694 132.587 175.943 132.587H339.556C340.805 132.587 341.817 133.453 341.817 134.522V246.72C341.817 247.789 340.805 248.656 339.556 248.656H175.943Z"
       fill="white"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M317.867 148.911H193.95C188.877 148.911 184.727 147.855 184.727 146.566C184.727 145.276 188.877 144.221 193.95 144.221H317.867C322.94 144.221 327.09 145.276 327.09 146.566C327.09 147.855 322.94 148.911 317.867 148.911Z"
       fill="#CCD7EE"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M205.24 167.758H188.146C186.258 167.758 184.727 166.708 184.727 165.414C184.727 164.118 186.258 163.069 188.146 163.069H205.24C207.128 163.069 208.659 164.118 208.659 165.414C208.659 166.708 207.128 167.758 205.24 167.758Z"
       fill="#CCD7EE"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M317.867 181.738H193.95C188.877 181.738 184.727 180.683 184.727 179.393C184.727 178.103 188.877 177.049 193.95 177.049H317.867C322.94 177.049 327.09 178.103 327.09 179.393C327.09 180.683 322.94 181.738 317.867 181.738Z"
       fill="#CCD7EE"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M205.24 200.497H188.146C186.258 200.497 184.727 199.447 184.727 198.152C184.727 196.857 186.258 195.808 188.146 195.808H205.24C207.128 195.808 208.659 196.857 208.659 198.152C208.659 199.447 207.128 200.497 205.24 200.497Z"
       fill="#CCD7EE"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M317.867 215.738H193.95C188.877 215.738 184.727 214.683 184.727 213.393C184.727 212.103 188.877 211.049 193.95 211.049H317.867C322.94 211.049 327.09 212.103 327.09 213.393C327.09 214.683 322.94 215.738 317.867 215.738Z"
       fill="#CCD7EE"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M281.507 234.497H200.858C191.95 234.497 184.727 233.447 184.727 232.152C184.727 230.857 191.95 229.808 200.858 229.808H281.507C290.415 229.808 297.636 230.857 297.636 232.152C297.636 233.447 290.415 234.497 281.507 234.497Z"
       fill="#CCD7EE"
     />
@@ -235,8 +235,8 @@ const MyIcon = () => (
     <path
       d="M401 309C381.5 297.5 371 294.5 345 293.216"
       stroke="black"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
     />
     <path
       d="M439.838 522.076L439.051 522.042L439.264 504.442H439.264V504.436V503.829V498.759V497.624V492.819V491.402C439.933 489.596 441.061 487.977 442.549 486.698C444.059 485.399 445.889 484.493 447.866 484.067L447.878 484.064L447.89 484.061L448.868 483.799C449.87 483.559 450.892 483.404 451.922 483.338L451.922 483.338L451.927 483.337C463.061 482.521 495.471 482.362 505.458 482.942C510.466 483.233 515.644 483.47 519.57 483.635C521.532 483.718 523.182 483.782 524.342 483.826C524.922 483.848 525.379 483.865 525.691 483.876L526.008 483.887L526.023 483.899L526.437 484.222C526.8 484.506 527.333 484.922 528.01 485.452C529.365 486.511 531.299 488.025 533.616 489.844C538.251 493.482 544.418 498.34 550.549 503.217C556.681 508.094 562.774 512.989 567.261 516.704C569.506 518.562 571.344 520.121 572.584 521.233C573.032 521.635 573.397 521.974 573.673 522.245L475.002 523.5C471.401 523.381 462.301 523.012 454.095 522.672C449.988 522.502 446.106 522.34 443.251 522.22C441.823 522.16 440.652 522.11 439.838 522.076Z"
@@ -286,9 +286,9 @@ const MyIcon = () => (
     <path
       d="M373.36 255.002C373.449 254.154 373.85 253.346 374.48 252.747C375.109 252.148 375.918 251.805 376.735 251.79"
       stroke="black"
-      stroke-width="0.5"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeWidth="0.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
     />
     <defs>
       <filter
@@ -298,9 +298,9 @@ const MyIcon = () => (
         width="137.258"
         height="173.912"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -333,9 +333,9 @@ const MyIcon = () => (
         width="106"
         height="124"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -368,9 +368,9 @@ const MyIcon = () => (
         width="179"
         height="124.759"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -403,9 +403,9 @@ const MyIcon = () => (
         width="101.681"
         height="97.5354"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"

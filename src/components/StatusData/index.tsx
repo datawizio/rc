@@ -10,12 +10,12 @@ export interface StatusDataProps {
 }
 
 const StatusData: FC<StatusDataProps> = ({ inProcess, lastUpdateDate }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   if (inProcess) {
     return (
       <div className="status-data__container">
-        <p>{translate("DATA_IN_PROGRESS")}</p>
+        <p>{t("DATA_IN_PROGRESS")}</p>
       </div>
     );
   }
@@ -23,8 +23,8 @@ const StatusData: FC<StatusDataProps> = ({ inProcess, lastUpdateDate }) => {
   if (lastUpdateDate) {
     return (
       <div className="status-data__container">
-        <p>{formatDateTime(lastUpdateDate, translate)}</p>
-        <p>{translate("LAST_UPDATE_DATA")}</p>
+        <p>{formatDateTime(lastUpdateDate, t)}</p>
+        <p>{t("LAST_UPDATE_DATA")}</p>
       </div>
     );
   }

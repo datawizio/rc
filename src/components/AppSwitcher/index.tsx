@@ -31,7 +31,7 @@ const App: FC<
   path,
   onAppClick
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const handleClick = () => {
     const url = `${host}${path || ""}`;
@@ -47,11 +47,9 @@ const App: FC<
 
       <div className="text">
         <Typography.Paragraph>
-          {is_main ? translate("HOME") : name}
+          {is_main ? t("HOME") : name}
         </Typography.Paragraph>
-        <Typography.Paragraph>
-          {translate(bento_menu_description)}
-        </Typography.Paragraph>
+        <Typography.Paragraph>{t(bento_menu_description)}</Typography.Paragraph>
       </div>
     </Col>
   );
@@ -107,11 +105,11 @@ const getMenu = (
 };
 
 const AppSwitcher: FC<IAppSwitcher> = ({ apps, client, theme, onAppClick }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const overlay = useMemo(() => {
-    return getMenu(apps, client, translate("NAVIGATE_TO"), onAppClick);
-  }, [apps, client, onAppClick, translate]);
+    return getMenu(apps, client, t("NAVIGATE_TO"), onAppClick);
+  }, [apps, client, onAppClick, t]);
 
   const className = clsx({
     "app-switcher-link": true,
@@ -130,7 +128,7 @@ const AppSwitcher: FC<IAppSwitcher> = ({ apps, client, theme, onAppClick }) => {
           href="#1"
           className={className}
           onClick={e => e.preventDefault()}
-          title={translate("CHANGE_APP_BTN_TITLE")}
+          title={t("CHANGE_APP_BTN_TITLE")}
         >
           <Icon component={AppSwitcherSvg} />
         </a>

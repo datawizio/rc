@@ -26,7 +26,7 @@ const CheckboxButton: FC<CheckboxButtonProps> = ({
   onChange,
   ...props
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const btnRef = useRef<HTMLButtonElement>(null);
 
   const buttonClasses = clsx(className, {
@@ -49,7 +49,7 @@ const CheckboxButton: FC<CheckboxButtonProps> = ({
       className={buttonClasses}
       onClick={handleButtonClick}
     >
-      {text && translate(text)}
+      {text && t(text)}
     </Button>
   );
 };

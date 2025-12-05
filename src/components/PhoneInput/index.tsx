@@ -35,7 +35,7 @@ const PhoneInput: PhoneInputComponent = ({
   value,
   onChange
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const [internalValue, setInternalValue] = useState<string>();
   const [formatedValue, setFormatedValue] = useState<string>();
 
@@ -119,7 +119,7 @@ const PhoneInput: PhoneInputComponent = ({
         optionFilterProp="title"
         onChange={value => handleCountryChange(value as CountryCode)}
         showSearch={true}
-        notFoundContent={translate("NO_DATA")}
+        notFoundContent={t("NO_DATA")}
       >
         {countries.map(country => {
           const Flag = (Flags as Record<string, FlagComponent>)[country.value];

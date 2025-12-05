@@ -141,20 +141,20 @@ const MyIcon = () => (
     <path
       d="M249.008 447.21C249.465 444.682 251.404 442.892 253.349 443.241"
       stroke="black"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
     />
     <path
       d="M232.783 481.95C259.376 491.178 266.456 489.39 299.856 480.37"
       stroke="black"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
     />
     <path
       d="M301.633 426.504C306.642 432.72 311.997 431.459 315.818 426.269"
       stroke="black"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
     />
     <path
       d="M641.259 476.014L641.26 476.014C644.553 476.199 647.642 477.656 649.872 480.077C652.103 482.498 653.298 485.691 653.204 488.976L653.204 488.977L653.002 496.305L653.002 496.316L653.002 496.327L653.013 496.99L652.871 502.577L652.87 502.588L652.871 502.598L652.884 503.389L652.891 503.847L652.745 509.17L652.745 509.181L652.745 509.192L652.771 510.767C652.017 512.773 650.771 514.559 649.146 515.962C647.498 517.386 645.513 518.368 643.38 518.817L643.368 518.819L643.357 518.822L642.282 519.102C641.205 519.347 640.108 519.498 639.004 519.555L639 519.555C627.159 520.271 595.424 520.06 584.338 519.295L584.316 519.174C584.259 518.844 584.175 518.359 584.069 517.743C583.856 516.509 583.553 514.746 583.193 512.629C582.475 508.393 581.53 502.739 580.627 497.063C579.723 491.387 578.861 485.693 578.308 481.378C578.03 479.218 577.831 477.412 577.742 476.128C577.697 475.484 577.681 474.985 577.695 474.644C577.697 474.589 577.7 474.54 577.703 474.497L614.811 474.549C619.259 474.769 631.535 475.444 641.259 476.014Z"
@@ -309,9 +309,9 @@ const MyIcon = () => (
         width="137.258"
         height="173.912"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -344,9 +344,9 @@ const MyIcon = () => (
         width="107.711"
         height="121.308"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -379,9 +379,9 @@ const MyIcon = () => (
         width="223"
         height="73.4999"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -414,9 +414,9 @@ const MyIcon = () => (
         width="216.383"
         height="65.1129"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -449,9 +449,9 @@ const MyIcon = () => (
         width="50"
         height="49"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -484,9 +484,9 @@ const MyIcon = () => (
         width="71"
         height="72"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"

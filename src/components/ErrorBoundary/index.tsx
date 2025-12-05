@@ -75,10 +75,10 @@ export default class ErrorBoundary extends Component<
       return (
         <Result
           icon={<RefreshIcon />}
-          title={ctx.translate("NEED_REFRESH")}
+          title={ctx.t("NEED_REFRESH")}
           extra={
             <Button type="primary" onClick={this.handlerRefreshClick}>
-              {ctx.translate("REFRESH")}
+              {ctx.t("REFRESH")}
             </Button>
           }
         />
@@ -88,10 +88,10 @@ export default class ErrorBoundary extends Component<
       return (
         <Result
           icon={<OopsIcon />}
-          title={ctx.translate("SOMETHING_WENT_WRONG")}
+          title={ctx.t("SOMETHING_WENT_WRONG")}
           extra={
             <Button type="primary" onClick={this.handlerButtonClick}>
-              {ctx.translate("REPORT_FEEDBACK")}
+              {ctx.t("REPORT_FEEDBACK")}
             </Button>
           }
         />

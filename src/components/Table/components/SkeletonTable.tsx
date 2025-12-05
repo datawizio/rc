@@ -17,10 +17,7 @@ const SkeletonTable: React.FC<React.PropsWithChildren<SkeletonTableProps>> = ({
   const tableRows = Array.from(Array(10).keys());
 
   const className = useMemo(
-    () =>
-      clsx("skeleton-container", {
-        "skeleton-container--loading": skeleton
-      }),
+    () => clsx("skeleton-container", skeleton && "skeleton-container--loading"),
     [skeleton]
   );
 
@@ -31,7 +28,7 @@ const SkeletonTable: React.FC<React.PropsWithChildren<SkeletonTableProps>> = ({
           <Row gutter={8}>
             {tableColumns.map((_, index) => (
               <Col key={index} span={3}>
-                <Skeleton.Input active style={{ width: "100%" }} />
+                <Skeleton.Input active={true} />
               </Col>
             ))}
           </Row>
@@ -40,7 +37,7 @@ const SkeletonTable: React.FC<React.PropsWithChildren<SkeletonTableProps>> = ({
             <Row key={index} gutter={8}>
               {tableColumns.map((_, index) => (
                 <Col key={index} span={3}>
-                  <Skeleton.Input active style={{ width: "100%" }} />
+                  <Skeleton.Input active={true} />
                 </Col>
               ))}
             </Row>

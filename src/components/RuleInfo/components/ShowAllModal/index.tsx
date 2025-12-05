@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 import { useRuleContext } from "@/components/RuleInfo/hooks/useRuleContext";
 
 import type { FC, MouseEvent } from "react";
@@ -9,8 +9,8 @@ export interface ShowAllModalProps {
 }
 
 const ShowAllModal: FC<ShowAllModalProps> = ({ dimensionName }) => {
+  const { t } = useConfig();
   const { dispatch } = useRuleContext();
-  const { t } = useTranslation();
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

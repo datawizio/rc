@@ -90,7 +90,7 @@ export const filtersMapperFunctions = {
   },
   "number": {
     "category_level_view": (value: number) => {
-      return [`${i18next.t("LEVEL_N")} ${value}`];
+      return [i18next.t("LEVEL_N", { level: value })];
     }
   },
   "array": (value: Array<string | number>, type?: "include" | "exclude") => {

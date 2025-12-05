@@ -18,7 +18,7 @@ const Template: FC<TemplateProps> = ({
   isActive,
   ...template
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const handleFavoriteClick = useCallback(
     (e: MouseEvent<HTMLSpanElement>) => {
@@ -45,14 +45,14 @@ const Template: FC<TemplateProps> = ({
       {!template.favorite && (
         <StarOutlined
           onClick={handleFavoriteClick}
-          title={translate("DEFAULT")}
+          title={t("DEFAULT")}
           className="table-templates__icon table-templates__icon--favorite"
         />
       )}
       {template.favorite && (
         <StarFilled
           onClick={handleFavoriteClick}
-          title={translate("DEFAULT")}
+          title={t("DEFAULT")}
           className="table-templates__icon table-templates__icon--favorite-active"
         />
       )}

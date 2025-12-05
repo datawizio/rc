@@ -9,7 +9,7 @@ import TableWrapper from "./components/TableWrapper";
 import HeaderWrapper from "./components/HeaderWrapper";
 
 import { useMemo, useReducer, useCallback, useImperativeHandle } from "react";
-
+import { mergeWith } from "lodash";
 import { Table as AntdTable } from "antd";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -19,6 +19,7 @@ import { useDataSource } from "./hooks/useDataSource";
 import { usePropsToState } from "./hooks/usePropsToState";
 import { useAsyncProviders } from "./hooks/useAsyncProviders";
 import { TableContext } from "./context";
+import { useVirtualTable } from "./components/Virtual";
 import { isSafari } from "@/utils/navigatorInfo";
 import { useConfig } from "@/hooks";
 
@@ -63,7 +64,7 @@ const tableDefaultProps: Partial<TableProps> = {
   compressColumns: false,
   showSorterTooltip: false,
 
-  size: "small",
+  size: "middle",
   width: "auto",
   height: "auto",
   tableLayout: "fixed",
@@ -85,11 +86,22 @@ const tableDefaultProps: Partial<TableProps> = {
 };
 
 const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
-  const props = { ...tableDefaultProps, ...customProps };
+  const props = useMemo(() => {
+    return mergeWith(
+      {},
+      tableDefaultProps,
+      customProps,
+      (objValue, srcValue) => {
+        return srcValue !== undefined ? srcValue : objValue;
+      }
+    );
+  }, [customProps]);
 
   const {
     errorRender,
+    vid,
     virtual,
+    virtualDebug,
     width = "auto",
     height = "auto",
     locale = { total: "TABLE_TOTAL" },
@@ -108,12 +120,13 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
     sortColumnCallback,
     isTotalRow,
     calcColumnWidth,
+    overscanRowCount,
     ...restProps
   } = props;
 
   const isAsync = props.async;
 
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const [baseState, dispatch] = useReducer(reducer, props, initializer);
 
   const columnsState = useColumns(baseState, props);
@@ -211,9 +224,9 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
 
   const totalRenderer = useCallback(
     (total: number, [current, to]: [number, number]) => {
-      return translate(locale.total, { current, to, total });
+      return t(locale.total, { current, to, total });
     },
-    [translate, locale.total]
+    [t, locale.total]
   );
 
   const expandIconRender = useCallback<HandlerFn<TableProps, "expandIcon">>(
@@ -257,6 +270,16 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
     [state.loadingRows]
   );
 
+  const [vt] = useVirtualTable(
+    () => ({
+      id: vid,
+      scroll: { y: height },
+      overscanRowCount: overscanRowCount ?? 5,
+      debug: virtualDebug
+    }),
+    [height, vid]
+  );
+
   const customComponents = useMemo<TableProps["components"]>(() => {
     if (virtual) {
       return {
@@ -268,7 +291,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
                 {...props}
                 calcColumnWidth={calcColumnWidth}
                 virtual={virtual}
-                isHeader
+                isHeader={true}
                 onWidthChange={onColumnWidthChange ?? (() => {})}
               />
             ) : (
@@ -276,10 +299,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
             );
           }
         },
-        body: {
-          cell: props => <Cell {...props} />,
-          row: props => <Row {...props} isTotalRow={isTotalRow} />
-        }
+        ...vt
       };
     }
 
@@ -291,7 +311,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
           return props.model ? (
             <Column
               calcColumnWidth={calcColumnWidth}
-              isHeader
+              isHeader={true}
               {...props}
               onWidthChange={onColumnWidthChange}
             />
@@ -306,7 +326,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [virtual, components, height, width, isTotalRow]);
+  }, [virtual, components, vt, height, width, isTotalRow]);
 
   const className = useMemo(
     () =>
@@ -322,9 +342,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
           "dw-table--compress-columns": compressColumns,
           "dw-table--safari": isSafari(),
           "dw-table--virtual": virtual,
-          "dw-table--small":
-            height &&
-            (typeof height === "string" ? parseInt(height) : height) < 200
+          "dw-table--small": height && parseInt(height as string) < 200
         },
         props.className
       ),
@@ -366,11 +384,6 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
     }
   }));
 
-  const totalColumnsWidth = columnsState.columns?.reduce(
-    (acc, col) => acc + (columnsState.columnsWidth?.[col.dataIndex] ?? 0),
-    0
-  );
-
   return (
     <div className="dw-table-container">
       <DndProvider backend={HTML5Backend}>
@@ -393,12 +406,11 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
               <AntdTable
                 {...restProps}
                 {...state}
-                virtual={virtual}
                 scroll={
                   virtual
                     ? {
                         y: height,
-                        x: totalColumnsWidth
+                        x: 500
                       }
                     : undefined
                 }

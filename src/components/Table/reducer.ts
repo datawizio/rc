@@ -7,7 +7,7 @@ import {
   setMultisortingForColumns
 } from "./utils/utils";
 
-import type { Key } from "antd/lib/table/interface";
+import type { Key } from "antd/es/table/interface";
 import type {
   TableState,
   Action,

@@ -19,7 +19,7 @@ const TableTransposeButton: FC<TableTransposeButtonProps> = ({
   buttonText = "TRANSPOSE",
   resetTableSearch = true
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const { dispatch } = useTable();
   const [isTransposed, setTransposed] = useState(false);
 
@@ -38,7 +38,7 @@ const TableTransposeButton: FC<TableTransposeButtonProps> = ({
     <div className="table-transpose-button table-toolbar--right">
       <Button border={false} onClick={handleTranspose}>
         <RetweetOutlined className="table-transpose-button__icon" />
-        {buttonText && translate(buttonText)}
+        {buttonText && t(buttonText)}
       </Button>
     </div>
   );

@@ -8,20 +8,19 @@ import { BellOutlined } from "@ant-design/icons";
 import { useDeepEqualMemo } from "@/hooks";
 import { ws } from "@/utils/ws";
 
-import type { FC, MouseEventHandler } from "react";
+import type { FC } from "react";
+import type { ButtonProps } from "@/components/Button";
 import type { BadgerOptions } from "@/components/FaviconBadger";
 import type { WebSocketMessage } from "@/utils/ws";
 
 import "./index.less";
 
-export interface NotificationButtonProps {
+export type NotificationButtonProps = Omit<ButtonProps, "title"> & {
   useWS?: boolean;
   faviconBadgerOptions?: BadgerOptions;
   count: number;
-  onClick: MouseEventHandler<HTMLElement>;
   tooltip?: string;
-  disabled?: boolean;
-}
+};
 
 const badgeOptions: BadgerOptions = { size: 0.35, radius: 50 };
 const faviconBadge = new Badger(badgeOptions);
@@ -32,7 +31,7 @@ const NotificationButton: FC<NotificationButtonProps> = ({
   useWS,
   tooltip,
   disabled,
-  onClick
+  ...props
 }) => {
   const [state, setState] = useState<number>(count);
 
@@ -65,9 +64,7 @@ const NotificationButton: FC<NotificationButtonProps> = ({
 
   useEffect(() => {
     if (!faviconBadgerOptions) return;
-    faviconBadge.updateOptions(
-      Object.assign(badgeOptions, faviconBadgerOptions)
-    );
+    faviconBadge.updateOptions({ ...badgeOptions, ...faviconBadgerOptions });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useDeepEqualMemo(faviconBadgerOptions)]);
 
@@ -81,10 +78,10 @@ const NotificationButton: FC<NotificationButtonProps> = ({
     >
       <Button
         type="link"
-        onClick={onClick}
         icon={<BellOutlined />}
         disabled={disabled}
         title={tooltip}
+        {...props}
       />
     </Badge>
   );

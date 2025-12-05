@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import { resizeDetector } from "@/utils/resizeDetector";
 import { getAbsoluteHeight } from "@/utils/sizeUtils";
+import { useTable } from "@/components/Table/hooks/useTable";
 
 import type { FC, HTMLAttributes, CSSProperties } from "react";
-import { useTable } from "@/components/Table/hooks/useTable";
 
 const TableWrapper: FC<HTMLAttributes<HTMLTableElement>> = ({
   style,
@@ -19,8 +19,8 @@ const TableWrapper: FC<HTMLAttributes<HTMLTableElement>> = ({
     tableProps: { responsiveTable, autoHeight }
   } = useTable();
 
-  const [width, setWidth] = useState<any>(_width);
-  const [height, setHeight] = useState<any>(_height);
+  const [width, setWidth] = useState<CSSProperties["width"]>(_width);
+  const [height, setHeight] = useState<CSSProperties["height"]>(_height);
 
   useEffect(() => setWidth(_width), [_width]);
   useEffect(() => setHeight(_height), [_height]);
@@ -44,8 +44,11 @@ const TableWrapper: FC<HTMLAttributes<HTMLTableElement>> = ({
             return el ? acc + getAbsoluteHeight(el as any) : acc;
           }, 0);
 
-          setWidth(elWidth);
-          setHeight(elHeight - offset);
+          const nextWidth = elWidth;
+          const nextHeight = Math.max(0, Math.floor(elHeight - offset));
+
+          setWidth(prev => (prev !== nextWidth ? nextWidth : prev));
+          setHeight(prev => (prev !== nextHeight ? nextHeight : prev));
         });
 
         return resizeRef.current;

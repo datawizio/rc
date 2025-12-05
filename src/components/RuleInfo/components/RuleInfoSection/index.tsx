@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 import type { FC, PropsWithChildren } from "react";
 
 import "./index.less";
@@ -10,7 +10,7 @@ export const RuleInfoSection: FC<
     className?: string;
   }>
 > = ({ name, children, className }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
 
   return (
     <div className={clsx("rule-info-section", className)}>

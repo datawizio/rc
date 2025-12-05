@@ -1,4 +1,4 @@
-import { notification } from "antd";
+import { notification } from "@/utils/staticAppFunctions";
 import type { FC } from "react";
 
 export interface ApiErrorProps {

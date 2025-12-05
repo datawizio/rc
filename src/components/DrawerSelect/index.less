@@ -9,6 +9,11 @@
     }
   }
 
+  &-list-placeholder {
+    color: var(--ant-color-text-placeholder);
+    margin-bottom: 10px;
+  }
+
   .ant-select-selection-search-input {
     font-size: 1px;
   }
@@ -27,14 +32,14 @@
     }
   }
 
-  span {
-    & > .ant-select-selection-placeholder {
+  .ant-select-selection-overflow {
+    &-item:has(.ant-select-selection-placeholder):not(:first-child) {
       display: none;
     }
+  }
 
-    &:first-of-type > .ant-select-selection-placeholder {
-      display: block;
-    }
+  .anticon-down {
+    display: none;
   }
 }
 
@@ -62,6 +67,12 @@
 
       .ant-tree-switcher {
         display: none;
+      }
+
+      .ant-tree-node-content-wrapper {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

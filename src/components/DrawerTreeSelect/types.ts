@@ -1,7 +1,7 @@
 import type { FC, ReactElement } from "react";
 import type { TreeSelectProps as AntTreeSelectProps } from "antd";
-import type { SelectValue } from "antd/lib/tree-select";
-import type { AntTreeNode } from "antd/lib/tree";
+import type { SelectValue } from "antd/es/tree-select";
+import type { AntTreeNode } from "antd/es/tree";
 import type { SafeKey } from "rc-tree-select/es/interface";
 
 export type SelectValues = Extract<SelectValue, unknown[]>;

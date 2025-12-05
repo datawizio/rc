@@ -25,6 +25,11 @@
 
     .ant-skeleton-element {
       width: 100%;
+
+      .ant-skeleton-input {
+        width: 100% !important;
+        min-width: unset !important;
+      }
     }
   }
 
@@ -32,18 +37,29 @@
     display: none;
   }
 
+  .ant-table-placeholder > td {
+    background-color: var(--ant-color-bg-container);
+  }
+
+  .ant-table-cell {
+    align-content: center;
+    min-height: 50px;
+    padding: 8px !important;
+  }
+
   &__wrapper {
     overflow: auto;
   }
 
   &__toolbar {
-    padding: 0 5px;
+    padding: 0 5px 3px;
     display: flow-root;
     position: relative;
 
     @media (max-width: @screen-xs) {
       display: flex;
       flex-direction: column;
+
       .lite-search {
         width: 100% !important;
       }
@@ -51,6 +67,7 @@
       .custom-table-toolbar {
         display: flex;
         flex-direction: row-reverse;
+
         @media (max-width: @screen-xxs) {
           justify-content: center;
         }
@@ -85,12 +102,12 @@
     }
   }
 
-  .dw-table__column,
-  th {
+  th,
+  .dw-table__column {
     min-width: 100px;
     transition: none !important;
     top: 0;
-    z-index: 5;
+    z-index: 5 !important;
     overflow: hidden;
     position: sticky !important;
 
@@ -112,6 +129,10 @@
 
     &--resizable {
       resize: horizontal;
+
+      &::before {
+        display: none;
+      }
     }
 
     &--drop-hover {
@@ -123,7 +144,7 @@
     }
 
     &--fixed {
-      z-index: 10;
+      z-index: 10 !important;
 
       &--left {
         left: 0;
@@ -153,17 +174,17 @@
       padding: 8px !important;
     }
 
-    .ant-table-filter-column {
-      padding-right: 30px;
-    }
-
     .ant-table-selection {
       display: flex;
+
+      &:has(input[type="checkbox"]) {
+        align-items: center;
+      }
     }
   }
 
-  tr.dw-row-total > td {
-    background-color: var(--ant-color-bg-solid);
+  .ant-table-selection-column {
+    min-width: 22px !important;
   }
 
   &__cell {
@@ -211,12 +232,19 @@
   table {
     table-layout: fixed;
     width: max-content;
+
     @media (max-width: @screen-xs) {
       table-layout: auto !important;
     }
   }
 
   td {
+    position: relative;
+    overflow: hidden;
+    white-space: pre-line;
+    text-overflow: ellipsis;
+    min-width: 100px;
+
     .row-prefix {
       float: left;
 
@@ -232,12 +260,6 @@
     .anticon-loading {
       margin-right: 11px;
     }
-
-    position: relative;
-    overflow: hidden;
-    white-space: pre-line;
-    text-overflow: ellipsis;
-    min-width: 100px;
   }
 
   &--nestedable {
@@ -258,7 +280,7 @@
 
   &.nested-table {
     .ant-table {
-      margin-left: 38px !important;
+      margin-left: 39.5px !important;
     }
 
     .ant-table-container {
@@ -285,16 +307,18 @@
       height: auto !important;
 
       td {
-        left: 50%;
         border: none !important;
-        position: absolute !important;
+
+        .dw-table__cell {
+          justify-content: center;
+        }
       }
     }
   }
 
   .ant-table-bordered {
     .ant-table-cell {
-      border-right: 1px solid var(--table-border-color);
+      border-right: 1px solid var(--ant-table-border-color);
     }
   }
 
@@ -395,7 +419,7 @@
   }
 
   .ant-table-tbody > tr > td {
-    border-bottom: 1.5px solid var(--table-border-color);
+    border-bottom: 1.5px solid var(--ant-table-border-color);
   }
 }
 

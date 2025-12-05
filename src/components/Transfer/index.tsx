@@ -63,7 +63,7 @@ const Transfer: FC<TransferProps> = ({
   onMoveToLeft,
   onMoveAllToLeft
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const [{ sourceChecked, targetChecked }, dispatch] = useTransfer({
     sourceChecked: [],
@@ -200,9 +200,9 @@ const Transfer: FC<TransferProps> = ({
         direction="left"
         actions={sourceActions}
         $filters={sourceFilters}
-        noDataText={translate("NO_DATA")}
-        searchText={translate("SEARCH")}
-        selectedText={translate("SELECTED")}
+        noDataText={t("NO_DATA")}
+        searchText={t("SEARCH")}
+        selectedText={t("SELECTED")}
       />
       <Operation
         className={`${prefixCls}-operation`}
@@ -230,9 +230,9 @@ const Transfer: FC<TransferProps> = ({
         showSelectAll={true}
         actions={targetActions}
         $filters={targetFilters}
-        noDataText={translate("NO_DATA")}
-        searchText={translate("SEARCH")}
-        selectedText={translate("SELECTED")}
+        noDataText={t("NO_DATA")}
+        searchText={t("SEARCH")}
+        selectedText={t("SELECTED")}
       />
     </div>
   );

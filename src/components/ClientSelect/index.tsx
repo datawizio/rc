@@ -4,7 +4,7 @@ import { Badge } from "antd";
 import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
-import type { SelectValue } from "antd/lib/select";
+import type { SelectValue } from "antd/es/select";
 import type { Theme } from "@/utils/theme";
 
 import "./index.less";
@@ -22,7 +22,7 @@ const ClientSelect: FC<ClientSelectProps> = ({
   theme,
   onChange
 }) => {
-  const { translate: t } = useConfig();
+  const { t } = useConfig();
 
   const handleChange = (value: SelectValue) => {
     const arr = window.location.pathname.split("/").slice(3);

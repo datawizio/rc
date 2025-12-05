@@ -1,7 +1,7 @@
 import { useState, type FC } from "react";
-import { useTranslation } from "react-i18next";
 import { Row } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
+import { useConfig } from "@/hooks";
 
 import "./index.less";
 
@@ -12,7 +12,7 @@ export interface TechnicalMaintenanceProps {
 const TechnicalMaintenance: FC<TechnicalMaintenanceProps> = ({
   messageKey = "THE_SERVICE_IS_TEMPORARILY_UNAVAILABLE"
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
   const [visible, setVisible] = useState<boolean>(true);
 
   const onClose = () => {

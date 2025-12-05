@@ -6,18 +6,18 @@ import Checkbox from "@/components/Checkbox";
 import Markers from "@/components/DrawerTreeSelect/components/Markers";
 import InnerOptions from "./components/InnerOptions";
 
-import { Skeleton, Tag, message, Select } from "antd";
+import { App, Skeleton, Tag, Select, Tree } from "antd";
 import { uniqBy } from "lodash";
 import { useConfig } from "@/hooks";
 import { useDrawerSelect } from "./hooks/useDrawerSelect";
-import { useRef, useCallback, useMemo, useEffect } from "react";
+import { useRef, useCallback, useMemo, useEffect, useState } from "react";
 
 import type { FC, ReactNode, UIEvent, ChangeEvent } from "react";
-import type { SelectProps, CheckboxChangeEvent } from "antd";
-import type { AntTreeNode } from "antd/lib/tree";
-import type { BaseOptionType, DefaultOptionType } from "antd/lib/select";
+import type { SelectProps, CheckboxChangeEvent, GetRef } from "antd";
+import type { AntTreeNode } from "antd/es/tree";
+import type { BaseOptionType, DefaultOptionType } from "antd/es/select";
 import type { HandlerFn } from "@/types/utils";
-import type { SelectValue } from "antd/lib/select";
+import type { SelectValue } from "antd/es/select";
 import type { SafeKey } from "rc-tree-select/es/interface";
 import type { IDrawerSelectState, SelectValues } from "./hooks/useDrawerSelect";
 
@@ -143,13 +143,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
   markersFilterName,
   ...restProps
 }) => {
-  const { translate } = useConfig();
-
-  const drawerSearchPlaceholder = translate("SEARCH");
-  const loadingText = translate("LOADING");
-  const submitText = translate("SUBMIT");
-  const cancelText = translate("CANCEL");
-  const selectAllText = translate("ALL");
+  const { t } = useConfig();
+  const { message } = App.useApp();
 
   const [
     {
@@ -176,6 +171,9 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     optionsState: []
   });
 
+  const [scrollLoading, setScrollLoading] = useState(false);
+
+  const optionsRef = useRef<GetRef<typeof Tree>>(null);
   const selectedOptions = useRef<DefaultOptionType[]>([]);
   const firstLoadedOptions = useRef<DefaultOptionType[]>([]);
 
@@ -380,6 +378,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
 
   const closeDrawer = useCallback(() => {
     setTimeout(() => {
+      optionsRef.current?.scrollTo({ top: 0 });
+
       const activeElement = document.activeElement as HTMLElement;
       activeElement.blur();
     }, 100);
@@ -563,8 +563,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         checkedKeys.length > maxSelectedCount
       ) {
         const messageKey = "select-over-then-" + maxSelectedCount;
-        message.error({
-          content: translate("COUNT_MUST_BE_SMALLER_THEN", {
+        void message.error({
+          content: t("COUNT_MUST_BE_SMALLER_THEN", {
             maxCount: maxSelectedCount
           }),
           key: messageKey
@@ -593,15 +593,16 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     },
     [
       internalValue,
-      optionsState,
-      handleSelect,
-      handleDeselect,
       multiple,
       maxSelectedCount,
       dispatch,
       drawerVisible,
       showSelectAll,
-      translate,
+      optionsState,
+      handleSelect,
+      handleDeselect,
+      message,
+      t,
       triggerOnChange,
       checkSelectAllStatus
     ]
@@ -623,8 +624,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         value.length > maxSelectedCount
       ) {
         const messageKey = "select-over-then-" + maxSelectedCount;
-        message.error({
-          content: translate("COUNT_MUST_BE_SMALLER_THEN", {
+        void message.error({
+          content: t("COUNT_MUST_BE_SMALLER_THEN", {
             maxCount: maxSelectedCount
           }),
           key: messageKey
@@ -657,7 +658,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       dispatch,
       drawerVisible,
       showSelectAll,
-      translate,
+      message,
+      t,
       triggerOnChange,
       checkSelectAllStatus,
       optionsState
@@ -672,7 +674,10 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       if (page === totalPages - 1) return;
 
       if (target.scrollTop + target.offsetHeight >= target.scrollHeight - 100) {
-        void loadPage(searchValue, page + 1);
+        setScrollLoading(true);
+        loadPage(searchValue, page + 1).then(() => {
+          setScrollLoading(false);
+        });
       }
     },
     [internalLoading, page, loadPage, searchValue, totalPages]
@@ -789,6 +794,13 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     // eslint-disable-next-line
   }, [asyncData, additionalFilters]);
 
+  useEffect(() => {
+    if (!asyncData && loadData) {
+      void loadPage(searchValue, 0, true);
+    }
+    // eslint-disable-next-line
+  }, [searchValue, asyncData]);
+
   // -------- RENDERS ---------
 
   const tagRender = useCallback<Handler<"tagRender">>(
@@ -799,7 +811,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       if (!optionsState || optionsState.length === 0) {
         return (
           <span className="ant-select-selection-placeholder">
-            {loadingText}
+            {t("LOADING")}
           </span>
         );
       }
@@ -817,7 +829,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         </span>
       );
     },
-    [maxTagLength, optionsState, loadingText]
+    [maxTagLength, optionsState, t]
   );
 
   const listHeight =
@@ -825,7 +837,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     198 -
     (multiple ? 27 : 0) -
     (showMarkers ? 60 : 0) -
-    (showSelectAll && markersSelected.current.length ? 28 : 0);
+    (showSelectAll && markersSelected.current.length ? 28 : 0) -
+    (labelPropOptions ? 30 : 0);
 
   const dropdownRender = () => {
     return (
@@ -844,9 +857,9 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         }
         actions={
           <>
-            <Button onClick={handleDrawerCancel}>{cancelText}</Button>
+            <Button onClick={handleDrawerCancel}>{t("CANCEL")}</Button>
             <Button onClick={handleDrawerSubmit} type="primary">
-              {submitText}
+              {t("SUBMIT")}
             </Button>
           </>
         }
@@ -865,7 +878,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         )}
         {!hideSearch && (
           <SearchInput
-            placeholder={drawerSearchPlaceholder}
+            placeholder={t("SEARCH")}
             value={searchValue}
             onChange={handleSearchInputChange}
             loading={internalLoading}
@@ -881,37 +894,45 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
               checked={selectAllState === "checked"}
               indeterminate={selectAllState === "indeterminate"}
             >
-              {selectAllText}
+              {t("ALL")}
             </Checkbox>
           </div>
         ) : null}
-        <InnerOptions
-          options={optionsState}
-          remoteSearch={!!loadData}
-          searchValue={searchValue}
-          height={listHeight}
-          value={(internalValue as SafeKey[]) || []}
-          keyProp={valueProp}
-          labelProp={optionLabelProp || "label"}
-          filterProp={optionFilterProp || "label"}
-          onCheck={handleTreeCheck}
-          onScroll={handleScroll}
-        />
+        {(!internalLoading || scrollLoading) && (
+          <InnerOptions
+            ref={optionsRef}
+            options={optionsState}
+            remoteSearch={!!loadData}
+            searchValue={searchValue}
+            height={listHeight}
+            value={(internalValue as SafeKey[]) || []}
+            keyProp={valueProp}
+            labelProp={optionLabelProp || "label"}
+            filterProp={optionFilterProp || "label"}
+            onCheck={handleTreeCheck}
+            onScroll={handleScroll}
+          />
+        )}
         <div className="drawer-select-loader-container">
           {internalLoading && (
-            <Skeleton
-              title={{ width: 300 }}
-              paragraph={{ rows: 1 }}
-              loading={true}
-              active
-            />
+            <>
+              {!scrollLoading && (
+                <div className="drawer-select-list-placeholder">
+                  {t("LOADING")}
+                </div>
+              )}
+              <Skeleton
+                title={{ width: 330 }}
+                paragraph={{ rows: 1 }}
+                loading={true}
+                active
+              />
+            </>
           )}
         </div>
         {multiple && (
           <div className="drawer-select-selected">
-            <div className="drawer-select-selected-title">
-              {translate("SELECTED")}
-            </div>
+            <div className="drawer-select-selected-title">{t("SELECTED")}</div>
             <div className="drawer-select-selected-count">
               {internalValue ? internalValue.length : 0}
             </div>

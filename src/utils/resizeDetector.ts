@@ -20,7 +20,12 @@ export const resizeDetector = (
 
   const frame = () => {
     void notifyListener();
-    updateLastSize();
+
+    // Defer the snapshot of last size to the next animation frame
+    // to avoid feedback loops where `onResize` affects layout immediately.
+    window.requestAnimationFrame(() => {
+      updateLastSize();
+    });
   };
 
   frame();

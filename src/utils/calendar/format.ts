@@ -1,5 +1,5 @@
-import { Dayjs } from "dayjs";
 import { fiscalCalendar } from "../fiscalCalendar";
+import type { Dayjs } from "dayjs";
 
 export const formatYYYYMMFiscal = (date: Dayjs) => {
   let month = fiscalCalendar.getMonth(date) + fiscalCalendar.startMonth + 1;

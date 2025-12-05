@@ -4,7 +4,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { useConfig } from "@/hooks";
 
 import type { UIEventHandler, ComponentProps } from "react";
-import type { BaseOptionType } from "antd/lib/select";
+import type { BaseOptionType } from "antd/es/select";
 import type { SelectComponent, SelectCompoundComponent } from "./types";
 
 import "./index.less";
@@ -23,7 +23,7 @@ const Select: SelectCompoundComponent = ({
   children,
   ...restProps
 }) => {
-  const { translate: t } = useConfig();
+  const { t } = useConfig();
 
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<any[]>([]);

@@ -10,7 +10,7 @@ export interface ForbiddenProps {
 }
 
 const Forbidden: FC<ForbiddenProps> = ({ backUrl, btnText }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const handleButtonClick = useCallback(() => {
     window.location.href = backUrl;
@@ -22,10 +22,10 @@ const Forbidden: FC<ForbiddenProps> = ({ backUrl, btnText }) => {
     <div className="result-container">
       <Result
         icon={<ForbiddenIcon />}
-        subTitle={translate("SERVICE_FORBIDDEN")}
+        subTitle={t("SERVICE_FORBIDDEN")}
         extra={
           <Button type="primary" onClick={handleButtonClick}>
-            {btnText ?? translate("BACK_TO_ACCOUNT")}
+            {btnText ?? t("BACK_TO_ACCOUNT")}
           </Button>
         }
       />

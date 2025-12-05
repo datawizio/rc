@@ -6,11 +6,11 @@ import {
   SendOutlined,
   VerticalAlignBottomOutlined
 } from "@ant-design/icons";
-import { Dropdown, Menu, message } from "antd";
-import { useCallback, useMemo } from "react";
+import { App, Dropdown, Menu } from "antd";
+import { useCallback, useContext, useMemo } from "react";
 import { saveAs } from "file-saver";
 import { useConfig } from "@/hooks";
-import { useTable } from "@/components/Table/hooks/useTable";
+import { TableContext } from "@/components/Table/context";
 
 import type { FC, MouseEvent } from "react";
 import type { MaybePromise } from "@/types/utils";
@@ -57,8 +57,9 @@ const TableMenu: FC<TableMenuProps> = ({
   nonExpandableMetrics = new Set(),
   ...restProps
 }) => {
-  const { translate } = useConfig();
-  const context = useTable();
+  const { t } = useConfig();
+  const { message } = App.useApp();
+  const context = useContext(TableContext);
 
   const { expand_horizontally, expand_tree, vertical_axis_metrics } = settings;
   const {
@@ -93,7 +94,7 @@ const TableMenu: FC<TableMenuProps> = ({
         const messageKey = "exporting-" + file;
 
         const hideLoadingMessageFn = message.loading({
-          content: translate("LOADING"),
+          content: t("LOADING"),
           key: messageKey,
           duration: duration
         });
@@ -108,7 +109,7 @@ const TableMenu: FC<TableMenuProps> = ({
 
         saveAs(new Blob([fileData]), file);
 
-        message.success({ content: translate("SUCCESS"), key: messageKey });
+        message.success({ content: t("SUCCESS"), key: messageKey });
 
         if (exportHandlerCallback && fileData) {
           await exportHandlerCallback(new Blob([fileData]), file);
@@ -117,12 +118,13 @@ const TableMenu: FC<TableMenuProps> = ({
     },
     // eslint-disable-next-line
     [
+      t,
       tableState,
-      translate,
       exportHandler,
       filename,
       getFilename,
-      exportHandlerCallback
+      exportHandlerCallback,
+      message
     ]
   );
 
@@ -206,14 +208,14 @@ const TableMenu: FC<TableMenuProps> = ({
             checked={Boolean(tableState?.fixedTotal)}
             onClick={handleTotalClick}
           >
-            {translate("FIXED_TOTAL")}
+            {t("FIXED_TOTAL")}
           </Checkbox>
         </Menu.Item>
       )}
       {expand_table_vertically && (
         <Menu.Item key="expand_table_vertically" className="menu-item-checkbox">
           <Checkbox onClick={onExpandVertical}>
-            {translate("EXPAND_THE_TABLE_VERTICALLY")}
+            {t("EXPAND_THE_TABLE_VERTICALLY")}
           </Checkbox>
         </Menu.Item>
       )}
@@ -223,25 +225,23 @@ const TableMenu: FC<TableMenuProps> = ({
           className="menu-item-checkbox"
         >
           <Checkbox onClick={onExpandHorizontal}>
-            {translate("EXPAND_TABLE_HORIZONTALLY")}
+            {t("EXPAND_TABLE_HORIZONTALLY")}
           </Checkbox>
         </Menu.Item>
       )}
       {(fixed_total ||
         expand_table_vertically ||
         expand_table_horizontally) && (
-        <Menu.Divider className={"table-menu-dropdown__divider"} />
+        <Menu.Divider className="table-menu-dropdown__divider" />
       )}
       {show_export_xls !== false && (
         <Menu.Item
           key="export_xlsx"
           icon={
-            <VerticalAlignBottomOutlined
-              className={"table-menu-dropdown__icon"}
-            />
+            <VerticalAlignBottomOutlined className="table-menu-dropdown__icon" />
           }
         >
-          {translate("SAVE_XLS")}
+          {t("SAVE_XLS")}
         </Menu.Item>
       )}
       {show_send_to_email &&
@@ -250,8 +250,8 @@ const TableMenu: FC<TableMenuProps> = ({
             key="send_xlsx_submenu"
             title={
               <>
-                <SendOutlined className={"table-menu-dropdown__icon__send"} />
-                {translate("SEND_XLS")}
+                <SendOutlined className="table-menu-dropdown__icon__send" />
+                {t("SEND_XLS")}
               </>
             }
           >
@@ -260,20 +260,20 @@ const TableMenu: FC<TableMenuProps> = ({
                 key="without_expand_tree"
                 onClick={() => onSendClick?.()}
               >
-                {translate("WITHOUT_EXPAND_TREE")}
+                {t("WITHOUT_EXPAND_TREE")}
               </Menu.Item>
             )}
             {send_xlsx_expand_submenu && (
               <Menu.SubMenu
                 key="send_xlsx_expand_submenu"
-                title={translate("APPLY_EXPAND_TREE")}
+                title={t("APPLY_EXPAND_TREE")}
               >
                 {expand_tree_horizontally && (
                   <Menu.Item
                     key="expand_tree_horizontally"
                     onClick={() => onSendClick?.("horizontally")}
                   >
-                    {translate("EXPAND_TREE_HORIZONTALLY")}
+                    {t("EXPAND_TREE_HORIZONTALLY")}
                   </Menu.Item>
                 )}
                 {expand_tree_grouped && (
@@ -281,7 +281,7 @@ const TableMenu: FC<TableMenuProps> = ({
                     key="expand_tree_grouped"
                     onClick={() => onSendClick?.("grouped")}
                   >
-                    {translate("EXPAND_TREE_GROUPED")}
+                    {t("EXPAND_TREE_GROUPED")}
                   </Menu.Item>
                 )}
               </Menu.SubMenu>
@@ -290,11 +290,9 @@ const TableMenu: FC<TableMenuProps> = ({
         ) : (
           <Menu.Item
             key="send_xlsx"
-            icon={
-              <SendOutlined className={"table-menu-dropdown__icon__send"} />
-            }
+            icon={<SendOutlined className="table-menu-dropdown__icon__send" />}
           >
-            {translate("SEND_XLS")}
+            {t("SEND_XLS")}
           </Menu.Item>
         ))}
     </Menu>
@@ -308,11 +306,16 @@ const TableMenu: FC<TableMenuProps> = ({
     fixed_total;
 
   return hasMenuItem ? (
-    <div className="table-menu table-toolbar--right">
-      <Dropdown overlay={menu} trigger={["click"]}>
+    <div className="table-menu table-toolbar--right" id="table-menu">
+      <Dropdown
+        overlay={menu}
+        trigger={["click"]}
+        getPopupContainer={() => document.getElementById("table-menu")!}
+      >
         <Button
+          type="link"
           className="table-menu__button"
-          icon={<DownOutlined className={"table-menu__icon"} />}
+          icon={<DownOutlined className="table-menu__icon" />}
           border={false}
           {...restProps}
         />

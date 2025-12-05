@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 import type { FC, ReactNode } from "react";
 import type { IFormFieldChanged, EnableSelectValueType } from "../../types";
-import type { CheckboxChangeEvent } from "antd/lib/checkbox";
+import type { CheckboxChangeEvent } from "antd/es/checkbox";
 
 export interface FieldEnableSelectFieldProps {
   name: string | string[];

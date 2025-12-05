@@ -16,7 +16,7 @@ const Dropdown: FC<PropsWithChildren<DropdownProps>> = ({
   onCreate,
   children
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const [inputValue, setInputValue] = useState<string>();
   const [isInputValueValid, setIsInputValueValid] = useState<boolean>(true);
 
@@ -54,7 +54,7 @@ const Dropdown: FC<PropsWithChildren<DropdownProps>> = ({
           size="small"
           value={inputValue}
           className={className}
-          placeholder={translate("INPUT_TITLE")}
+          placeholder={t("INPUT_TITLE")}
           onChange={handleChangeInput}
         />
         <SaveOutlined

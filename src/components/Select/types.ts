@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from "react";
 import type { Select as AntSelect, SelectProps as AntSelectProps } from "antd";
-import type { SelectValue } from "antd/lib/select";
+import type { SelectValue } from "antd/es/select";
 
 export interface SelectProps<T> extends AntSelectProps<T> {
   /**

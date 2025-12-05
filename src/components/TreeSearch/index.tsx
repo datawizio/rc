@@ -5,7 +5,7 @@ import { Empty } from "antd";
 import { unTree, flattenOptions, filterOptions } from "@/utils/data/tree";
 import { useConfig } from "@/hooks";
 
-import type { AntTreeNodeProps, DataNode } from "antd/lib/tree";
+import type { AntTreeNodeProps, DataNode } from "antd/es/tree";
 import type { TreeProps } from "@/components/Tree";
 import type {
   FC,
@@ -111,7 +111,7 @@ const TreeSearch: FC<TreeSearchProps> = ({
 }) => {
   const { searchInputPlaceholder, emptySearchResultText } = locale;
 
-  const { translate } = useConfig();
+  const { t } = useConfig();
   const timeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const [internalCheckedKeys, setInternalCheckedKeys] =
@@ -313,14 +313,14 @@ const TreeSearch: FC<TreeSearchProps> = ({
 
   return (
     <div className="tree-search-container">
-      <div className="tree-search-input" style={{ marginBottom: "15px" }}>
+      <div className="tree-search-input" style={{ margin: "15px 0" }}>
         {showSearchInput &&
           (renderInput ? (
             renderInput(handleSearchInputChange)
           ) : (
             <SearchInput
               onChange={handleSearchInputChange}
-              placeholder={translate(
+              placeholder={t(
                 searchInputPlaceholder ?? defaultLocale.searchInputPlaceholder
               )}
             />
@@ -341,7 +341,7 @@ const TreeSearch: FC<TreeSearchProps> = ({
         />
       ) : (
         <Empty
-          description={translate(
+          description={t(
             emptySearchResultText ?? defaultLocale.emptySearchResultText
           )}
         />

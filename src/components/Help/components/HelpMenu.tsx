@@ -16,7 +16,7 @@ const HelpMenu: FC<IHelpMenu> = ({
   btnDisabled,
   visible
 }) => {
-  const { translate } = useConfig();
+  const { t } = useConfig();
 
   const menu = useMemo(() => {
     return (
@@ -27,12 +27,12 @@ const HelpMenu: FC<IHelpMenu> = ({
             disabled={tutorialDisabled}
             onClick={onTutorialLinkClick}
           >
-            {translate("READ_TUTORIAL")}
+            {t("READ_TUTORIAL")}
           </Menu.Item>
         )}
         {onHelperClick && (
           <Menu.Item key="2" disabled={helperDisabled} onClick={onHelperClick}>
-            {translate("BES_HELPER")}
+            {t("BES_HELPER")}
           </Menu.Item>
         )}
         {tourMenu}
@@ -41,7 +41,7 @@ const HelpMenu: FC<IHelpMenu> = ({
   }, [
     onTutorialLinkClick,
     tutorialDisabled,
-    translate,
+    t,
     onHelperClick,
     helperDisabled,
     tourMenu
@@ -55,7 +55,7 @@ const HelpMenu: FC<IHelpMenu> = ({
         <Dropdown
           {...visibleProps}
           onOpenChange={onVisibleChange}
-          overlay={menu} // TODO
+          overlay={menu}
           trigger={["click"]}
           placement="bottomRight"
         >

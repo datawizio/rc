@@ -2,10 +2,8 @@ import clsx from "clsx";
 import { TreeSelect as AntTreeSelect } from "antd";
 
 import type { FC } from "react";
-import type {
-  TreeSelectProps as AntTreeSelectProps,
-  SelectValue
-} from "antd/lib/tree-select";
+import type { TreeSelectProps as AntTreeSelectProps } from "antd";
+import type { SelectValue } from "antd/es/tree-select";
 
 import "./index.less";
 

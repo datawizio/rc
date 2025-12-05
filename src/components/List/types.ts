@@ -1,6 +1,6 @@
 import type { ReactNode, FC, ComponentType } from "react";
 import type { ListProps } from "antd";
-import type { ListItemTypeProps as AntListItemTypeProps } from "antd/lib/list/Item";
+import type { ListItemTypeProps as AntListItemTypeProps } from "antd/es/list/Item";
 
 export interface ListItemFieldProps {
   title: string;

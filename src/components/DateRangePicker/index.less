@@ -3,11 +3,25 @@
 }
 
 .dw-range-picker-dropdown {
-  .ant-picker-ranges {
-    width: 550px;
+  &:has(.ant-picker-footer-extra:empty) {
+    padding-bottom: 0 !important;
+  }
+
+  .ant-picker-footer-extra {
+    width: 575px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    padding: 6px 12px;
+
+    &:empty {
+      padding: 0;
+    }
+
+    .ant-tag {
+      cursor: pointer;
+      margin: 5px;
+    }
   }
 
   @media (max-width: 576px) {

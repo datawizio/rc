@@ -1,7 +1,7 @@
 import Checkbox from "@/components/Checkbox";
 
 import { Button } from "antd";
-import { useTranslation } from "react-i18next";
+import { useConfig } from "@/hooks";
 
 import type { MouseEvent, FC, ReactNode } from "react";
 import type { CheckboxChangeEvent } from "antd";
@@ -26,7 +26,7 @@ export const ListHeader: FC<ListHeaderProps> = ({
   onChecked,
   onCheckAll
 }) => {
-  const { t } = useTranslation();
+  const { t } = useConfig();
 
   return (
     <div className="dw-list-header">

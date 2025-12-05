@@ -81,7 +81,7 @@ const RuleInfo: React.FC<RuleInfoProps> = ({
         title={name}
         className="rule-info-modal"
         open={state.modalShow}
-        width={"65%"}
+        width="65%"
         destroyOnHidden={true}
         afterClose={() => dispatch({ type: "reset" })}
         onCancel={handleCancel}

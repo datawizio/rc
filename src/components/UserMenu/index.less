@@ -3,7 +3,7 @@
 .user-menu {
   display: flex;
   flex-direction: column;
-  border-radius: 2px;
+  border-radius: var(--ant-border-radius);
   background-color: var(--ant-color-bg-container);
   box-shadow: var(--ant-box-shadow);
   width: 400px;
@@ -58,7 +58,7 @@
     align-items: center;
     column-gap: 8px;
     padding: 8px;
-    border-radius: 2px;
+    border-radius: var(--ant-border-radius);
     border: 1px solid var(--ant-color-border);
 
     &:hover {
@@ -96,6 +96,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
+      .ant-btn-icon {
+        height: 19px;
+      }
     }
   }
 }

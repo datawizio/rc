@@ -1,7 +1,6 @@
 import Bowser from "bowser";
 
-const userAgent = window.navigator.userAgent;
-const browser = Bowser.getParser(userAgent);
+export const browser = Bowser.getParser(window.navigator.userAgent);
 
 /* Browser */
 
