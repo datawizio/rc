@@ -810,9 +810,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         title={drawerTitle || placeholder}
         onClose={handlerDrawerCancel}
         open={drawerVisible}
-        width={
-          window.innerWidth < drawerWidth ? window.innerWidth : drawerWidth
-        }
+        size={window.innerWidth < drawerWidth ? window.innerWidth : drawerWidth}
         actions={
           <>
             <Button onClick={handlerDrawerCancel}>{t("CANCEL")}</Button>

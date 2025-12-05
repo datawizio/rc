@@ -24,7 +24,7 @@ const SkeletonTable: React.FC<React.PropsWithChildren<SkeletonTableProps>> = ({
   return (
     <div className={className}>
       {skeleton && (
-        <Space direction="vertical">
+        <Space orientation="vertical">
           <Row gutter={8}>
             {tableColumns.map((_, index) => (
               <Col key={index} span={3}>

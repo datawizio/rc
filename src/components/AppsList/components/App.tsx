@@ -89,8 +89,7 @@ export const App: FC<CardAppProps> = ({
           <div className="card-app-clients">
             <Select
               placeholder={t("SELECT_CLIENT")}
-              showSearch
-              optionFilterProp="label"
+              showSearch={{ optionFilterProp: "label" }}
               onChange={value => handleChangeClient(value as number)}
               value={client}
               notFoundContent={t("NO_DATA")}

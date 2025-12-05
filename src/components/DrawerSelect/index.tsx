@@ -850,7 +850,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         title={drawerTitle ? drawerTitle : restProps.placeholder}
         onClose={handleDrawerCancel}
         open={drawerVisible}
-        width={
+        size={
           drawerWidth && window.innerWidth < drawerWidth
             ? window.innerWidth
             : drawerWidth
