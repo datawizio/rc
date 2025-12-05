@@ -123,7 +123,7 @@ const AppSwitcher: FC<IAppSwitcher> = ({ apps, client, theme, onAppClick }) => {
       <Dropdown
         popupRender={() => overlay}
         trigger={["click"]}
-        placement="bottomCenter"
+        placement="bottom"
         classNames={{ root: "app-switcher__dropdown" }}
       >
         <Button
@@ -135,7 +135,7 @@ const AppSwitcher: FC<IAppSwitcher> = ({ apps, client, theme, onAppClick }) => {
           <Icon component={AppSwitcherSvg} />
         </Button>
       </Dropdown>
-      <div className="divider"></div>
+      <div className="divider" />
     </>
   );
 };

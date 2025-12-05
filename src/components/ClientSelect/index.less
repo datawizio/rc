@@ -1,3 +1,5 @@
+@import "@/styles/mixin/select-focus-outline";
+
 .ant-select.client-select.ant-select-show-search.ant-select-single {
   width: 120px;
   padding-right: 4px;
@@ -6,6 +8,8 @@
   & * {
     color: var(--ant-color-white);
   }
+
+  .select-focus-outline();
 
   .ant-select-selector {
     cursor: pointer;
@@ -27,13 +31,8 @@
     cursor: pointer;
   }
 
-  &.ant-select-open {
-    box-shadow: 0 0 0 2px
-      color-mix(in srgb, var(--primary-color) 20%, transparent);
-
-    .ant-select-input {
-      cursor: text;
-    }
+  &.ant-select-open .ant-select-input {
+    cursor: text;
   }
 }
 

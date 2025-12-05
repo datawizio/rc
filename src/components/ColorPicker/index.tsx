@@ -19,7 +19,7 @@ const ColorPicker: FC<ColorPickerProps> = ({
   onChange,
   render
 }) => {
-  const color = value ?? "#FFF";
+  const color = value ?? "#fff";
 
   const handleChange = (val: ColorResult) => {
     onChange?.(val.hex);
@@ -39,9 +39,7 @@ const ColorPicker: FC<ColorPickerProps> = ({
         />
       }
     >
-      {render ? (
-        render(color)
-      ) : (
+      {render?.(color) ?? (
         <div className="color-picker" style={{ background: color }}></div>
       )}
     </Popover>

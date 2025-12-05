@@ -2,7 +2,7 @@ import { Select, Badge } from "antd";
 import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
-import type { DefaultOptionType, SelectValue } from "antd/es/select";
+import type { SelectValue } from "antd/es/select";
 
 import "./index.less";
 
@@ -26,12 +26,6 @@ const ClientSelect: FC<ClientSelectProps> = ({ clients, client, onChange }) => {
     onChange?.(`/c/${value}/${arr.join("/")}`);
   };
 
-  const options = clients.map<DefaultOptionType>(client => ({
-    label: client.name,
-    value: client.id,
-    isActive: client.is_active
-  }));
-
   return (
     <>
       {clients.length === 1 ? (
@@ -44,13 +38,14 @@ const ClientSelect: FC<ClientSelectProps> = ({ clients, client, onChange }) => {
           notFoundContent={t("NO_DATA")}
           onChange={handleChange}
           className="client-select"
-          options={options}
+          options={clients}
+          fieldNames={{ value: "id", label: "name" }}
           optionRender={option => (
             <>
               <Badge
                 style={{ width: 14 }}
                 status="default"
-                color={option.data.isActive ? "purple" : undefined}
+                color={option.data.is_active ? "purple" : undefined}
               />
               {option.label}
             </>

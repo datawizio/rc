@@ -8,7 +8,7 @@ const Help: FC<IHelpMenu> = props => {
   return (
     <>
       <HelpMenu {...props} />
-      <div className="divider"></div>
+      <div className="divider" />
     </>
   );
 };
