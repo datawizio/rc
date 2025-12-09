@@ -59,7 +59,7 @@ const Polling: FC<PollingProps> = ({
 
     if (!steps[activeStepIdx + 1]) {
       notification.success({
-        message: t("THANKS_FOR_FEEDBACK")
+        title: t("THANKS_FOR_FEEDBACK")
       });
     }
   }, [activeStepIdx, notification, steps, t]);

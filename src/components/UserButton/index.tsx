@@ -46,7 +46,7 @@ const UserButton: FC<UserButtonProps> = ({
 
   return (
     <Dropdown
-      overlay={menu}
+      popupRender={() => menu}
       className="user-dropdown"
       trigger={["click"]}
       open={visible}

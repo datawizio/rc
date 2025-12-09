@@ -3,9 +3,9 @@ import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tsEslint from "typescript-eslint";
-import { globalIgnores } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 
-export default tsEslint.config([
+export default defineConfig([
   globalIgnores(["es", "lib"]),
   {
     files: ["**/*.{ts,tsx}"],
@@ -13,14 +13,22 @@ export default tsEslint.config([
       js.configs.recommended,
       tsEslint.configs.recommended,
       reactHooks.configs["recommended-latest"],
-      reactRefresh.configs.vite
+      reactRefresh.configs.vite,
+      {
+        languageOptions: {
+          parserOptions: {
+            projectService: true
+          }
+        }
+      }
     ],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser
     },
     rules: {
-      "@typescript-eslint/no-explicit-any": "off"
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-deprecated": "warn"
     }
   }
 ]);

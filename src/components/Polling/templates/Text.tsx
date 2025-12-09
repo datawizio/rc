@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Input } from "antd";
+import { Button, Input, Space } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useConfig } from "@/hooks";
 
@@ -16,11 +16,10 @@ const Text: FC<StepProps> = ({ onSubmit }) => {
 
   return (
     <div className="polling-text">
-      <Input
-        addonBefore={<EditOutlined />}
-        maxLength={500}
-        onChange={e => setTextValue(e.target.value)}
-      />
+      <Space.Compact>
+        <EditOutlined />
+        <Input maxLength={500} onChange={e => setTextValue(e.target.value)} />
+      </Space.Compact>
       <Button
         className="polling-send-btn"
         disabled={!textValue}

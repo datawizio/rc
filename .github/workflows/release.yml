@@ -82,6 +82,26 @@ jobs:
           git push origin ${{ github.ref_name }}
           git push origin "v${{ env.NEW_VERSION }}"
 
+      - name: Generate changelog
+        if: steps.version.outputs.bump_type != 'none'
+        id: changelog
+        run: |
+          # Get the previous tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "No previous tag found, getting all commits"
+            CHANGELOG=$(git log --reverse --no-merges --grep="Bump to version" --invert-grep --pretty=format:"- %s (%h)" -n 50)
+          else
+            echo "Previous tag: $PREVIOUS_TAG"
+            CHANGELOG=$(git log --reverse --no-merges --grep="Bump to version" --invert-grep --pretty=format:"- %s (%h)" ${PREVIOUS_TAG}..HEAD^)
+          fi
+
+          # Handle multiline output for GitHub Actions
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         if: steps.version.outputs.bump_type != 'none'
         uses: actions/create-release@v1
@@ -91,9 +111,10 @@ jobs:
           tag_name: "v${{ env.NEW_VERSION }}"
           release_name: "Release v${{ env.NEW_VERSION }}"
           body: |
-            ## Changes in v${{ env.NEW_VERSION }}
-
             This release includes the latest changes from the ${{ github.ref_name }} branch.
+
+            ### Changelog
+            ${{ steps.changelog.outputs.CHANGELOG }}
 
             ### Installation
             ```bash
@@ -101,3 +122,21 @@ jobs:
             ```
           draft: false
           prerelease: ${{ github.ref_name == 'dev' }}
+
+      - name: Sync dev branch with master
+        if: github.ref == 'refs/heads/master' && steps.version.outputs.bump_type != 'none'
+        continue-on-error: true
+        run: |
+          echo "Syncing dev branch with latest master changes..."
+          git fetch origin dev:dev
+          git checkout dev
+
+          if git merge master -m "Merge master into dev (v${{ env.NEW_VERSION }}) [skip ci]"; then
+            git push origin dev
+            echo "Dev branch successfully synced with master"
+          else
+            git merge --abort
+            echo "Merge conflict detected. Dev branch was not updated."
+            echo "Please manually merge master into dev to sync the branches."
+            exit 1
+          fi

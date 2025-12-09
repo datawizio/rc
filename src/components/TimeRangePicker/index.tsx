@@ -47,7 +47,7 @@ const TimeRangePicker: FC<TimeRangePickerProps> = ({
       className={clsx(fullWidth && "ant-picker-w100")}
       classNames={{
         popup: {
-          root: clsx("time-range-picker", props.popupClassName)
+          root: clsx("time-range-picker", props.classNames?.popup)
         }
       }}
       mode={undefined}

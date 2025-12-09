@@ -1,10 +1,11 @@
 import clsx from "clsx";
-import { useCallback, useState, useMemo, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { Input } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { useConfig, useDeepEqualMemo } from "@/hooks";
 
 import type { FC, MouseEvent, ChangeEvent, PropsWithChildren } from "react";
+import type { InputRef } from "antd";
 
 export interface DropdownProps {
   isOpen: boolean;
@@ -17,13 +18,15 @@ const Dropdown: FC<PropsWithChildren<DropdownProps>> = ({
   children
 }) => {
   const { t } = useConfig();
+  const inputRef = useRef<InputRef>(null);
   const [inputValue, setInputValue] = useState<string>();
   const [isInputValueValid, setIsInputValueValid] = useState<boolean>(true);
 
+  const open = useDeepEqualMemo(isOpen);
+
   useEffect(() => {
-    if (!isOpen) setIsInputValueValid(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [useDeepEqualMemo(isOpen)]);
+    if (!open) setIsInputValueValid(true);
+  }, [open]);
 
   const handleChangeInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setIsInputValueValid(Boolean(e.target.value?.trim()));
@@ -41,19 +44,24 @@ const Dropdown: FC<PropsWithChildren<DropdownProps>> = ({
     },
     [inputValue, onCreate]
   );
-  const className = useMemo(
-    () => clsx({ "error-field": !isInputValueValid }),
-    [isInputValueValid]
-  );
+
+  const onFooterMouseDown = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    if (e.target instanceof HTMLElement && e.target.tagName === "INPUT") {
+      inputRef.current?.focus();
+    }
+  }, []);
 
   return (
     <div className="table-templates__dropdown">
       <div className="table-templates__templates">{children}</div>
-      <div className="table-templates__footer">
+      <div className="table-templates__footer" onMouseDown={onFooterMouseDown}>
         <Input
+          ref={inputRef}
           size="small"
           value={inputValue}
-          className={className}
+          className={clsx({ "error-field": !isInputValueValid })}
           placeholder={t("INPUT_TITLE")}
           onChange={handleChangeInput}
         />

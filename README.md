@@ -4,14 +4,14 @@
 [![GitHub Package Version](https://img.shields.io/github/package-json/v/datawizio/rc?color=red&label=Version)](https://github.com/datawizio/rc)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 
-A comprehensive React components library built with TypeScript, Ant Design, and modern web technologies. 
-This library provides a collection of reusable, customizable, 
+A comprehensive React components library built with TypeScript, Ant Design, and modern web technologies.
+This library provides a collection of reusable, customizable,
 and production-ready components for building data-driven applications.
 
 ## 📦 Installation
 
-This library is published to **GitHub Packages**. To use it, you'll need to configure your `.npmrc` file. 
-Copy the content of the `.npmrc.example` file to the `.npmrc` in the project root. 
+This library is published to **GitHub Packages**. To use it, you'll need to configure your `.npmrc` file.
+Copy the content of the `.npmrc.example` file to the `.npmrc` in the project root.
 You can do it by running the following command:
 
 ```bash
@@ -33,7 +33,7 @@ yarn add @datawizio/rc
 ### Prerequisites
 
 The Node.js version used for this project is specified in the `.nvmrc` file.
-We recommend using [_Node Version Manager (NVM)_](https://github.com/nvm-sh/nvm) 
+We recommend using [_Node Version Manager (NVM)_](https://github.com/nvm-sh/nvm)
 to set up the correct Node.js version on your machine.
 
 The project also uses [`yarn`](https://github.com/yarnpkg/yarn) as the package managers.
@@ -46,7 +46,7 @@ After making some changes in the `rc` library locally, build it with:
 yarn build:dev
 ```
 
-If you want to test your local changes in another project without publishing a new version, 
+If you want to test your local changes in another project without publishing a new version,
 you can link the `@datawizio/rc` package:
 
 ```bash

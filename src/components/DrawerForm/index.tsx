@@ -115,7 +115,7 @@ const DrawerForm = <T extends object = any>({
     <Drawer
       title={title}
       style={style}
-      width={window.innerWidth < width ? window.innerWidth : width}
+      size={window.innerWidth < width ? window.innerWidth : width}
       onClose={handleFormClose}
       open={visible}
       actions={internalActions}

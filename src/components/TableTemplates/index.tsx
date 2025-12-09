@@ -28,10 +28,7 @@ const pickState = (
       columns?.map(column => ({
         dataIndex: column.dataIndex,
         order: column.order,
-        children:
-          column.children && column.children.length
-            ? rec(column.children)
-            : undefined
+        children: column.children?.length ? rec(column.children) : undefined
       })) ?? []
     );
   })(baseState.columns);
@@ -270,34 +267,39 @@ const TableTemplates: FC<TableTemplatesProps> = ({
   return (
     <div
       className={className}
-      title={t(
-        selectedTemplate ? "CHANGE_TEMPLATE_BTN_TITLE" : "TEMPLATES_BTN_TITLE"
-      )}
+      title={
+        selectedTemplate
+          ? t("CHANGE_TEMPLATE_BTN_TITLE")
+          : t("TEMPLATES_BTN_TITLE")
+      }
     >
       <Select
+        variant="borderless"
         listHeight={150}
-        onChange={value => handleSelect(value as number)}
+        onChange={handleSelect}
         className="table-templates__selector"
-        value={selectedTemplate?.id || t("TEMPLATES")}
-        onOpenChange={state => setIsDropdownOpen(state)}
+        value={selectedTemplate?.id}
+        placeholder={t("TEMPLATES")}
+        open={isDropdownOpen}
+        onOpenChange={setIsDropdownOpen}
         prefix={<TagsOutlined className="table-templates__icon" />}
+        suffixIcon={null}
         popupRender={originNode => (
           <Dropdown onCreate={handleCreate} isOpen={isDropdownOpen}>
             {originNode}
           </Dropdown>
         )}
-      >
-        {templates.map((template, idx) => (
-          <Select.Option key={idx} value={template.id}>
-            <Template
-              onDelete={handleDelete}
-              onSelectFavorite={handleSelectFavorite}
-              isActive={Boolean(selectedTemplate?.id === template.id)}
-              {...template}
-            />
-          </Select.Option>
-        ))}
-      </Select>
+        fieldNames={{ value: "id", label: "title" }}
+        options={templates}
+        optionRender={option => (
+          <Template
+            onDelete={handleDelete}
+            onSelectFavorite={handleSelectFavorite}
+            isActive={Boolean(selectedTemplate?.id === option.data.id)}
+            {...option.data}
+          />
+        )}
+      />
       {selectedTemplate && (
         <span className="table-templates__value-unselect" onClick={handleClear}>
           &times;

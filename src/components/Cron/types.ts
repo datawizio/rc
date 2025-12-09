@@ -249,11 +249,10 @@ export interface FieldProps {
   getPopupContainer?: () => HTMLElement;
 }
 
-export interface PeriodProps
-  extends Omit<
-    FieldProps,
-    "value" | "setValue" | "period" | "periodicityOnDoubleClick" | "mode"
-  > {
+export interface PeriodProps extends Omit<
+  FieldProps,
+  "value" | "setValue" | "period" | "periodicityOnDoubleClick" | "mode"
+> {
   value: PeriodType;
   setValue: SetValuePeriod;
   shortcuts: Shortcuts;
@@ -284,25 +283,24 @@ export interface MinutesProps extends FieldProps {
   clockFormat?: ClockFormat;
 }
 
-export interface CustomSelectProps
-  extends Omit<
-    SelectProps,
-    | "mode"
-    | "tokenSeparators"
-    | "allowClear"
-    | "virtual"
-    | "onClick"
-    | "onBlur"
-    | "tagRender"
-    | "dropdownRender"
-    | "showSearch"
-    | "showArrow"
-    | "onChange"
-    | "dropdownMatchSelectWidth"
-    | "options"
-    | "onSelect"
-    | "onDeselect"
-  > {
+export interface CustomSelectProps extends Omit<
+  SelectProps,
+  | "mode"
+  | "tokenSeparators"
+  | "allowClear"
+  | "virtual"
+  | "onClick"
+  | "onBlur"
+  | "tagRender"
+  | "dropdownRender"
+  | "showSearch"
+  | "showArrow"
+  | "onChange"
+  | "dropdownMatchSelectWidth"
+  | "options"
+  | "onSelect"
+  | "onDeselect"
+> {
   grid?: boolean;
   setValue: SetValueNumbersOrUndefined;
   optionsList?: string[];

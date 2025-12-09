@@ -14,8 +14,7 @@ import type { TableSelectColumnsModalProps } from "../index";
 import type { IColumn } from "@/components/Table/types";
 import type { Key } from "antd/es/table/interface";
 
-export interface TableSelectColumnsModalModalProps
-  extends TableSelectColumnsModalProps {
+export interface TableSelectColumnsModalModalProps extends TableSelectColumnsModalProps {
   treeData: any;
   context?: any;
   titleRender?: any;

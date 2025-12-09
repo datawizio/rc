@@ -66,8 +66,8 @@ const InnerOptions: FC<InnerOptionsProps> = ({
     <T,>(filterValue: T) => {
       return Boolean(
         searchValue &&
-          typeof filterValue === "string" &&
-          filterValue.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
+        typeof filterValue === "string" &&
+        filterValue.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
       );
     },
     [searchValue]

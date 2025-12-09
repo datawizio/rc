@@ -850,7 +850,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         title={drawerTitle ? drawerTitle : restProps.placeholder}
         onClose={handleDrawerCancel}
         open={drawerVisible}
-        width={
+        size={
           drawerWidth && window.innerWidth < drawerWidth
             ? window.innerWidth
             : drawerWidth
@@ -908,7 +908,11 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
             value={(internalValue as SafeKey[]) || []}
             keyProp={valueProp}
             labelProp={optionLabelProp || "label"}
-            filterProp={optionFilterProp || "label"}
+            filterProp={
+              (Array.isArray(optionFilterProp)
+                ? optionFilterProp[0]
+                : optionFilterProp) || "label"
+            }
             onCheck={handleTreeCheck}
             onScroll={handleScroll}
           />

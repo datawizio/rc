@@ -103,7 +103,7 @@ const formatTreeData = (
       };
 
       // Check `key` & `value` and warning user
-      if (process.env.NODE_ENV !== "production") {
+      if (import.meta.env.MODE !== "production") {
         if (
           key !== null &&
           key !== undefined &&

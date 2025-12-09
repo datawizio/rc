@@ -72,8 +72,9 @@ export type DrawerTreeSelectProps<VT> = Omit<
   onDrawerSubmitCallback?: (payload?: any) => void;
 };
 
-export interface DrawerTreeSelectCompoundComponent<VT>
-  extends FC<DrawerTreeSelectProps<VT>> {
+export interface DrawerTreeSelectCompoundComponent<VT> extends FC<
+  DrawerTreeSelectProps<VT>
+> {
   SHOW_PARENT: "SHOW_PARENT";
   SHOW_ALL: "SHOW_ALL";
   SHOW_CHILD: "SHOW_CHILD";

@@ -1,71 +1,38 @@
-@import "./rtl";
+@import "@/styles/mixin/select-focus-outline";
 
 .ant-select.client-select.ant-select-show-search.ant-select-single {
   width: 120px;
+  padding-right: 4px;
+
+  &,
+  & * {
+    color: var(--ant-color-white);
+  }
+
+  .select-focus-outline();
 
   .ant-select-selector {
     cursor: pointer;
-    border: 0;
     padding-right: 5px;
   }
 
-  .ant-select-selection-item {
+  .ant-select-content {
+    justify-content: end;
     text-align: right;
-    padding-right: 18px;
   }
 
-  .ant-select-selection-search-input {
-    cursor: pointer;
-  }
-
-  .ant-select-arrow {
-    color: rgba(0, 0, 0, 0.65);
-    right: 5px;
-    cursor: pointer;
-  }
-
-  .ant-select-selection-search {
+  .ant-select-input {
     right: 16px;
+    cursor: pointer;
   }
 
-  &.ant-select-open {
-    .ant-select-selection-search-input {
-      cursor: text;
-    }
+  .ant-select-suffix {
+    margin-top: 2px;
+    cursor: pointer;
   }
 
-  &.dw-dark {
-    .ant-select-selector {
-      background-color: var(--bg-dark-color);
-    }
-
-    .ant-select-arrow {
-      color: var(--icon-color-dark-theme);
-    }
-
-    .ant-select-selection-item {
-      color: var(--icon-color-dark-theme);
-    }
-
-    .ant-select-selection-search-input {
-      color: var(--icon-color-dark-theme);
-    }
-  }
-}
-
-.theme-dark {
-  .ant-select.client-select.ant-select-show-search.ant-select-single {
-    .ant-select-arrow {
-      color: var(--icon-color-dark-theme);
-    }
-
-    .ant-select-selection-item {
-      color: var(--icon-color-dark-theme);
-    }
-
-    .ant-select-selection-search-input {
-      color: var(--icon-color-dark-theme);
-    }
+  &.ant-select-open .ant-select-input {
+    cursor: text;
   }
 }
 

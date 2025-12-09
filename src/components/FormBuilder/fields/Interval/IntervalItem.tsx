@@ -2,6 +2,7 @@ import DatePicker from "@/components/DatePicker";
 import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
+import type { Dayjs } from "dayjs";
 import type { IntervalItemProps } from "../../types";
 
 export const IntervalItem: FC<IntervalItemProps> = ({
@@ -27,7 +28,7 @@ export const IntervalItem: FC<IntervalItemProps> = ({
         picker={picker}
         placeholder={t("UNLIMITED")}
         value={value}
-        onChange={onChange}
+        onChange={value => onChange(value as Dayjs)}
         format={format}
       />
     </>

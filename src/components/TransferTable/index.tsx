@@ -78,11 +78,10 @@ const TransferTable: FC<TransferTableProps> = ({
   );
 };
 
-export interface InnerTableProps<T>
-  extends Pick<
-    TransferTableProps,
-    "columns" | "transferTableProps" | "onTableChange"
-  > {
+export interface InnerTableProps<T> extends Pick<
+  TransferTableProps,
+  "columns" | "transferTableProps" | "onTableChange"
+> {
   direction: TransferDirection;
   filter: string[];
   loading: boolean;

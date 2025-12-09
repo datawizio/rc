@@ -154,7 +154,7 @@ const DateRangePicker: IDateRangePicker = ({
       const formattedDate = formatDate(date.format("DD-MM-YYYY"));
       return Boolean(
         (maxDate && formattedDate?.isAfter(maxDate)) ||
-          (minDate && formattedDate?.isBefore(minDate))
+        (minDate && formattedDate?.isBefore(minDate))
       );
     },
     [maxDate, minDate, formatDate]

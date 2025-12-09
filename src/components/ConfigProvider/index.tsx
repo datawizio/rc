@@ -69,7 +69,12 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
 
   return (
     <ConfigContext.Provider value={contextValue}>
-      <AntdConfigProvider {...props} theme={themeConfig}>
+      <AntdConfigProvider
+        {...props}
+        theme={themeConfig}
+        drawer={{ mask: { blur: false } }}
+        modal={{ mask: { blur: false } }}
+      >
         <App>{children}</App>
       </AntdConfigProvider>
     </ConfigContext.Provider>
