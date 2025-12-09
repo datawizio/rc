@@ -12,7 +12,7 @@
   "quoteProps": "preserve",
   "overrides": [
     {
-      "files": "*.md",
+      "files": ["*.md", "*.yml", "*.yaml"],
       "options": {
         "printWidth": 100,
         "proseWrap": "preserve"

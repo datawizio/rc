@@ -122,3 +122,21 @@ jobs:
             ```
           draft: false
           prerelease: ${{ github.ref_name == 'dev' }}
+
+      - name: Sync dev branch with master
+        if: github.ref == 'refs/heads/master' && steps.version.outputs.bump_type != 'none'
+        continue-on-error: true
+        run: |
+          echo "Syncing dev branch with latest master changes..."
+          git fetch origin dev:dev
+          git checkout dev
+
+          if git merge master -m "Merge master into dev (v${{ env.NEW_VERSION }}) [skip ci]"; then
+            git push origin dev
+            echo "Dev branch successfully synced with master"
+          else
+            git merge --abort
+            echo "Merge conflict detected. Dev branch was not updated."
+            echo "Please manually merge master into dev to sync the branches."
+            exit 1
+          fi
