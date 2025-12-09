@@ -41,7 +41,7 @@ const Markers: React.FC<MarkersProps> = ({
       showCheckedStrategy="SHOW_PARENT"
       loadData={loadData}
       onChange={onChange}
-      filterTreeNode={handleSearch}
+      showSearch={{ filterTreeNode: handleSearch }}
       className="select-markers-field"
       style={style}
     />

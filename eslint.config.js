@@ -13,14 +13,22 @@ export default defineConfig([
       js.configs.recommended,
       tsEslint.configs.recommended,
       reactHooks.configs["recommended-latest"],
-      reactRefresh.configs.vite
+      reactRefresh.configs.vite,
+      {
+        languageOptions: {
+          parserOptions: {
+            projectService: true
+          }
+        }
+      }
     ],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser
     },
     rules: {
-      "@typescript-eslint/no-explicit-any": "off"
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-deprecated": "warn"
     }
   }
 ]);
