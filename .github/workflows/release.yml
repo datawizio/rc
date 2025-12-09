@@ -91,10 +91,10 @@ jobs:
 
           if [ -z "$PREVIOUS_TAG" ]; then
             echo "No previous tag found, getting all commits"
-            CHANGELOG=$(git log --pretty=format:"- %s (%h)" -n 50)
+            CHANGELOG=$(git log --reverse --no-merges --grep="Bump to version" --invert-grep --pretty=format:"- %s (%h)" -n 50)
           else
             echo "Previous tag: $PREVIOUS_TAG"
-            CHANGELOG=$(git log --pretty=format:"- %s (%h)" ${PREVIOUS_TAG}..HEAD^)
+            CHANGELOG=$(git log --reverse --no-merges --grep="Bump to version" --invert-grep --pretty=format:"- %s (%h)" ${PREVIOUS_TAG}..HEAD^)
           fi
 
           # Handle multiline output for GitHub Actions
