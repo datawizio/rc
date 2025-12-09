@@ -111,8 +111,6 @@ jobs:
           tag_name: "v${{ env.NEW_VERSION }}"
           release_name: "Release v${{ env.NEW_VERSION }}"
           body: |
-            ## Changes in v${{ env.NEW_VERSION }}
-
             This release includes the latest changes from the ${{ github.ref_name }} branch.
 
             ### Changelog
