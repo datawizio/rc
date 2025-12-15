@@ -10,6 +10,12 @@ import type {
   WidgetParamsDimension
 } from "./types";
 
+declare global {
+  interface Window {
+    allDict: Record<string, any>;
+  }
+}
+
 export const MAX_LENGTH_ITEM_LIST = 7;
 
 export const getValue = (
@@ -66,10 +72,22 @@ export const parseLogic = <
   logic: TLogic
 ): TReturn => {
   if (Array.isArray(logic)) {
-    return logic.map((l: string | TLogic) => {
-      if (typeof l !== "object") return l;
-      if ("var" in l) return i18next.t(l["var"].toUpperCase());
-      return parseLogic<TLogic, string>(l);
+    return logic.map((logicItem: string | TLogic) => {
+      if (typeof logicItem !== "object") {
+        return logicItem;
+      }
+
+      if ("var" in logicItem) {
+        let value = logicItem["var"];
+
+        if (value?.startsWith("custom_") && window.allDict) {
+          value = window.allDict[value]?.title;
+        }
+
+        return i18next.t(value.toUpperCase());
+      }
+
+      return parseLogic<TLogic, string>(logicItem);
     }) as TReturn;
   }
 

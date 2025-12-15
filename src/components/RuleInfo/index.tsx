@@ -19,7 +19,9 @@ const RuleInfo: React.FC<RuleInfoProps> = ({
   widget_params,
   formatDateRange,
   name,
-  dtype
+  dtype,
+  disabled,
+  tooltip
 }) => {
   const [state, dispatch] = useRuleInfo({
     logic,
@@ -49,7 +51,12 @@ const RuleInfo: React.FC<RuleInfoProps> = ({
   return (
     <RuleInfoContext.Provider value={{ ruleInfoState: state, dispatch }}>
       <div className="rule-info">
-        <RuleInfoSection name="CONDITION" className="rule-condition">
+        <RuleInfoSection
+          name="CONDITION"
+          className="rule-condition"
+          disabled={disabled}
+          tooltip={tooltip}
+        >
           {typeof logic === "string" ? logic : parseLogic(logic)}
         </RuleInfoSection>
 
