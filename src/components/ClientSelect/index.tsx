@@ -34,7 +34,7 @@ const ClientSelect: FC<ClientSelectProps> = ({ clients, client, onChange }) => {
         <Select
           value={client}
           variant="borderless"
-          showSearch={{ optionFilterProp: "label" }}
+          showSearch={{ optionFilterProp: "name" }}
           notFoundContent={t("NO_DATA")}
           onChange={handleChange}
           className="client-select"
