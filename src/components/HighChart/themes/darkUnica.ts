@@ -1,6 +1,6 @@
 import type { Options } from "highcharts";
 
-export const DarkUnica: Options & Record<string, unknown> = {
+export const DarkUnica: Options = {
   colors: [
     "#7cb5ec",
     "#f45b5b",
@@ -25,9 +25,6 @@ export const DarkUnica: Options & Record<string, unknown> = {
         [0, "#000"],
         [1, "#000"]
       ]
-    },
-    style: {
-      fontFamily: "'Unica One', sans-serif"
     },
     plotBorderColor: "#606063"
   },
@@ -124,11 +121,6 @@ export const DarkUnica: Options & Record<string, unknown> = {
   credits: {
     style: {
       color: "#666"
-    }
-  },
-  labels: {
-    style: {
-      color: "#707073"
     }
   },
   drilldown: {
