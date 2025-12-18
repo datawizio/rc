@@ -50,7 +50,7 @@ fiscalCalendarConfig.locale.format = (locale, date, format) => {
     let y1 = fiscalCalendar.getYear(date);
 
     if (fiscalCalendar.calendar) {
-      Object.entries(fiscalCalendar.calendar).forEach(([key, value]: any) => {
+      Object.entries(fiscalCalendar.calendar).forEach(([key, value]) => {
         if (date.isBetween(value.from, value.to, "day")) {
           y1 = Number(key);
         }

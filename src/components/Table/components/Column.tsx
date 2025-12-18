@@ -177,7 +177,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       }
 
       const tableDOMWrapper = columnRef.current?.closest<HTMLElement>(
-        ".ant-table-content>.dw-table__wrapper"
+        ".ant-table-content > .dw-table__wrapper"
       );
 
       if (tableDOMWrapper && isSafariBrowser) {
