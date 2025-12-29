@@ -40,6 +40,10 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
       headerBorderRadius: 0,
       borderRadius: 0
     },
+    Pagination: {
+      itemBg: "transparent",
+      itemActiveBg: "transparent"
+    },
     Form: {
       itemMarginBottom: 14
     }
