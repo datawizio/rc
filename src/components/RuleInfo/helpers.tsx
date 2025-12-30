@@ -80,8 +80,8 @@ export const parseLogic = <
       if ("var" in logicItem) {
         let value = logicItem["var"];
 
-        if (value?.startsWith("custom_") && window.allDict) {
-          value = window.allDict[value]?.title;
+        if (window.allDict && value?.startsWith("custom_")) {
+          value = window.allDict[value]?.title ?? value;
         }
 
         return i18next.t(value.toUpperCase());
