@@ -12,3 +12,9 @@
     box-shadow: var(--box-shadow-lg);
   }
 }
+
+.ant-tree {
+  &-treenode:not(&-treenode-disabled).filter-node &-title {
+    color: inherit !important;
+  }
+}

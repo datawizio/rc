@@ -4,15 +4,17 @@
 
 .theme-light {
   --text-color: rgba(0, 0, 0, 0.85);
+  --text-color-title: rgba(0, 0, 0, 0.95);
+
   --primary-color: #722ed1;
   --primary-medium-color: #975fe4;
   --primary-light-color: #e3d1ff;
 
   --icon-color-dark-theme: hsl(0, 0%, 100%);
-  --color-dark-theme: white;
-  --color-white-theme: black;
+  --color-dark-theme: #fff;
+  --color-white-theme: #000;
   --bg-dark-color: #09011c;
-  --bg-lighter-color: white;
+  --bg-lighter-color: #fff;
 
   --layout-body-background: #fff;
 
@@ -20,7 +22,7 @@
   --divider-dark-border-color: hsla(0, 0%, 100%, 0.65);
   --drawer-title-color: #020202;
 
-  --page-title-color: rgba(0, 0, 0, 0.65);
+  --page-title-color: var(--text-color);
   --sidebar-bg-color: #09011c;
   --table-border-color: #f0f0f0;
   --input-bg-color: #fff;
@@ -64,13 +66,15 @@
 
 .theme-dark {
   --text-color: rgba(255, 255, 255, 0.85);
+  --text-color-title: rgba(255, 255, 255, 0.95);
+
   --primary-color: #975fe4;
   --primary-medium-color: #975fe4;
   --primary-light-color: #e3d1ff;
 
   --icon-color-dark-theme: hsl(0, 0%, 100%);
-  --color-dark-theme: white;
-  --color-white-theme: black;
+  --color-dark-theme: #fff;
+  --color-white-theme: #000;
   --bg-dark-color: #1f1f1f;
   --bg-lighter-color: #1f1f1f;
 
@@ -78,25 +82,25 @@
 
   --divider-border-color: rgba(255, 255, 255, 0.45);
   --divider-dark-border-color: hsla(0, 0%, 100%, 0.65);
-  --drawer-title-color: white;
+  --drawer-title-color: #fff;
 
-  --page-title-color: white;
+  --page-title-color: var(--text-color);
   --sidebar-bg-color: #1f1f1f;
   --table-border-color: rgba(255, 255, 255, 0.45);
   --input-bg-color: #000;
   --list-item-border-color: rgba(255, 255, 255, 0.45);
   --title-color: #020202;
-  --help-icon-color: white;
+  --help-icon-color: #fff;
   --help-icon-color-hover: #975fe4;
   --notice-bg: var(--primary-color);
 
-  --app-switcher-title-color: white;
+  --app-switcher-title-color: #fff;
   --app-switcher-description-color: rgba(255, 255, 255, 0.8);
   --app-switcher-bg-color: #434343;
 
   --toggler-icon-color: #fff;
   --table-template-selected-color: rgba(255, 255, 255, 0.25);
-  --drawer-selected-text-color: white;
+  --drawer-selected-text-color: #fff;
   --ant-menu-item-disabled-color: gray;
 
   --ant-tag-color: rgba(255, 255, 255, 0.65);
