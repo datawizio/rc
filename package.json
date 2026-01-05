@@ -28,7 +28,6 @@
   "typings": "es/index.d.ts",
   "files": [
     "es",
-    "lib",
     "package.json",
     "README.md"
   ],
