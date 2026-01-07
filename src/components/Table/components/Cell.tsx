@@ -15,7 +15,7 @@ const Cell: FC<PropsWithChildren<HTMLAttributes<HTMLTableCellElement>>> = ({
   ...props
 }) => {
   const {
-    tableState: { columnsWidth }
+    tableState: { columnsWidth, columns }
   } = useTable();
 
   const style = useMemo(() => {
@@ -24,8 +24,22 @@ const Cell: FC<PropsWithChildren<HTMLAttributes<HTMLTableCellElement>>> = ({
 
     if (isValidElement<{ column: IColumn }>(child)) {
       const column = child?.props.column;
+      const parentWidth =
+        column?.parent_key && columnsWidth?.[column.parent_key];
 
-      if (column && column.key) {
+      if (parentWidth) {
+        const parentChildren =
+          columns?.find(item => item.key === column.parent_key)?.children ?? [];
+
+        const childWidth = parentWidth / parentChildren.length;
+
+        if (Number.isFinite(childWidth)) {
+          output.width = `${childWidth}px`;
+          return output;
+        }
+      }
+
+      if (column?.key) {
         const width = columnsWidth?.[column.key as SafeKey];
 
         if (width !== undefined && width !== null) {
@@ -35,7 +49,7 @@ const Cell: FC<PropsWithChildren<HTMLAttributes<HTMLTableCellElement>>> = ({
     }
 
     return output;
-  }, [children, columnsWidth]);
+  }, [children, columns, columnsWidth]);
 
   return (
     <td {...props} style={style}>

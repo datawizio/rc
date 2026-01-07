@@ -26,8 +26,8 @@ export interface ColumnProps extends HTMLAttributes<HTMLTableCellElement> {
   calcColumnWidth?: (width: number) => number;
 }
 
-const DEFAULT_COLUMN_WIDTH = 200;
-const DEFAULT_SUB_CELL_WIDTH = 20;
+const DEFAULT_SUBCOLUMN_WIDTH = 130;
+const DEFAULT_SUBCELL_WIDTH = 20;
 const DEFAULT_MAX_VALUE = 10;
 
 const getColumnWidth = (
@@ -101,7 +101,11 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     [model]
   );
 
-  const minWidth = model.colMinWidth || 100;
+  const minWidth =
+    model.colMinWidth ||
+    (model.children?.length
+      ? model.children.length * DEFAULT_SUBCOLUMN_WIDTH
+      : 100);
 
   const calculateWidth = useCallback(
     (target: HTMLElement | null) => {
@@ -253,18 +257,6 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
 
     const colKey = model.dataIndex || model.key || model.originalKey;
 
-    const sortersElements = columnRef.current?.querySelectorAll<HTMLElement>(
-      ".ant-table-column-sorters"
-    );
-
-    if (sortersElements && sortersElements.length > 0) {
-      sortersElements[0].style.setProperty("min-width", "0%");
-
-      setTimeout(() => {
-        sortersElements[0].style.setProperty("min-width", "100%");
-      }, 1000);
-    }
-
     const fn = () => {
       const columnWidth = calculateWidth(columnRef.current);
 
@@ -283,9 +275,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
 
       if (
         shouldResize &&
-        columnRef?.current &&
         typeof columnWidth === "number" &&
-        lastWidthRef.current !== columnWidth &&
         columnWidth !== 0
       ) {
         dispatch({
@@ -300,7 +290,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       rafRef.current = requestAnimationFrame(fn);
     };
 
-    fn();
+    requestAnimationFrame(fn);
 
     return () => {
       if (rafRef.current != null) {
@@ -377,7 +367,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
 
       if (model.children && model.children.length) {
         return {
-          width: model.children.length * DEFAULT_COLUMN_WIDTH
+          width: model.children.length * DEFAULT_SUBCOLUMN_WIDTH
         };
       }
 
@@ -390,7 +380,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
 
       if (model.max_value) {
         return {
-          width: model.max_value * DEFAULT_SUB_CELL_WIDTH
+          width: model.max_value * DEFAULT_SUBCELL_WIDTH
         };
       }
 

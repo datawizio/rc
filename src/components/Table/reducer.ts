@@ -135,10 +135,23 @@ export const reducer = (state: TableState, action: Action): TableState => {
         return state;
       }
 
+      const children =
+        state.columns?.find(item => item.key === action.payload.key)
+          ?.children ?? [];
+
+      const childrenWidths = children.reduce(
+        (acc, child) => ({
+          ...acc,
+          [child.key as string]: action.payload.width / children.length
+        }),
+        {}
+      );
+
       return {
         ...state,
         columnsWidth: {
           ...state.columnsWidth,
+          ...childrenWidths,
           [action.payload.key]: action.payload.width
         }
       };

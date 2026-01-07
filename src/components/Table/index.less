@@ -363,16 +363,10 @@
   }
 
   &--compress-columns {
-    th.ant-table-cell {
-      min-width: 100px;
-
-      .ant-table-column-sorters {
-        width: inherit;
-        min-width: 100%;
-
-        span:first-of-type {
-          width: 100%;
-        }
+    .ant-table-header {
+      & > table {
+        width: fit-content !important;
+        min-width: unset !important;
       }
     }
   }
