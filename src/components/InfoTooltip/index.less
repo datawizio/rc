@@ -1,11 +1,15 @@
 @import "@/styles/variables";
 
+// Button styles
+
 button.info-tooltip-button {
+  --info-tooltip-button-size: 16px;
+
   margin-left: 8px;
   margin-right: 4px;
-  width: 16px !important;
-  height: 16px !important;
-  line-height: 16px;
+  width: var(--info-tooltip-button-size) !important;
+  height: var(--info-tooltip-button-size) !important;
+  line-height: 0;
   background: transparent;
   color: var(--primary-color);
   box-shadow: none;
@@ -15,17 +19,17 @@ button.info-tooltip-button {
   border-radius: 50%;
 
   .anticon-info-circle {
-    width: 16px;
-    height: 16px;
-  }
+    width: var(--info-tooltip-button-size);
+    height: var(--info-tooltip-button-size);
 
-  .anticon-info-circle:not(:hover) {
-    color: var(--primary-color);
-  }
+    &:not(:hover) {
+      color: var(--primary-color);
+    }
 
-  svg {
-    width: 16px;
-    height: 16px;
+    svg {
+      width: var(--info-tooltip-button-size);
+      height: var(--info-tooltip-button-size);
+    }
   }
 
   &:hover {
@@ -37,14 +41,12 @@ button.info-tooltip-button {
     background: var(--primary-color) !important;
     border-color: var(--primary-color) !important;
 
-    svg {
-      path:last-child {
-        color: #fff;
-      }
-    }
-
     .anticon-info-circle {
       color: var(--primary-color);
+
+      svg path:last-child {
+        color: #fff;
+      }
     }
 
     &:hover {
@@ -80,6 +82,8 @@ button.info-tooltip-button {
   }
 }
 
+// Tooltip styles
+
 .info-tooltip {
   max-width: 420px;
   z-index: 1200 !important;
@@ -88,7 +92,7 @@ button.info-tooltip-button {
     max-width: 250px;
   }
 
-  .ant-tooltip-inner {
+  .ant-tooltip-container {
     padding: 20px;
   }
 
@@ -111,21 +115,6 @@ button.info-tooltip-button {
       right: -12px;
       top: -12px;
       cursor: pointer;
-    }
-  }
-
-  &.info-tooltip-theme-light {
-    .ant-tooltip-arrow::before {
-      background: #fff;
-    }
-
-    .ant-tooltip-inner {
-      background: #fff;
-      color: var(--ant-color-text);
-
-      .anticon.anticon-close {
-        color: var(--ant-color-text);
-      }
     }
   }
 }

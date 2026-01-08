@@ -5,6 +5,7 @@ import Button from "@/components/Button";
 import { useMemo, type FC } from "react";
 import { Col, Dropdown, Row, Typography } from "antd";
 import { useConfig } from "@/hooks";
+import { themed } from "@/utils/theme";
 
 import "./index.less";
 
@@ -44,7 +45,7 @@ const App: FC<
   return (
     <Col span={24} onClick={handleClick} flex="1">
       <div className="logo">
-        <img src={window.theme === "dark" ? dark_icon : icon} alt={name} />
+        <img src={themed(icon, dark_icon)} alt={name} />
       </div>
 
       <div className="text">
