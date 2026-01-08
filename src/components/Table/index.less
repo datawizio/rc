@@ -50,7 +50,7 @@
   &.ant-table-wrapper .ant-table-cell.ant-table-cell-fix {
     position: sticky;
     left: 0;
-    z-index: 6;
+    z-index: 4;
   }
 
   &__wrapper {
@@ -292,6 +292,11 @@
     .ant-table-container {
       border-top: 0;
     }
+
+    th,
+    .dw-table__column {
+      z-index: 4 !important;
+    }
   }
 
   &--skeleton {
@@ -363,16 +368,10 @@
   }
 
   &--compress-columns {
-    th.ant-table-cell {
-      min-width: 100px;
-
-      .ant-table-column-sorters {
-        width: inherit;
-        min-width: 100%;
-
-        span:first-of-type {
-          width: 100%;
-        }
+    .ant-table-header {
+      & > table {
+        width: fit-content !important;
+        min-width: unset !important;
       }
     }
   }

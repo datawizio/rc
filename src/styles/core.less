@@ -2,13 +2,19 @@
 @import "./variables";
 @import "./mixin/retina-image";
 
-.crisp-client #crisp-chatbox {
-  z-index: 1000;
+.crisp-client {
+  --crisp-customization-container-index: 1000;
 }
 
 .theme-dark {
   .ant-dropdown .ant-dropdown-menu,
   .ant-dropdown-menu-submenu .ant-dropdown-menu {
     box-shadow: var(--box-shadow-lg);
+  }
+}
+
+.ant-tree {
+  &-treenode:not(&-treenode-disabled).filter-node &-title {
+    color: inherit !important;
   }
 }

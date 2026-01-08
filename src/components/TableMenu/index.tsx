@@ -7,7 +7,7 @@ import {
   VerticalAlignBottomOutlined
 } from "@ant-design/icons";
 import { App, Dropdown, Menu } from "antd";
-import { useCallback, useContext, useMemo } from "react";
+import { useCallback, useContext, useMemo, useId } from "react";
 import { saveAs } from "file-saver";
 import { useConfig } from "@/hooks";
 import { TableContext } from "@/components/Table/context";
@@ -59,7 +59,9 @@ const TableMenu: FC<TableMenuProps> = ({
 }) => {
   const { t } = useConfig();
   const { message } = App.useApp();
+
   const context = useContext(TableContext);
+  const tableMenuId = useId();
 
   const { expand_horizontally, expand_tree, vertical_axis_metrics } = settings;
   const {
@@ -306,11 +308,11 @@ const TableMenu: FC<TableMenuProps> = ({
     fixed_total;
 
   return hasMenuItem ? (
-    <div className="table-menu table-toolbar--right" id="table-menu">
+    <div className="table-menu table-toolbar--right" id={tableMenuId}>
       <Dropdown
         popupRender={() => menu}
         trigger={["click"]}
-        getPopupContainer={() => document.getElementById("table-menu")!}
+        getPopupContainer={() => document.getElementById(tableMenuId)!}
       >
         <Button
           type="link"

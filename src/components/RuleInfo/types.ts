@@ -6,6 +6,8 @@ export interface RuleInfoProps {
   widget_params: WidgetParams;
   name: string;
   dtype: string;
+  disabled?: boolean;
+  tooltip?: string;
 }
 
 export type WidgetParamsDimension = {

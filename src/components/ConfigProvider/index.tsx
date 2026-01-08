@@ -1,11 +1,9 @@
-import clsx from "clsx";
 import ConfigContext, { defaultContextValue } from "./context";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { ConfigProvider as AntdConfigProvider, App, theme } from "antd";
 import { useTheme } from "@/hooks";
 import { ANTD_THEME_CLASS, cssVar, initTheme } from "@/utils/theme";
-import { browser } from "@/utils/navigatorInfo";
 
 import type { FC } from "react";
 import type { ConfigContextValue } from "./context";
@@ -40,6 +38,10 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
       headerBorderRadius: 0,
       borderRadius: 0
     },
+    Pagination: {
+      itemBg: "transparent",
+      itemActiveBg: "transparent"
+    },
     Form: {
       itemMarginBottom: 14
     }
@@ -62,10 +64,6 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
 
     return nextValue;
   }, [direction, t]);
-
-  useEffect(() => {
-    document.documentElement.classList.add(clsx(browser.getBrowserName(true)));
-  }, []);
 
   return (
     <ConfigContext.Provider value={contextValue}>

@@ -23,26 +23,16 @@
 
 // Disable scroll when modal or drawer is opened
 
-html,
-body {
-  overflow: visible;
-}
-
 html {
+  overflow: visible;
+
   body {
-    background-color: var(--scrollbar-track-color);
+    overflow: auto !important;
+    height: 100vh;
   }
 
-  &:has(.ant-drawer, .ant-modal) {
+  &:has(.ant-drawer-open, .ant-modal) {
     overflow: hidden;
-  }
-
-  &.chrome {
-    body:has(.ant-drawer, .ant-modal) {
-      overflow: hidden;
-      touch-action: none;
-      width: calc(100% - var(--scrollbar-size));
-    }
   }
 }
 

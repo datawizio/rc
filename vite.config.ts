@@ -25,14 +25,11 @@ const copyLessFiles = () => {
     name: "copy-less-files",
     closeBundle: () => {
       const srcDir = resolve(__dirname, "src");
-      const outDirs = ["es", "lib"];
+      const targetDir = resolve(__dirname, "es");
 
-      for (const out of outDirs) {
-        const targetDir = resolve(__dirname, out);
-        fs.copySync(srcDir, targetDir, {
-          filter: src => src.endsWith(".less") || fs.statSync(src).isDirectory()
-        });
-      }
+      fs.copySync(srcDir, targetDir, {
+        filter: src => src.endsWith(".less") || fs.statSync(src).isDirectory()
+      });
     }
   };
 };
@@ -43,7 +40,7 @@ export default defineConfig(({ mode }) => ({
     libInjectCss(),
     copyLessFiles(),
     dts({
-      outDir: ["es", "lib"],
+      outDir: "es",
       tsconfigPath: resolve(__dirname, "tsconfig.app.json")
     })
   ],
@@ -64,7 +61,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     lib: {
       entry: entryFiles,
-      fileName: format => (format === "es" ? "index.js" : "index.cjs")
+      fileName: "index.js"
     },
     rollupOptions: {
       output: [
@@ -75,14 +72,6 @@ export default defineConfig(({ mode }) => ({
           preserveModules: true,
           preserveModulesRoot: "src",
           entryFileNames: "[name].js"
-        },
-        {
-          exports: "named",
-          format: "cjs",
-          dir: "lib",
-          preserveModules: true,
-          preserveModulesRoot: "src",
-          entryFileNames: "[name].cjs"
         }
       ],
       external: [

@@ -16,13 +16,7 @@ import "./index.less";
 
 const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
   (
-    {
-      config,
-      loading,
-      responsible = false,
-      resizeTimeout = 500,
-      constructorType = "chart"
-    },
+    { config, loading, responsible = false, constructorType = "chart" },
     ref
   ) => {
     const chartRef = useRef<Highcharts.Chart | null>(null);
@@ -58,31 +52,24 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
 
     useEffect(() => {
       if (!loading && responsible && containerRef.current) {
-        return resizeDetector(
-          containerRef.current,
-          async () => {
-            firstTime.current = false;
-            if (containerRef.current) {
-              containerRef.current.style.visibility = "visible";
-            }
+        return resizeDetector(containerRef.current, () => {
+          firstTime.current = false;
 
-            if (chartRef.current) {
-              chartRef.current.setSize();
+          if (containerRef.current) {
+            containerRef.current.style.visibility = "visible";
+          }
 
-              if (
-                chartRef.current &&
-                chartRef.current.series &&
-                chartRef.current.series.length > 0
-              ) {
-                // @ts-expect-error: Required options are not provided
-                chartRef.current.series[0].update();
-              }
+          if (chartRef.current) {
+            chartRef.current.setSize();
+
+            if (chartRef.current.series?.length > 0) {
+              // @ts-expect-error: Required options are not provided
+              chartRef.current.series[0].update();
             }
-          },
-          resizeTimeout
-        );
+          }
+        });
       }
-    }, [resizeTimeout, responsible, chartRef, loading]);
+    }, [responsible, chartRef, loading]);
 
     useImperativeHandle(ref, () => ({
       get chart() {
