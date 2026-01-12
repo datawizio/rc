@@ -53,7 +53,7 @@ const InnerOptions: FC<InnerOptionsProps> = ({
         ...option,
         id: option[keyProp],
         key: option[keyProp],
-        title: option[labelProp],
+        title: String(option[labelProp]) || option[keyProp],
         isLeaf: true,
         pId: 0
       }))
