@@ -5,6 +5,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  flex-direction: row-reverse;
 
   &__template {
     display: flex;
@@ -23,7 +24,7 @@
   }
 
   &__value-unselect {
-    right: 15px;
+    margin-right: 15px;
     font-size: 20px;
     height: 20px;
     line-height: 18px;
@@ -68,7 +69,7 @@
   }
 
   &__selector {
-    width: 150px;
+    padding-right: 15px;
 
     .select-focus-outline();
 
@@ -77,7 +78,9 @@
     }
 
     .ant-select-content {
+      width: 95px;
       margin-left: 4px;
+      margin-right: 10px;
 
       .ant-select-input {
         display: none;
