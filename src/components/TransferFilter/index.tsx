@@ -290,6 +290,11 @@ const TransferFilter: FC<TransferFilterProps> = ({
     });
   };
 
+  const paginationConfig = pagination && {
+    ...(typeof pagination === "object" ? pagination : {}),
+    showSizeChanger: false
+  };
+
   return (
     <div className="dw-transfer-filter">
       <List
@@ -298,7 +303,7 @@ const TransferFilter: FC<TransferFilterProps> = ({
         actions={sourceActions}
         checkedKeys={sourceChecked}
         local={local}
-        pagination={pagination}
+        pagination={paginationConfig}
         prefixCls={`${prefixCls}-list`}
         showSearch={true}
         titleText={sourceTitle}

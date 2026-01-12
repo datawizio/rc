@@ -183,6 +183,7 @@ const DateRangePicker: IDateRangePicker = ({
           <Tag
             key={label}
             color="purple"
+            variant="outlined"
             onMouseEnter={() => setPreviewRange(value)}
             onMouseLeave={() => setPreviewRange(null)}
             onClick={() => {
