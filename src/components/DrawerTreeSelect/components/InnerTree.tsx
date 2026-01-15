@@ -86,22 +86,23 @@ const InnerTree: FC<InnerTreeProps> = ({
     if (!searchingLocally) return nestedTreeData;
     const visibleKeys = new Set(localExpandedKeys ?? []);
 
-    // Visually hide nodes that are not expanded during local searching (do not filter data)
-    const markHidden = (nodes?: TreeDataNode[]): TreeDataNode[] | undefined => {
+    // Filter tree data to only include visible nodes
+    const filterVisible = (
+      nodes?: TreeDataNode[]
+    ): TreeDataNode[] | undefined => {
       if (!nodes) return nodes;
-      return nodes.map(node => {
-        const shouldHide = !visibleKeys.has(node.key);
-        const children = markHidden(node.children);
-
-        return {
-          ...node,
-          children,
-          style: shouldHide ? { ...node.style, display: "none" } : node.style
-        } as TreeDataNode;
-      });
+      return nodes
+        .filter(node => visibleKeys.has(node.key))
+        .map(node => {
+          const children = filterVisible(node.children);
+          return {
+            ...node,
+            children: children?.length ? children : undefined
+          } as TreeDataNode;
+        });
     };
 
-    return markHidden(nestedTreeData as TreeDataNode[]);
+    return filterVisible(nestedTreeData as TreeDataNode[]);
   }, [searchingLocally, nestedTreeData, localExpandedKeys]);
 
   useEffect(() => {

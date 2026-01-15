@@ -2,6 +2,10 @@
 
 @checkbox-size: 16px;
 
+.ant-form-item-control-input:has(.drawer-select) * {
+  transition: none !important;
+}
+
 .drawer-select {
   .ant-select-selector {
     & > span {
@@ -32,9 +36,18 @@
     }
   }
 
-  .ant-select-selection-overflow {
-    &-item:has(.ant-select-selection-placeholder):not(:first-child) {
-      display: none;
+  .ant-select-content {
+    &-item:has(.ant-select-selection-placeholder) {
+      flex: 1;
+      color: var(--ant-color-text-tertiary);
+      background: var(--select-multi-item-background);
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-right: 12px;
+
+      &:not(:first-child) {
+        display: none;
+      }
     }
   }
 

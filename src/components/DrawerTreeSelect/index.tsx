@@ -744,10 +744,10 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
       const maxLength = maxTagLength || 20;
 
       if (internalLoading) {
-        const loadingTextClasses = clsx({
-          "ant-select-selection-placeholder": true,
-          "drawer-tree-select-loading-placeholder": true
-        });
+        const loadingTextClasses = clsx(
+          "ant-select-selection-placeholder",
+          "drawer-tree-select-loading-placeholder"
+        );
         return <span className={loadingTextClasses}>{t("LOADING")}</span>;
       }
 
