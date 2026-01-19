@@ -1,4 +1,6 @@
 .dw-transfer-filter {
+  --dw-transfer-list-header-height: 40px;
+
   display: flex;
   align-items: center;
 
@@ -13,6 +15,9 @@
       width: 100%;
       flex: 1;
       min-height: 300px;
+      border: 1px solid var(--ant-color-border);
+      border-radius: var(--ant-border-radius-lg);
+      overflow: clip;
 
       &-title {
         padding: 8px 0;
@@ -25,12 +30,36 @@
         }
       }
 
-      .ant-transfer-list-body-levels-wrapper {
+      &-body {
+        height: calc(100% - var(--dw-transfer-list-header-height));
+      }
+
+      &-body-levels-wrapper {
         padding: 12px 12px 0;
+      }
+
+      &-body-search-wrapper {
+        padding: 12px;
+      }
+
+      &-body-not-found {
+        flex: none;
+        width: 100%;
+        margin: 50% 0;
+        color: var(--ant-color-text-placeholder);
+        text-align: center;
+        transform: translateY(-50%);
       }
 
       &-header {
         display: flex;
+        flex: none;
+        align-items: center;
+        height: var(--dw-transfer-list-header-height);
+        padding: 8px 12px 9px;
+        background: var(--ant-modal-content-bg);
+        border-bottom: 1px solid var(--ant-color-border-secondary);
+        border-radius: 2px 2px 0 0;
 
         .ant-checkbox-wrapper {
           flex: 1;
@@ -46,10 +75,51 @@
         }
       }
 
-      .ant-tree-list {
-        .ant-tree-treenode-switcher-close {
-          .button-add-all {
-            display: none;
+      &-content {
+        list-style: none;
+        padding-left: 0;
+        overflow: auto;
+        height: 100%;
+        margin: 0;
+
+        &-item {
+          display: flex;
+          align-items: center;
+          min-height: 32px;
+          padding: 4px 12px;
+          overflow: hidden;
+          line-height: 20px;
+          transition: all 0.3s;
+          gap: 8px;
+          cursor: pointer;
+
+          &-disabled {
+            cursor: not-allowed;
+            color: var(--ant-color-text-disabled);
+          }
+
+          &-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          &:not(&-disabled):hover {
+            background-color: var(--ant-color-bg-text-hover);
+          }
+        }
+      }
+
+      .ant-tree {
+        background-color: var(--ant-modal-content-bg);
+
+        &-list {
+          padding: 0 5px;
+
+          .ant-tree-treenode-switcher-close {
+            .button-add-all {
+              display: none;
+            }
           }
         }
       }
@@ -59,12 +129,30 @@
       padding-top: 7px;
       padding-right: 4px;
       text-align: end;
+      border-top: 1px solid var(--ant-color-border-secondary);
+      justify-content: flex-end;
+
+      .ant-pagination-prev {
+        margin-inline-end: var(--ant-margin-xxs) !important;
+      }
     }
   }
 
   .ant-transfer-operation {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-self: center;
+    margin: 0 8px;
+    overflow: hidden;
+    vertical-align: middle;
+
     .ant-btn {
       margin-bottom: 4px;
+
+      &-icon {
+        display: flex;
+      }
 
       &:last-of-type {
         margin-bottom: 0;
