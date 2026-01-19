@@ -21,7 +21,7 @@ export const RuleInfoSection: FC<
       <div className="rule-info-section-name">{t(name)}</div>
       {disabled ? (
         <div className="colored-tags">
-          <Tooltip title={tooltip} placement="top">
+          <Tooltip title={tooltip} placement="topLeft">
             <div className="colored-tag rule-info-section-content rule-info-section-content--disabled">
               {children}
             </div>

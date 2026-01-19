@@ -10,12 +10,6 @@ import type {
   WidgetParamsDimension
 } from "./types";
 
-declare global {
-  interface Window {
-    allDict: Record<string, any>;
-  }
-}
-
 export const MAX_LENGTH_ITEM_LIST = 7;
 
 export const getValue = (
@@ -69,7 +63,8 @@ export const parseLogic = <
   TLogic extends Record<string, any> | TLogic[],
   TReturn extends string | string[] = string
 >(
-  logic: TLogic
+  logic: TLogic,
+  metricsDictionary: Record<string, string> = {}
 ): TReturn => {
   if (Array.isArray(logic)) {
     return logic.map((logicItem: string | TLogic) => {
@@ -77,17 +72,14 @@ export const parseLogic = <
         return logicItem;
       }
 
-      if ("var" in logicItem) {
-        let value = logicItem["var"];
+      const value = "var" in logicItem ? logicItem["var"] : undefined;
+      const title = "title" in logicItem ? logicItem["title"] : undefined;
 
-        if (window.allDict && value?.startsWith("custom_")) {
-          value = window.allDict[value]?.title ?? value;
-        }
+      if (title) return title;
+      if (metricsDictionary[value]) return metricsDictionary[value];
+      if (value) return i18next.t(value.toUpperCase());
 
-        return i18next.t(value.toUpperCase());
-      }
-
-      return parseLogic<TLogic, string>(logicItem);
+      return parseLogic<TLogic, string>(logicItem, metricsDictionary);
     }) as TReturn;
   }
 
@@ -95,10 +87,10 @@ export const parseLogic = <
   const l = logic[op];
 
   if (op === "!") {
-    return ("!" + parseLogic<TLogic, string>(l)) as TReturn;
+    return ("!" + parseLogic<TLogic, string>(l, metricsDictionary)) as TReturn;
   }
 
-  const res = parseLogic<TLogic, string[]>(l);
+  const res = parseLogic<TLogic, string[]>(l, metricsDictionary);
   if (Array.isArray(res) && res.length > 1) {
     return `(${res.join(` ${i18next.t(op.toUpperCase())} `)})` as TReturn;
   }

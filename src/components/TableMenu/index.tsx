@@ -41,6 +41,7 @@ export interface TableMenuProps extends ButtonProps {
   onExpandVertical?: (e: MouseEvent<HTMLElement>) => void;
   onExpandHorizontal?: (e: MouseEvent<HTMLElement>) => void;
   nonExpandableMetrics?: Set<string>;
+  attachToTable?: boolean;
 }
 
 const TableMenu: FC<TableMenuProps> = ({
@@ -55,6 +56,7 @@ const TableMenu: FC<TableMenuProps> = ({
   onExpandHorizontal,
   onExpandVertical,
   nonExpandableMetrics = new Set(),
+  attachToTable = false,
   ...restProps
 }) => {
   const { t } = useConfig();
@@ -62,6 +64,13 @@ const TableMenu: FC<TableMenuProps> = ({
 
   const context = useContext(TableContext);
   const tableMenuId = useId();
+
+  const additionalDropdownProps = attachToTable
+    ? {
+        getPopupContainer: () =>
+          document.getElementById(tableMenuId) || document.body
+      }
+    : {};
 
   const { expand_horizontally, expand_tree, vertical_axis_metrics } = settings;
   const {
@@ -312,7 +321,7 @@ const TableMenu: FC<TableMenuProps> = ({
       <Dropdown
         popupRender={() => menu}
         trigger={["click"]}
-        getPopupContainer={() => document.getElementById(tableMenuId)!}
+        {...additionalDropdownProps}
       >
         <Button
           type="link"
