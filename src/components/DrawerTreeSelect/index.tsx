@@ -359,24 +359,23 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   );
 
   const checkSelectAllStatus = (
-    values: SelectValues | undefined,
+    selectValues: SelectValues | undefined,
     ignoreEmpty: boolean = false,
     forceSelectAll: boolean = false
   ) => {
-    if (!values) values = [];
     let checked = true;
-    if (!multiple)
+    const values = selectValues || [];
+
+    if (!multiple) {
       return {
         selectAllState: ""
       };
+    }
 
-    if (
-      forceSelectAll ||
-      (!ignoreEmpty &&
-        (!values || !values.length) &&
-        emptyIsAll &&
-        !searchValueRef.current)
-    ) {
+    const shouldSelectAllValues =
+      !ignoreEmpty && !values?.length && emptyIsAll && !searchValueRef.current;
+
+    if (forceSelectAll || shouldSelectAllValues) {
       return selectAll();
     }
 
@@ -407,13 +406,16 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     const state: Partial<IDrawerTreeSelectState> = {
       selectAllState: "checked"
     };
+
     if (showCheckedStrategy === "SHOW_CHILD") {
       state.internalValue = allLeafItems.current;
       return state;
     }
+
     if (mainLevelItems.current) {
       state.internalValue = Array.from(mainLevelItems.current);
     }
+
     return state;
   };
 
@@ -467,11 +469,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   };
 
   const closeDrawer = useCallback(() => {
-    setTimeout(() => {
-      const activeElement = document.activeElement as HTMLElement;
-      activeElement.blur();
-    }, 50);
-
     resetPrevRefs();
     drawerVisibleRef.current = false;
     onDrawerCloseCallback?.();
@@ -502,7 +499,8 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         fakeVisible: false
       }
     });
-    setTimeout(() => {
+
+    window.requestAnimationFrame(() => {
       rollbackRefs();
 
       dispatch({
@@ -520,10 +518,10 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
 
       closeDrawer();
 
-      setTimeout(() => {
+      window.requestAnimationFrame(() => {
         showAllRef.current = false;
-      }, 200);
-    }, 100);
+      });
+    });
     // eslint-disable-next-line
   }, [multiple, value, dispatch, onDrawerCancelCallback, closeDrawer]);
 
@@ -693,11 +691,15 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   }, [dependentItems]);
 
   useEffect(() => {
+    if (!internalLoading) {
+      return;
+    }
+
     dispatch({
       type: "internalValue",
       payload: !multiple && !value ? [] : value
     });
-  }, [value, multiple, dispatch]);
+  }, [value, multiple, dispatch, internalLoading]);
 
   useEffect(() => {
     if (treeData) {

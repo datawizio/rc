@@ -91,7 +91,7 @@ const InnerTree: FC<InnerTreeProps> = ({
       return nestedTreeData;
     }
 
-    // When `remoteSearch` is enabled, clean up result returned from the backed
+    // When `remoteSearch` is enabled, clear the result returned from the backend
     if (remoteSearch) {
       const filterRemoteSearch: TreeFilterFunction = nodes => {
         if (!nodes) return nodes;
@@ -114,7 +114,7 @@ const InnerTree: FC<InnerTreeProps> = ({
       return filterRemoteSearch(nestedTreeData);
     }
 
-    // Otherwise, it means we search only on the client side
+    // Otherwise, it means that we only perform search on the client side
 
     const visibleKeys = new Set(localExpandedKeys ?? []);
 
