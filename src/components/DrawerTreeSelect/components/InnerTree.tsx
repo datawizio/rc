@@ -36,6 +36,10 @@ export type InnerTreeProps = Omit<
   ) => Partial<IDrawerTreeSelectState>;
 };
 
+type TreeFilterFunction = {
+  (nodes?: TreeDataNode[]): TreeDataNode[] | undefined;
+};
+
 const InnerTree: FC<InnerTreeProps> = ({
   treeData,
   simpleMode,
@@ -56,7 +60,7 @@ const InnerTree: FC<InnerTreeProps> = ({
   const [localExpandedKeys, setLocalExpandedKeys] = useState<Key[]>([]);
 
   const nestedTreeData = useMemo(() => {
-    return simpleMode ? buildTreeData(treeData) : treeData;
+    return (simpleMode ? buildTreeData(treeData) : treeData) as TreeDataNode[];
   }, [simpleMode, treeData]);
 
   const flatDataList = useMemo(() => {
@@ -83,13 +87,38 @@ const InnerTree: FC<InnerTreeProps> = ({
   );
 
   const renderedTreeData = useMemo(() => {
-    if (!searchingLocally) return nestedTreeData;
+    if (!searchValue) {
+      return nestedTreeData;
+    }
+
+    // When `remoteSearch` is enabled, clean up result returned from the backed
+    if (remoteSearch) {
+      const filterRemoteSearch: TreeFilterFunction = nodes => {
+        if (!nodes) return nodes;
+        return nodes
+          .map(node => {
+            const children = filterRemoteSearch(node.children);
+            const filterValue = node[treeNodeFilterProp as keyof TreeDataNode];
+            const isMatch = searchPredicate(filterValue);
+
+            if (!children?.length && !isMatch) return null;
+
+            return {
+              ...node,
+              children: children?.length ? children : undefined
+            } as TreeDataNode;
+          })
+          .filter((node): node is TreeDataNode => Boolean(node));
+      };
+
+      return filterRemoteSearch(nestedTreeData);
+    }
+
+    // Otherwise, it means we search only on the client side
+
     const visibleKeys = new Set(localExpandedKeys ?? []);
 
-    // Filter tree data to only include visible nodes
-    const filterVisible = (
-      nodes?: TreeDataNode[]
-    ): TreeDataNode[] | undefined => {
+    const filterVisible: TreeFilterFunction = nodes => {
       if (!nodes) return nodes;
       return nodes
         .filter(node => visibleKeys.has(node.key))
@@ -102,8 +131,15 @@ const InnerTree: FC<InnerTreeProps> = ({
         });
     };
 
-    return filterVisible(nestedTreeData as TreeDataNode[]);
-  }, [searchingLocally, nestedTreeData, localExpandedKeys]);
+    return filterVisible(nestedTreeData);
+  }, [
+    remoteSearch,
+    localExpandedKeys,
+    nestedTreeData,
+    searchValue,
+    searchPredicate,
+    treeNodeFilterProp
+  ]);
 
   useEffect(() => {
     if (remoteSearch) return;
@@ -140,17 +176,17 @@ const InnerTree: FC<InnerTreeProps> = ({
 
   const handleTreeExpand = useCallback<HandlerFn<TreeProps, "onExpand">>(
     expandedKeys => {
-      if (!remoteSearch && searchValue) {
+      if (searchingLocally) {
         setLocalExpandedKeys(expandedKeys);
-        return;
+      } else {
+        onExpandedKeysChange?.(expandedKeys as SafeKey[]);
       }
-      onExpandedKeysChange?.(expandedKeys as SafeKey[]);
     },
-    [onExpandedKeysChange, remoteSearch, searchValue]
+    [onExpandedKeysChange, searchingLocally]
   );
 
   const indexes = useMemo(
-    () => buildTreeIndexes(nestedTreeData as TreeDataNode[]),
+    () => buildTreeIndexes(nestedTreeData),
     [nestedTreeData]
   );
 
@@ -162,7 +198,7 @@ const InnerTree: FC<InnerTreeProps> = ({
         rawChecked,
         showCheckedStrategy,
         indexes,
-        nestedTreeData as TreeDataNode[]
+        nestedTreeData
       );
 
       let state: Record<string, any> = {};
@@ -190,9 +226,9 @@ const InnerTree: FC<InnerTreeProps> = ({
     ]
   );
 
-  // During local search, if nothing matched, all nodes are effectively hidden
+  // During search, if nothing matched, all nodes are effectively hidden
   if (
-    nestedTreeData?.length === 0 ||
+    renderedTreeData?.length === 0 ||
     (searchingLocally && searchValue && !localExpandedKeys?.length)
   ) {
     return (
@@ -204,9 +240,7 @@ const InnerTree: FC<InnerTreeProps> = ({
     <Tree
       {...props}
       expandedKeys={
-        !remoteSearch && searchValue
-          ? localExpandedKeys
-          : internalTreeDefaultExpandedKeys
+        searchingLocally ? localExpandedKeys : internalTreeDefaultExpandedKeys
       }
       selectable={false}
       onExpand={handleTreeExpand}

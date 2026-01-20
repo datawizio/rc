@@ -70,8 +70,8 @@
     flex-direction: column;
     justify-content: flex-end;
 
-    * + .ant-input-search,
-    * + .drawer-tree-select-levels {
+    div ~ .ant-input-search,
+    div ~ .drawer-tree-select-levels {
       margin-top: var(--ant-margin-sm);
     }
 
@@ -140,8 +140,8 @@
         margin: 0;
       }
 
-      .ant-skeleton-content .ant-skeleton-title + .ant-skeleton-paragraph {
-        margin-top: 5px;
+      .ant-skeleton-section .ant-skeleton-title + .ant-skeleton-paragraph {
+        margin-block-start: 5px;
 
         li {
           width: 300px !important;

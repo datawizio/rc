@@ -796,7 +796,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
 
   useEffect(() => {
     if (!asyncData && loadData) {
-      void loadPage(searchValue, 0, true);
+      void loadPage(searchValue, 0, false);
     }
     // eslint-disable-next-line
   }, [searchValue, asyncData]);
