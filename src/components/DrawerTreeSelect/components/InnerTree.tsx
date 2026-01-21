@@ -13,9 +13,7 @@ import type { FC, Key } from "react";
 import type { TreeProps, TreeDataNode } from "antd";
 import type { SafeKey } from "rc-tree-select/es/interface";
 import type { CheckedStrategy } from "rc-tree-select/es/utils/strategyUtil";
-import type { HandlerFn } from "@/types/utils";
-import type { IDrawerTreeSelectState } from "../hooks/useDrawerTreeSelect";
-import type { SelectValues } from "../types";
+import type { HandlerFn, ReplaceParameter } from "@/types/utils";
 
 export type InnerTreeProps = Omit<
   TreeProps<any>,
@@ -27,13 +25,8 @@ export type InnerTreeProps = Omit<
   treeNodeFilterProp?: string;
   internalTreeDefaultExpandedKeys?: Key[];
   onExpandedKeysChange?: (keys: SafeKey[]) => void;
-  setState?: (state: Partial<IDrawerTreeSelectState>) => void;
   showCheckedStrategy?: CheckedStrategy;
-  checkSelectAllStatus?: (
-    values: SelectValues | undefined,
-    ignoreEmpty?: boolean,
-    forceSelectAll?: boolean
-  ) => Partial<IDrawerTreeSelectState>;
+  onCheck: ReplaceParameter<HandlerFn<TreeProps, "onCheck">, 0, SafeKey[]>;
 };
 
 type TreeFilterFunction = {
@@ -49,11 +42,9 @@ const InnerTree: FC<InnerTreeProps> = ({
   checkStrictly,
   internalTreeDefaultExpandedKeys,
   checkedKeys,
-  multiple,
-  setState,
   onExpandedKeysChange,
   showCheckedStrategy,
-  checkSelectAllStatus,
+  onCheck,
   ...props
 }) => {
   const { t } = useConfig();
@@ -194,36 +185,18 @@ const InnerTree: FC<InnerTreeProps> = ({
     (ck, info) => {
       const rawChecked = Array.isArray(ck) ? ck : (ck?.checked ?? []);
 
-      const valueKeys = applyCheckedStrategy(
-        rawChecked,
-        showCheckedStrategy,
-        indexes,
-        nestedTreeData
-      );
+      const valueKeys = checkStrictly
+        ? rawChecked
+        : applyCheckedStrategy(
+            rawChecked,
+            showCheckedStrategy,
+            indexes,
+            nestedTreeData
+          );
 
-      let state: Record<string, any> = {};
-
-      if (multiple) {
-        state.internalValue = valueKeys;
-        if (valueKeys) {
-          const check = checkSelectAllStatus?.(valueKeys as SafeKey[], true);
-          state = { ...state, ...check };
-        }
-      } else {
-        state.internalValue = info?.checked ? [info?.node?.key] : [];
-      }
-
-      state.internalTreeDataCount = (state.internalValue || []).length;
-      setState?.(state);
+      onCheck?.(valueKeys as SafeKey[], info);
     },
-    [
-      multiple,
-      setState,
-      checkSelectAllStatus,
-      indexes,
-      nestedTreeData,
-      showCheckedStrategy
-    ]
+    [indexes, nestedTreeData, onCheck, showCheckedStrategy, checkStrictly]
   );
 
   // During search, if nothing matched, all nodes are effectively hidden

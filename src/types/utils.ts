@@ -35,3 +35,22 @@ export type PartialBy<T extends object, K extends keyof T> = Omit<T, K> &
  */
 export type Overwrite<U extends object, V extends object> = Omit<U, keyof V> &
   V;
+
+/**
+ * Rewrites the type of specific parameter in a function type.
+ *
+ * @template F The original function type.
+ * @template Index The index of the parameter to replace.
+ * @template NewType The new type for the parameter at the given index.
+ */
+export type ReplaceParameter<
+  F extends (...args: any[]) => any,
+  Index extends number,
+  NewType
+> = F extends (...args: infer Args) => infer Return
+  ? (
+      ...args: {
+        [K in keyof Args]: K extends `${Index}` ? NewType : Args[K];
+      }
+    ) => Return
+  : never;

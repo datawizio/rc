@@ -43,7 +43,7 @@ export type DrawerTreeSelectProps<VT> = Omit<
   selectAllText?: string;
   onCheckedDependentValue?: (
     fieldName: SafeKey,
-    selectedItems: string[]
+    selectedItems: SafeKey[]
   ) => void;
   dependentItems?: any[];
   treeDataCount?: number;

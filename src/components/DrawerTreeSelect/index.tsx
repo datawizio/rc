@@ -22,10 +22,11 @@ import {
 
 import type { Key, ChangeEvent } from "react";
 import type { TreeProps, TreeSelectProps } from "antd";
-import type { DataNode } from "rc-tree-select/es/interface";
+import type { DataNode, SafeKey } from "rc-tree-select/es/interface";
 import type { CheckboxChangeEvent } from "antd";
 import type { HandlerFn } from "@/types/utils";
 import type { IDrawerTreeSelectState } from "./hooks/useDrawerTreeSelect";
+import type { InnerTreeProps } from "./components/InnerTree";
 import type {
   SelectValues,
   DrawerTreeSelectCompoundComponent,
@@ -575,12 +576,12 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     [dispatch]
   );
 
-  const handleTreeSelectChange = useCallback<Handler<"onChange">>(
-    (value, _labels, extra) => {
-      const { triggerValue, checked } = extra;
+  const handleTreeCheck = useCallback<HandlerFn<InnerTreeProps, "onCheck">>(
+    (value, info) => {
+      const { node, checked } = info;
 
       if (checked && onCheckedDependentValue) {
-        onCheckedDependentValue(triggerValue, value);
+        onCheckedDependentValue(node.key as SafeKey, value);
       }
 
       let state: Partial<IDrawerTreeSelectState> = {};
@@ -592,7 +593,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
           state = { ...state, ...check };
         }
       } else {
-        state.internalValue = extra.checked ? [extra.triggerValue] : [];
+        state.internalValue = info.checked ? [info.node.key as SafeKey] : [];
       }
 
       state.internalTreeDataCount = state.internalValue?.length;
@@ -898,11 +899,10 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
             showCheckedStrategy={
               searchValueRef.current ? "SHOW_CHILD" : showCheckedStrategy
             }
+            onCheck={handleTreeCheck}
             onSelect={handleTreeSelect}
-            setState={state => dispatch({ type: "setState", payload: state })}
             onExpandedKeysChange={handlerTreeExpand}
             loadData={loadChildren ? handleTreeLoadData : undefined}
-            checkSelectAllStatus={checkSelectAllStatus}
           />
         )}
         <div className="drawer-select-loader-container">
@@ -979,7 +979,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
           searchValueRef.current ? "SHOW_CHILD" : showCheckedStrategy
         }
         onClick={handleSelectClick}
-        onChange={handleTreeSelectChange}
         tagRender={tagRender}
         maxTagPlaceholder={maxTagPlaceholder}
         maxTagCount={maxTagCount}
