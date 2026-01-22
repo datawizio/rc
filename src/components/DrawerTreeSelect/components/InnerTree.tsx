@@ -26,7 +26,7 @@ export type InnerTreeProps = Omit<
   internalTreeDefaultExpandedKeys?: Key[];
   onExpandedKeysChange?: (keys: SafeKey[]) => void;
   showCheckedStrategy?: CheckedStrategy;
-  onCheck: ReplaceParameter<HandlerFn<TreeProps, "onCheck">, 0, SafeKey[]>;
+  onCheck?: ReplaceParameter<HandlerFn<TreeProps, "onCheck">, 0, SafeKey[]>;
 };
 
 type TreeFilterFunction = {

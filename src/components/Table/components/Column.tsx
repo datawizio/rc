@@ -1,10 +1,17 @@
 import clsx from "clsx";
-import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { useTable } from "@/components/Table/hooks/useTable";
 import { useDrag, useDrop } from "react-dnd";
 import { useDebouncedCallback } from "use-debounce";
 import { isSafari } from "@/utils/navigatorInfo";
 import { columnIcons } from "../utils/columnIcons";
+import {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+  useEffectEvent
+} from "react";
 
 import type { DropTargetMonitor } from "react-dnd";
 import type { SafeKey } from "antd/es/table/interface";
@@ -26,7 +33,7 @@ export interface ColumnProps extends HTMLAttributes<HTMLTableCellElement> {
   calcColumnWidth?: (width: number) => number;
 }
 
-const DEFAULT_SUBCOLUMN_WIDTH = 130;
+const DEFAULT_SUBCOLUMN_WIDTH = 150;
 const DEFAULT_SUBCELL_WIDTH = 20;
 const DEFAULT_MAX_VALUE = 10;
 
@@ -62,6 +69,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
   const columnRef = useRef<HTMLTableCellElement>(null);
   const lastWidthRef = useRef<number>(0);
   const rafRef = useRef<number>(null);
+  const first = useRef(true);
 
   const {
     dispatch,
@@ -242,36 +250,43 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     [dragRef, dropRef]
   );
 
-  useEffect(() => {
+  useEffectEvent(() => {
     if (!onWidthChange) return;
     window.addEventListener("mouseup", onMouseUpHandler);
 
     return () => {
       window.removeEventListener("mouseup", onMouseUpHandler);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   useEffect(() => {
     if (!isHeader) return;
 
     const colKey = model.dataIndex || model.key || model.originalKey;
+    const firstValue = first.current;
 
     const fn = () => {
       const columnWidth = calculateWidth(columnRef.current);
 
       // If the native resize set `width` below the minimum, immediately clamp it on the element.
-      if (columnRef.current) {
-        const styleWidth = parseInt(columnRef.current.style?.width);
+      if (
+        (startedResize.current || (first.current && model.children?.length)) &&
+        columnRef.current
+      ) {
+        first.current = false;
+        const styleWidth = parseInt(columnRef.current.style?.width || "0");
 
-        if (styleWidth < minWidth) {
+        if (styleWidth > 0 && styleWidth < minWidth) {
           columnRef.current.style.width = minWidth + "px";
         }
       }
 
       // The width should only be changed for the current column (when `startedResize.current = true`)
       // or when the table is not in virtual mode (i.e. the resizing is handled by the browser).
-      const shouldResize = !virtual || startedResize.current;
+      const shouldResize =
+        !virtual ||
+        startedResize.current ||
+        (firstValue && model.children?.length);
 
       if (
         shouldResize &&
@@ -297,8 +312,17 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         cancelAnimationFrame(rafRef.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHeader]);
+  }, [
+    isHeader,
+    minWidth,
+    calculateWidth,
+    model.dataIndex,
+    model.key,
+    model.originalKey,
+    model.children,
+    virtual,
+    dispatch
+  ]);
 
   const onMouseUpHandler = useCallback(() => {
     if (startedResize?.current) {
@@ -405,13 +429,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     return conf;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    model.children,
-    model.max_value,
-    model.colWidth,
-    columnsForceUpdate,
-    columnsWidth?.[model.key as SafeKey] // eslint-disable-line
-  ]);
+  }, [model, calcColumnWidth, minWidth, columnsWidth, columnsForceUpdate]);
 
   return (
     <th

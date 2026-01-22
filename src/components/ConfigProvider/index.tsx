@@ -36,7 +36,8 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   const components: ThemeConfig["components"] = {
     Table: {
       headerBorderRadius: 0,
-      borderRadius: 0
+      borderRadius: 0,
+      headerSplitColor: "transparent"
     },
     Pagination: {
       itemBg: "transparent",

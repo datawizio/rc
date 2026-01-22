@@ -45,6 +45,10 @@
     align-content: center;
     min-height: 50px;
     padding: 8px !important;
+
+    &-scrollbar {
+      display: none;
+    }
   }
 
   &.ant-table-wrapper .ant-table-cell.ant-table-cell-fix {
@@ -229,7 +233,7 @@
     }
   }
 
-  &--responsive-columns {
+  &--responsive-columns:not(&--resizable):not(&--compress-columns) {
     table {
       width: 100% !important;
     }
