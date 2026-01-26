@@ -125,7 +125,7 @@ export const useColumns = (
         };
 
         if (column.children && column.children.length) {
-          record.children = rec(column.children, 150); // DEFAULT_SUBCOLUMN_WIDTH
+          record.children = rec(column.children, 130); // DEFAULT_SUBCOLUMN_WIDTH
         } else {
           nextColumnWidth[record.dataIndex] =
             columnsWidth?.[record.dataIndex] ?? record.colWidth ?? defaultWidth;

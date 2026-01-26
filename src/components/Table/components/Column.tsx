@@ -33,7 +33,7 @@ export interface ColumnProps extends HTMLAttributes<HTMLTableCellElement> {
   calcColumnWidth?: (width: number) => number;
 }
 
-const DEFAULT_SUBCOLUMN_WIDTH = 150;
+const DEFAULT_SUBCOLUMN_WIDTH = 130;
 const DEFAULT_SUBCELL_WIDTH = 20;
 const DEFAULT_MAX_VALUE = 10;
 
@@ -69,7 +69,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
   const columnRef = useRef<HTMLTableCellElement>(null);
   const lastWidthRef = useRef<number>(0);
   const rafRef = useRef<number>(null);
-  const first = useRef(true);
+  const firstLoad = useRef(true);
 
   const {
     dispatch,
@@ -109,11 +109,21 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     [model]
   );
 
-  const minWidth =
-    model.colMinWidth ||
-    (model.children?.length
-      ? model.children.length * DEFAULT_SUBCOLUMN_WIDTH
-      : 100);
+  const minWidth = useMemo(() => {
+    if (model.colMinWidth) {
+      return model.colMinWidth;
+    }
+
+    if (model.children?.length) {
+      return model.children.length * DEFAULT_SUBCOLUMN_WIDTH;
+    }
+
+    if (model.parent_key) {
+      return DEFAULT_SUBCOLUMN_WIDTH;
+    }
+
+    return 100;
+  }, [model]);
 
   const calculateWidth = useCallback(
     (target: HTMLElement | null) => {
@@ -263,17 +273,22 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     if (!isHeader) return;
 
     const colKey = model.dataIndex || model.key || model.originalKey;
-    const firstValue = first.current;
 
     const fn = () => {
       const columnWidth = calculateWidth(columnRef.current);
 
+      // The width should only be changed for the current column (when `startedResize.current = true`)
+      // or when the table is not in virtual mode (i.e. the resizing is handled by the browser).
+      // We also handle some special cases for columns with children to set their initial width during loading,
+      // or for subcolumns when the size of their parent element changes.
+      const allowResizeHandling =
+        !virtual ||
+        startedResize.current ||
+        (firstLoad.current && model.children) ||
+        model.parent_key;
+
       // If the native resize set `width` below the minimum, immediately clamp it on the element.
-      if (
-        (startedResize.current || (first.current && model.children?.length)) &&
-        columnRef.current
-      ) {
-        first.current = false;
+      if (allowResizeHandling && columnRef.current) {
         const styleWidth = parseInt(columnRef.current.style?.width || "0");
 
         if (styleWidth > 0 && styleWidth < minWidth) {
@@ -281,15 +296,8 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         }
       }
 
-      // The width should only be changed for the current column (when `startedResize.current = true`)
-      // or when the table is not in virtual mode (i.e. the resizing is handled by the browser).
-      const shouldResize =
-        !virtual ||
-        startedResize.current ||
-        (firstValue && model.children?.length);
-
       if (
-        shouldResize &&
+        allowResizeHandling &&
         typeof columnWidth === "number" &&
         columnWidth !== 0
       ) {
@@ -300,6 +308,10 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
             width: columnWidth
           }
         });
+      }
+
+      if (firstLoad.current) {
+        firstLoad.current = false;
       }
 
       rafRef.current = requestAnimationFrame(fn);
