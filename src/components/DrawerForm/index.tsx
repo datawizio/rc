@@ -30,7 +30,6 @@ export interface DrawerFormProps<Values> {
   width?: number;
   submitDisabled?: boolean;
   footer?: ReactNode;
-  convertState?: <S = any>(state: Values) => S;
   onClose?: () => void;
   onSubmit?: () => void;
   validateTrigger?: string | string[];
@@ -53,7 +52,6 @@ const DrawerForm = <T extends object = any>({
   width = 500,
   submitDisabled,
   footer,
-  convertState,
   onClose,
   onSubmit,
   onFieldsChange,
@@ -68,10 +66,9 @@ const DrawerForm = <T extends object = any>({
     }
 
     return formStore.watch(state => {
-      if (convertState) state = convertState(state);
       form?.setFieldsValue(state);
     });
-  }, [convertState, form, formStore]);
+  }, [form, formStore]);
 
   useEffect(() => {
     return () => {
