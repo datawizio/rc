@@ -120,7 +120,23 @@
 
     .ant-tree {
       background-color: transparent;
-      margin-left: -28px;
+      margin: 0 -28px;
+
+      .ant-tree-node-content-wrapper {
+        overflow: hidden;
+      }
+
+      &-treenode {
+        width: 100%;
+      }
+
+      &-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        width: 100%;
+      }
 
       .tree-check-all {
         display: none;
