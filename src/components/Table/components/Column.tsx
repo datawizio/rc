@@ -332,6 +332,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     model.key,
     model.originalKey,
     model.children,
+    model.parent_key,
     virtual,
     dispatch
   ]);

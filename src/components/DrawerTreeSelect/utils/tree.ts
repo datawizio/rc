@@ -1,3 +1,5 @@
+import { difference } from "lodash";
+
 import type { Key } from "react";
 import type { TreeDataNode } from "antd";
 import type { CheckedStrategy } from "rc-tree-select/es/utils/strategyUtil";
@@ -30,7 +32,8 @@ export const getMainLevelItems = (
       break;
     }
   }
-  return set;
+
+  return Array.from(set);
 };
 
 /**
@@ -54,23 +57,15 @@ export const getAllLeafItems = (items: any[] = []) => {
 /**
  * Check whether every value from `items` is present in the provided set.
  *
- * @param items - Values that should be present
- * @param set - Set of currently selected values
+ * @param selectedItems - Values that should be present (can contain other values)
+ * @param allItems - Set of currently selected values
  * @returns True if all `items` are present in `set`
  */
 export const isAllItemsChecked = (
-  items: SelectValues,
-  set: Set<SelectValues[number]>
+  selectedItems: SelectValues,
+  allItems: Array<SelectValues[number]>
 ) => {
-  if (items.length !== set.size) return false;
-
-  for (const value of items) {
-    if (!set.has(value)) {
-      return false;
-    }
-  }
-
-  return true;
+  return difference(allItems, selectedItems).length === 0;
 };
 
 /**

@@ -120,7 +120,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   });
 
   const [searchValue, setSearchValue] = useState<string>("");
-  const mainLevelItems = useRef<Set<string>>(new Set());
+  const mainLevelItems = useRef<string[]>([]);
   const allLeafItems = useRef<string[]>([]);
 
   const markersSelected = useRef<string[] | number[]>(selectedMarkers || []);
@@ -414,7 +414,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     }
 
     if (mainLevelItems.current) {
-      state.internalValue = Array.from(mainLevelItems.current);
+      state.internalValue = mainLevelItems.current;
     }
 
     return state;
@@ -615,14 +615,8 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         triggerOnChange(value);
       }
     },
-    [
-      checkSelectAllStatus,
-      dispatch,
-      drawerVisible,
-      multiple,
-      onCheckedDependentValue,
-      triggerOnChange
-    ]
+    // eslint-disable-next-line
+    [drawerVisible, triggerOnChange, multiple]
   );
 
   const handleTreeCheck = useCallback<HandlerFn<InnerTreeProps, "onCheck">>(
@@ -717,11 +711,17 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   }, [dependentItems]);
 
   useEffect(() => {
+    if (emptyIsAll && !value?.length && internalValue?.length) {
+      return;
+    }
+
     dispatch({
       type: "internalValue",
       payload: !multiple && !value ? [] : value
     });
-  }, [value, multiple, dispatch]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, multiple, dispatch, emptyIsAll]);
 
   useEffect(() => {
     if (treeData) {
