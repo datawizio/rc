@@ -41,7 +41,7 @@ const TableWrapper: FC<HTMLAttributes<HTMLTableElement>> = ({
 
         resizeRef.current = resizeDetector(parent, (elHeight, elWidth) => {
           const offset = [toolbar, pagination].reduce((acc, el) => {
-            return el ? acc + getAbsoluteHeight(el as any) : acc;
+            return el ? acc + getAbsoluteHeight(el as HTMLElement) : acc;
           }, 0);
 
           const nextWidth = elWidth;
