@@ -808,7 +808,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       const maxLength = maxTagLength || 20;
       const isLongTag = typeof label === "string" && label?.length > maxLength;
 
-      if (!optionsState || optionsState.length === 0) {
+      if (internalLoading) {
         return (
           <span className="ant-select-selection-placeholder">
             {t("LOADING")}
@@ -829,7 +829,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         </span>
       );
     },
-    [maxTagLength, optionsState, t]
+    [maxTagLength, internalLoading, t]
   );
 
   const listHeight =
