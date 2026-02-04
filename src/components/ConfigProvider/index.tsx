@@ -1,8 +1,9 @@
 import ConfigContext, { defaultContextValue } from "./context";
 
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { ConfigProvider as AntdConfigProvider, App, theme } from "antd";
 import { useTheme } from "@/hooks";
+import { browser } from "@/utils/navigatorInfo";
 import { ANTD_THEME_CLASS, cssVar, initTheme } from "@/utils/theme";
 
 import type { FC } from "react";
@@ -65,6 +66,22 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
 
     return nextValue;
   }, [direction, t]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add(browser.getBrowserName(true));
+
+    let rafId = window.requestAnimationFrame(function frame() {
+      root.classList.toggle(
+        "scrollable",
+        root.scrollHeight > root.clientHeight
+      );
+
+      rafId = window.requestAnimationFrame(frame);
+    });
+
+    return () => window.cancelAnimationFrame(rafId);
+  }, []);
 
   return (
     <ConfigContext.Provider value={contextValue}>
