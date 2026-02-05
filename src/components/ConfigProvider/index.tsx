@@ -70,17 +70,7 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   useEffect(() => {
     const root = document.documentElement;
     root.classList.add(browser.getBrowserName(true));
-
-    let rafId = window.requestAnimationFrame(function frame() {
-      root.classList.toggle(
-        "scrollable",
-        root.scrollHeight > root.clientHeight
-      );
-
-      rafId = window.requestAnimationFrame(frame);
-    });
-
-    return () => window.cancelAnimationFrame(rafId);
+    root.classList.toggle("scrollable", root.scrollHeight > root.clientHeight); // TODO: update class on page resize
   }, []);
 
   return (
