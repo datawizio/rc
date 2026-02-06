@@ -106,7 +106,6 @@ const InnerTree: FC<InnerTreeProps> = ({
     }
 
     // Otherwise, it means that we only perform search on the client side
-
     const visibleKeys = new Set(localExpandedKeys ?? []);
 
     const filterVisible: TreeFilterFunction = nodes => {
@@ -131,6 +130,19 @@ const InnerTree: FC<InnerTreeProps> = ({
     searchPredicate,
     treeNodeFilterProp
   ]);
+
+  const renderedTreeKeySet = useMemo(() => {
+    const keys = new Set<Key>();
+    const traverse = (nodes?: TreeDataNode[]) => {
+      if (!nodes) return;
+      nodes.forEach(node => {
+        keys.add(node.key);
+        traverse(node.children);
+      });
+    };
+    traverse(renderedTreeData);
+    return keys;
+  }, [renderedTreeData]);
 
   useEffect(() => {
     if (remoteSearch) return;
@@ -184,11 +196,20 @@ const InnerTree: FC<InnerTreeProps> = ({
   const handleTreeCheck = useCallback<HandlerFn<TreeProps, "onCheck">>(
     (ck, info) => {
       const rawChecked = Array.isArray(ck) ? ck : (ck?.checked ?? []);
+      const mergedChecked =
+        searchingLocally && Array.isArray(checkedKeys)
+          ? Array.from(
+              new Set([
+                ...checkedKeys.filter(key => !renderedTreeKeySet.has(key)),
+                ...rawChecked
+              ])
+            )
+          : rawChecked;
 
       const valueKeys = checkStrictly
-        ? rawChecked
+        ? mergedChecked
         : applyCheckedStrategy(
-            rawChecked,
+            mergedChecked,
             showCheckedStrategy,
             indexes,
             nestedTreeData
@@ -196,7 +217,16 @@ const InnerTree: FC<InnerTreeProps> = ({
 
       onCheck?.(valueKeys as SafeKey[], info);
     },
-    [indexes, nestedTreeData, onCheck, showCheckedStrategy, checkStrictly]
+    [
+      checkStrictly,
+      showCheckedStrategy,
+      indexes,
+      nestedTreeData,
+      onCheck,
+      searchingLocally,
+      checkedKeys,
+      renderedTreeKeySet
+    ]
   );
 
   // During search, if nothing matched, all nodes are effectively hidden
