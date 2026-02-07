@@ -48,6 +48,7 @@
     "antd": "^6.1.0",
     "exceljs": "^4.4.0",
     "highcharts": "^12.4.0",
+    "highcharts-react-official": "^3.2.3",
     "i18next": "^25.7.2",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
@@ -57,6 +58,9 @@
       "optional": true
     },
     "highcharts": {
+      "optional": true
+    },
+    "highcharts-react-official": {
       "optional": true
     }
   },
@@ -105,6 +109,7 @@
     "glob": "^13.0.0",
     "globals": "^16.5.0",
     "highcharts": "^12.4.0",
+    "highcharts-react-official": "^3.2.3",
     "i18next": "^25.7.2",
     "less": "^4.4.2",
     "prettier": "3.7.4",
