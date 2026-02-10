@@ -4,14 +4,7 @@ import { useDrag, useDrop } from "react-dnd";
 import { useDebouncedCallback } from "use-debounce";
 import { isSafari } from "@/utils/navigatorInfo";
 import { columnIcons } from "../utils/columnIcons";
-import {
-  useState,
-  useCallback,
-  useMemo,
-  useRef,
-  useEffect,
-  useEffectEvent
-} from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 
 import type { DropTargetMonitor } from "react-dnd";
 import type { SafeKey } from "antd/es/table/interface";
@@ -260,15 +253,6 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     [dragRef, dropRef]
   );
 
-  useEffectEvent(() => {
-    if (!onWidthChange) return;
-    window.addEventListener("mouseup", onMouseUpHandler);
-
-    return () => {
-      window.removeEventListener("mouseup", onMouseUpHandler);
-    };
-  });
-
   useEffect(() => {
     if (!isHeader) return;
 
@@ -364,6 +348,15 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     },
     [lastWidth, onClick, calculateWidth]
   );
+
+  useEffect(() => {
+    if (!onWidthChange) return;
+    window.addEventListener("mouseup", onMouseUpHandler);
+
+    return () => {
+      window.removeEventListener("mouseup", onMouseUpHandler);
+    };
+  }, [onWidthChange, onMouseUpHandler]);
 
   const className = useMemo(() => {
     return clsx(
