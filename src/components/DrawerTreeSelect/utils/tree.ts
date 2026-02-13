@@ -311,3 +311,89 @@ export const applyCheckedStrategy = (
 
   return Array.from(new Set(result));
 };
+
+/**
+ * Get keys of nodes that should be shown as half-checked (indeterminate).
+ * A node is half-checked when it has some but not all descendant leaves selected.
+ * Uses the full tree so that during local search, parents with many children
+ * show correctly as half-checked when only one visible child is checked.
+ *
+ * @param checkedKeys - Current checked keys (strategy-applied value)
+ * @param strategy - Same strategy used for the checked keys (to expand to leaves)
+ * @param indexes - Precomputed indexes for the full tree
+ * @param roots - Full tree roots
+ * @returns Array of keys that are half-checked
+ */
+export const getHalfCheckedKeys = (
+  checkedKeys: Iterable<Key>,
+  _strategy: CheckedStrategy | undefined,
+  indexes: TreeIndexes,
+  roots: TreeDataNode[] | undefined
+): Key[] => {
+  const raw = new Set<Key>(checkedKeys);
+  const selectedLeaves = new Set<Key>();
+
+  raw.forEach(key => {
+    if (indexes.leafKeys.has(key)) {
+      selectedLeaves.add(key);
+    } else {
+      getDescendantLeaves(key, indexes).forEach(d => selectedLeaves.add(d));
+    }
+  });
+
+  const halfChecked: Key[] = [];
+
+  const visit = (node: TreeDataNode) => {
+    const leaves = getDescendantLeaves(node.key, indexes);
+    if (leaves.length === 0) return;
+    const selectedCount = leaves.filter(l => selectedLeaves.has(l)).length;
+    if (selectedCount > 0 && selectedCount < leaves.length) {
+      halfChecked.push(node.key);
+    }
+    (node.children || []).forEach(visit);
+  };
+
+  (roots || []).forEach(root => visit(root));
+  return halfChecked;
+};
+
+/**
+ * Expand checked keys for display so that parent nodes appear checked when
+ * all their descendant leaves are in the checked set. Used when the stored
+ * value is leaf-only (e.g. SHOW_CHILD with emptyIsAll) but the tree is shown
+ * with checkStrictly (e.g. during client search), so parents must be added
+ * to the checked set for correct visual state.
+ *
+ * @param checkedKeys - Current checked keys (may be leaf-only)
+ * @param indexes - Precomputed tree indexes
+ * @param roots - Full tree roots
+ * @returns Array of keys to display as checked (includes fully-selected parents)
+ */
+export const expandCheckedKeysForDisplay = (
+  checkedKeys: Iterable<Key>,
+  indexes: TreeIndexes,
+  roots: TreeDataNode[] | undefined
+): Key[] => {
+  const raw = new Set<Key>(checkedKeys);
+  const selectedLeaves = new Set<Key>();
+
+  raw.forEach(key => {
+    if (indexes.leafKeys.has(key)) {
+      selectedLeaves.add(key);
+    } else {
+      getDescendantLeaves(key, indexes).forEach(d => selectedLeaves.add(d));
+    }
+  });
+
+  const result = new Set<Key>(raw);
+  const visit = (node: TreeDataNode) => {
+    const leaves = getDescendantLeaves(node.key, indexes);
+    if (leaves.length === 0) return;
+    const allSelected = leaves.every(l => selectedLeaves.has(l));
+    if (allSelected) result.add(node.key);
+    (node.children || []).forEach(visit);
+  };
+
+  (roots || []).forEach(root => visit(root));
+  return Array.from(result);
+};

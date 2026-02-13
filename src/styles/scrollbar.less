@@ -26,7 +26,7 @@
 @supported-browser: chrome;
 
 html:has(.ant-drawer-open, .ant-modal) {
-  overflow: clip;
+  overflow: clip !important;
 
   &.scrollable.@{supported-browser} > body {
     width: calc(100% - var(--scrollbar-size));

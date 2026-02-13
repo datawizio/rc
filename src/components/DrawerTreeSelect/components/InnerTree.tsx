@@ -6,7 +6,9 @@ import {
   buildTreeData,
   getRelatedKeys,
   buildTreeIndexes,
-  applyCheckedStrategy
+  applyCheckedStrategy,
+  getHalfCheckedKeys,
+  expandCheckedKeysForDisplay
 } from "../utils/tree";
 
 import type { FC, Key } from "react";
@@ -193,18 +195,61 @@ const InnerTree: FC<InnerTreeProps> = ({
     [nestedTreeData]
   );
 
+  const checkedKeysArray = useMemo(
+    () =>
+      Array.isArray(checkedKeys)
+        ? checkedKeys
+        : checkedKeys && "checked" in checkedKeys
+          ? checkedKeys.checked
+          : [],
+    [checkedKeys]
+  );
+
+  const halfCheckedKeys = useMemo(() => {
+    if (!searchingLocally) return [];
+    return getHalfCheckedKeys(
+      checkedKeysArray,
+      showCheckedStrategy,
+      indexes,
+      nestedTreeData
+    );
+  }, [
+    searchingLocally,
+    checkedKeysArray,
+    showCheckedStrategy,
+    indexes,
+    nestedTreeData
+  ]);
+
+  const treeCheckedKeys = useMemo(() => {
+    if (searchingLocally) {
+      const displayChecked = expandCheckedKeysForDisplay(
+        checkedKeysArray,
+        indexes,
+        nestedTreeData
+      );
+      return { checked: displayChecked, halfChecked: halfCheckedKeys };
+    }
+    return checkedKeysArray;
+  }, [
+    searchingLocally,
+    checkedKeysArray,
+    halfCheckedKeys,
+    indexes,
+    nestedTreeData
+  ]);
+
   const handleTreeCheck = useCallback<HandlerFn<TreeProps, "onCheck">>(
     (ck, info) => {
       const rawChecked = Array.isArray(ck) ? ck : (ck?.checked ?? []);
-      const mergedChecked =
-        searchingLocally && Array.isArray(checkedKeys)
-          ? Array.from(
-              new Set([
-                ...checkedKeys.filter(key => !renderedTreeKeySet.has(key)),
-                ...rawChecked
-              ])
-            )
-          : rawChecked;
+      const mergedChecked = searchingLocally
+        ? Array.from(
+            new Set([
+              ...checkedKeysArray.filter(key => !renderedTreeKeySet.has(key)),
+              ...rawChecked
+            ])
+          )
+        : rawChecked;
 
       const valueKeys = checkStrictly
         ? mergedChecked
@@ -224,7 +269,7 @@ const InnerTree: FC<InnerTreeProps> = ({
       nestedTreeData,
       onCheck,
       searchingLocally,
-      checkedKeys,
+      checkedKeysArray,
       renderedTreeKeySet
     ]
   );
@@ -248,9 +293,9 @@ const InnerTree: FC<InnerTreeProps> = ({
       selectable={false}
       onExpand={handleTreeExpand}
       treeData={renderedTreeData}
-      checkedKeys={checkedKeys || []}
+      checkedKeys={treeCheckedKeys}
       onCheck={handleTreeCheck}
-      checkStrictly={checkStrictly}
+      checkStrictly={searchingLocally ? true : checkStrictly}
       filterTreeNode={node => {
         return searchPredicate(node[treeNodeFilterProp as keyof TreeDataNode]);
       }}

@@ -159,13 +159,14 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     showLevels && internalLevels && internalLevels.length > 1;
 
   const internalTreeData = useMemo(() => {
-    const td = (treeData || stateTreeData)?.map((item): DataNode => {
+    const td = (treeData || stateTreeData)?.map(function walk(item): DataNode {
       const resolvedKey = item.key || item.id;
 
       return {
         ...item,
         key: resolvedKey,
-        value: item.value || resolvedKey
+        value: item.value || resolvedKey,
+        children: item.children?.map(walk)
       };
     });
 
@@ -983,7 +984,13 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     <>
       <TreeSelect
         {...restProps}
-        treeDataSimpleMode={false}
+        treeDataSimpleMode={
+          // For some reason, tree selection does not work properly
+          // when simple mode is enabled during remote search
+          searchValueRef.current && remoteSearch
+            ? false
+            : restProps.treeDataSimpleMode
+        }
         value={internalValue}
         className={clsx({
           "drawer-tree-select": true,
