@@ -28,6 +28,10 @@
 html:has(.ant-drawer-open, .ant-modal) {
   overflow: clip !important;
 
+  body {
+    overflow: visible !important;
+  }
+
   &.scrollable.@{supported-browser} > body {
     width: calc(100% - var(--scrollbar-size));
   }

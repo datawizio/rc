@@ -195,15 +195,17 @@ const InnerTree: FC<InnerTreeProps> = ({
     [nestedTreeData]
   );
 
-  const checkedKeysArray = useMemo(
-    () =>
-      Array.isArray(checkedKeys)
-        ? checkedKeys
-        : checkedKeys && "checked" in checkedKeys
-          ? checkedKeys.checked
-          : [],
-    [checkedKeys]
-  );
+  const checkedKeysArray = useMemo(() => {
+    if (Array.isArray(checkedKeys)) {
+      return checkedKeys;
+    }
+
+    if (checkedKeys && "checked" in checkedKeys) {
+      return checkedKeys.checked;
+    }
+
+    return [];
+  }, [checkedKeys]);
 
   const halfCheckedKeys = useMemo(() => {
     if (!searchingLocally) return [];
@@ -222,15 +224,15 @@ const InnerTree: FC<InnerTreeProps> = ({
   ]);
 
   const treeCheckedKeys = useMemo(() => {
-    if (searchingLocally) {
-      const displayChecked = expandCheckedKeysForDisplay(
-        checkedKeysArray,
-        indexes,
-        nestedTreeData
-      );
-      return { checked: displayChecked, halfChecked: halfCheckedKeys };
-    }
-    return checkedKeysArray;
+    if (!searchingLocally) return checkedKeysArray;
+
+    const displayChecked = expandCheckedKeysForDisplay(
+      checkedKeysArray,
+      indexes,
+      nestedTreeData
+    );
+
+    return { checked: displayChecked, halfChecked: halfCheckedKeys };
   }, [
     searchingLocally,
     checkedKeysArray,

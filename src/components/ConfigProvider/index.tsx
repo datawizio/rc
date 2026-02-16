@@ -70,7 +70,16 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   useEffect(() => {
     const root = document.documentElement;
     root.classList.add(browser.getBrowserName(true));
-    root.classList.toggle("scrollable", root.scrollHeight > root.clientHeight); // TODO: update class on page resize
+
+    const observer = new ResizeObserver(([rootEntry]) => {
+      rootEntry.target.classList.toggle(
+        "scrollable",
+        root.scrollHeight > root.clientHeight
+      );
+    });
+
+    observer.observe(root);
+    return () => observer.disconnect();
   }, []);
 
   return (
