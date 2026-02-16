@@ -243,12 +243,20 @@ const InnerTree: FC<InnerTreeProps> = ({
     (ck, info) => {
       const rawChecked = Array.isArray(ck) ? ck : (ck?.checked ?? []);
       const mergedChecked = searchingLocally
-        ? Array.from(
-            new Set([
-              ...checkedKeysArray.filter(key => !renderedTreeKeySet.has(key)),
-              ...rawChecked
-            ])
-          )
+        ? (() => {
+            const preserved = checkedKeysArray.filter(
+              key => !renderedTreeKeySet.has(key)
+            );
+
+            // During local search we show parents as checked via `expandCheckedKeysForDisplay`.
+            // Only use leaf keys so unchecking the only item in a group actually removes it
+            // (otherwise the parent stays in `rawChecked` and gets expanded back to the leaf).
+            const rawLeavesOnly = rawChecked.filter(key =>
+              indexes.leafKeys.has(key)
+            );
+
+            return Array.from(new Set([...preserved, ...rawLeavesOnly]));
+          })()
         : rawChecked;
 
       const valueKeys = checkStrictly
