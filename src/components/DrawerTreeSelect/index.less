@@ -120,7 +120,17 @@
 
     .ant-tree {
       background-color: transparent;
-      margin-left: -28px;
+      margin: 0 -28px;
+
+      &-list-holder,
+      &-node-content-wrapper {
+        overflow: hidden;
+      }
+
+      &-checkbox {
+        align-self: baseline;
+        margin-top: 4px;
+      }
 
       .tree-check-all {
         display: none;

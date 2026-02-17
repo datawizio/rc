@@ -63,13 +63,6 @@ type Handler<T extends keyof SelectProps> = HandlerFn<
   T
 >;
 
-const extractProperty = <V,>(
-  array: Record<string, V>[],
-  propertyName: string
-) => {
-  return array.map(item => item[propertyName]);
-};
-
 const convertOptions = <T extends BaseOptionType>(
   source: T[],
   valueProp: keyof T,
@@ -293,9 +286,11 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         payload: state
       });
 
-      const filters = { ...additionalFilters, search };
-
-      filters.selected = extractProperty(selectedOptions.current, valueProp);
+      const filters = {
+        ...additionalFilters,
+        search,
+        selected: internalValue ?? value
+      };
 
       if (showMarkers && markersFilterName) {
         filters[markersFilterName] = markersSelected.current;
