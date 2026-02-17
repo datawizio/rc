@@ -259,12 +259,8 @@ const TableMenu: FC<TableMenuProps> = ({
         (send_xlsx_submenu ? (
           <Menu.SubMenu
             key="send_xlsx_submenu"
-            title={
-              <>
-                <SendOutlined className="table-menu-dropdown__icon__send" />
-                {t("SEND_XLS")}
-              </>
-            }
+            icon={<SendOutlined className="table-menu-dropdown__icon__send" />}
+            title={t("SEND_XLS")}
           >
             {without_expand_tree && (
               <Menu.Item
