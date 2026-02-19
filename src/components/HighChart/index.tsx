@@ -53,7 +53,7 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
     return config && config.error ? (
       <div style={{ height }}>{config.error.message}</div>
     ) : (
-      <div ref={containerRef} />
+      <div ref={containerRef} style={{ height }} />
     );
   }
 );
