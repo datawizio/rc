@@ -1,5 +1,6 @@
 import Highcharts from "highcharts";
 import Skeleton from "@/components/Skeleton";
+import { resizeDetector } from "@/utils/resizeDetector";
 import {
   useRef,
   useMemo,
@@ -14,13 +15,22 @@ import type { HighChartProps, HighChartRef } from "./types";
 import "./index.less";
 
 const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
-  ({ config, loading, constructorType = "chart" }, ref) => {
-    const chartRef = useRef<Highcharts.Chart | null>(null);
-    const containerRef = useRef<HTMLDivElement | null>(null);
+  (
+    { config, loading, responsible = false, constructorType = "chart" },
+    ref
+  ) => {
+    const chartRef = useRef<Highcharts.Chart>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const firstTime = useRef<boolean>(true);
+
     const height = useMemo(() => config?.chart?.height || 300, [config]);
 
     useEffect(() => {
       if (containerRef.current) {
+        if (responsible && firstTime.current) {
+          containerRef.current.style.visibility = "hidden";
+        }
+
         const type = constructorType as keyof typeof Highcharts;
 
         chartRef.current = Highcharts[type](
@@ -35,7 +45,21 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
           chartRef.current = null;
         }
       };
-    }, [config, constructorType]);
+    }, [config, constructorType, responsible]);
+
+    useEffect(() => {
+      if (!loading && responsible && containerRef.current) {
+        return resizeDetector(containerRef.current, () => {
+          firstTime.current = false;
+
+          if (containerRef.current) {
+            containerRef.current.style.visibility = "visible";
+          }
+
+          chartRef.current?.reflow();
+        });
+      }
+    }, [responsible, chartRef, loading]);
 
     useImperativeHandle(ref, () => ({
       get chart() {
@@ -53,7 +77,7 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
     return config && config.error ? (
       <div style={{ height }}>{config.error.message}</div>
     ) : (
-      <div ref={containerRef} style={{ height }} />
+      <div ref={containerRef} />
     );
   }
 );
