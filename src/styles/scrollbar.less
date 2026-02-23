@@ -19,25 +19,25 @@
   height: 100px;
 }
 
-// TODO: Disable scroll when modal or drawer is opened
+// Disable scroll when modal or drawer is opened.
 
-// @supported-browser: chrome;
+@supported-browser: chrome;
 
-// html:has(.ant-drawer-open, .ant-modal) {
-//   overflow: clip !important;
+html.scrollbar-hidden {
+  overflow: clip !important;
 
-//   body {
-//     overflow: visible !important;
-//   }
+  body {
+    overflow: visible !important;
+  }
 
-//   &.scrollable.@{supported-browser} > body {
-//     width: calc(100% - var(--scrollbar-size));
-//   }
-// }
+  &.scrollable.@{supported-browser} > body {
+    width: calc(100% - var(--scrollbar-size));
+  }
+}
 
 // Scroll customizations for specific components
 
-.ant-table-body {
+.ant-table {
   scrollbar-width: auto !important;
   scrollbar-color: auto !important;
 }

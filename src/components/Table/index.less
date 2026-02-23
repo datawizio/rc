@@ -41,6 +41,10 @@
     background-color: var(--ant-color-bg-container);
   }
 
+  .ant-table-body {
+    overflow: auto !important;
+  }
+
   .ant-table-cell {
     align-content: center;
     min-height: 50px;
@@ -387,10 +391,11 @@
       }
 
       .ant-table-thead > tr > th.ant-table-cell.ant-table-cell-scrollbar {
-        width: 8px;
-        max-width: 8px;
-        min-width: 8px;
-        padding: 0;
+        display: table-cell;
+        width: var(--scrollbar-size) !important;
+        max-width: var(--scrollbar-size);
+        min-width: var(--scrollbar-size);
+        padding: 0 !important;
       }
     }
   }
