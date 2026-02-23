@@ -1,5 +1,5 @@
 import type { TreeDataNode } from "antd";
-import type { DataNode as TreeSelectDataNode } from "rc-tree-select/es/interface";
+import type { DataNode as TreeSelectDataNode } from "@rc-component/tree-select/es/interface";
 
 export type DataNode = TreeDataNode & TreeSelectDataNode;
 

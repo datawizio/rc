@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import localeData from "dayjs/plugin/localeData";
-import dayjsConfig from "rc-picker/es/generate/dayjs";
+import dayjsConfig from "@rc-component/picker/es/generate/dayjs";
 import { fiscalCalendar } from "@/utils/fiscalCalendar";
 import { parseLocale } from "../utils/locale";
 
 import type { Dayjs } from "dayjs";
-import type { GenerateConfig } from "rc-picker/es/generate";
+import type { GenerateConfig } from "@rc-component/picker/es/generate";
 
 dayjs.extend(isBetween);
 dayjs.extend(localeData);

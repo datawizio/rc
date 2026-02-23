@@ -13,8 +13,8 @@ import {
 
 import type { FC, Key } from "react";
 import type { TreeProps, TreeDataNode } from "antd";
-import type { SafeKey } from "rc-tree-select/es/interface";
-import type { CheckedStrategy } from "rc-tree-select/es/utils/strategyUtil";
+import type { SafeKey } from "@rc-component/tree-select/es/interface";
+import type { CheckedStrategy } from "@rc-component/tree-select/es/utils/strategyUtil";
 import type { HandlerFn, ReplaceParameter } from "@/types/utils";
 
 export type InnerTreeProps = Omit<

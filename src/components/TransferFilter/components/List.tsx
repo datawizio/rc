@@ -11,7 +11,7 @@ import { isLocalDataSource, searchByArticle } from "../helper";
 import type { ChangeEvent, ReactElement, ReactNode } from "react";
 import type { DataNode } from "antd/es/tree";
 import type { SelectValue } from "antd/es/tree-select";
-import type { EventDataNode } from "rc-tree/es/interface";
+import type { EventDataNode } from "@rc-component/tree/es/interface";
 import type { PaginationType } from "antd/es/transfer/interface";
 import type { Observable, Subscription } from "@/types/store";
 import type { PartialBy } from "@/types/utils";

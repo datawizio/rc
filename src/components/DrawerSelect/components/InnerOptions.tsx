@@ -5,7 +5,10 @@ import { buildTreeData } from "@/components/DrawerTreeSelect/utils/tree";
 
 import type { FC, Key, Ref } from "react";
 import type { TreeProps, TreeDataNode, GetRef } from "antd";
-import type { SafeKey, SimpleModeConfig } from "rc-tree-select/es/interface";
+import type {
+  SafeKey,
+  SimpleModeConfig
+} from "@rc-component/tree-select/es/interface";
 import type { HandlerFn } from "@/types/utils";
 import type { DefaultOptionType } from "antd/es/select";
 import type { BasicDataNode } from "antd/es/tree";

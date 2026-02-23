@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 
 import type { FC, MouseEvent } from "react";
-import type { DataNode } from "rc-tree-select/es/interface";
+import type { DataNode } from "@rc-component/tree-select/es/interface";
 import type { ICheckedItem } from "../types";
 
 interface ButtonAddAllProps {

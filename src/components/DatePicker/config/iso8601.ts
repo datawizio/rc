@@ -1,9 +1,9 @@
-import dayjsConfig from "rc-picker/es/generate/dayjs";
+import dayjsConfig from "@rc-component/picker/es/generate/dayjs";
 import { calendarInfo } from "@/utils/calendar";
 import { parseLocale } from "../utils/locale";
 
 import type { Dayjs } from "dayjs";
-import type { GenerateConfig } from "rc-picker/es/generate";
+import type { GenerateConfig } from "@rc-component/picker/es/generate";
 
 export interface ISO8601CalendarConfig extends GenerateConfig<Dayjs> {
   getStartOfMonth?: (date: Dayjs) => Dayjs;

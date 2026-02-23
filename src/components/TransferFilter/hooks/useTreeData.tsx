@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { ButtonAddAll } from "../components/ButtonAddAll";
-import { convertChildrenToData } from "rc-tree-select/es/utils/legacyUtil";
+import { convertChildrenToData } from "@rc-component/tree-select/es/utils/legacyUtil";
 
 import type { ReactNode } from "react";
 import type { SafeKey } from "antd/es/table/interface";
@@ -9,7 +9,7 @@ import type {
   DataNode,
   SimpleModeConfig,
   DefaultValueType
-} from "rc-tree-select/es/interface";
+} from "@rc-component/tree-select/es/interface";
 
 const MAX_WARNING_TIMES = 10;
 

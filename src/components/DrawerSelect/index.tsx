@@ -18,7 +18,7 @@ import type { AntTreeNode } from "antd/es/tree";
 import type { BaseOptionType, DefaultOptionType } from "antd/es/select";
 import type { HandlerFn } from "@/types/utils";
 import type { SelectValue } from "antd/es/select";
-import type { SafeKey } from "rc-tree-select/es/interface";
+import type { SafeKey } from "@rc-component/tree-select/es/interface";
 import type { IDrawerSelectState, SelectValues } from "./hooks/useDrawerSelect";
 
 import "./index.less";

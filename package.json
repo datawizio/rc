@@ -23,7 +23,7 @@
     "datawiz.io"
   ],
   "type": "module",
-  "main": "lib/index.cjs",
+  "main": "es/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
   "files": [
@@ -70,9 +70,6 @@
     "file-saver": "^2.0.5",
     "libphonenumber-js": "^1.12.31",
     "lodash": "^4.17.23",
-    "rc-field-form": "^2.7.1",
-    "rc-picker": "^4.11.3",
-    "rc-tree-select": "^5.27.0",
     "react-color": "^2.19.3",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",

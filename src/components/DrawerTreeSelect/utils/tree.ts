@@ -2,8 +2,8 @@ import { difference } from "lodash";
 
 import type { Key } from "react";
 import type { TreeDataNode } from "antd";
-import type { CheckedStrategy } from "rc-tree-select/es/utils/strategyUtil";
-import type { SimpleModeConfig } from "rc-tree-select/es/interface";
+import type { CheckedStrategy } from "@rc-component/tree-select/es/utils/strategyUtil";
+import type { SimpleModeConfig } from "@rc-component/tree-select/es/interface";
 import type {
   IDrawerTreeSelectFilters,
   SelectValues

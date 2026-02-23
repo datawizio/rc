@@ -22,7 +22,7 @@ import {
 
 import type { Key, ChangeEvent } from "react";
 import type { TreeProps, TreeSelectProps } from "antd";
-import type { DataNode, SafeKey } from "rc-tree-select/es/interface";
+import type { DataNode, SafeKey } from "@rc-component/tree-select/es/interface";
 import type { CheckboxChangeEvent } from "antd";
 import type { HandlerFn } from "@/types/utils";
 import type { IDrawerTreeSelectState } from "./hooks/useDrawerTreeSelect";
