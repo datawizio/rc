@@ -1,6 +1,7 @@
 import { ColumnIcons } from "./utils/columnIcons";
 
 import type { TableProps as AntdTableProps, ColumnProps } from "antd/es/table";
+import type { PaginationConfig } from "antd/es/pagination";
 import type { MaybePromise, Overwrite } from "@/types/utils";
 import type {
   TableTemplateState,
@@ -64,7 +65,7 @@ export type TableProps<RT = any> = Overwrite<
   showAllColumns?: boolean;
   sortable?: boolean;
   forceColumns?: boolean;
-  showSizeChanger?: boolean;
+  showSizeChanger?: PaginationConfig["showSizeChanger"];
   multisorting?: boolean;
   isResizableColumns?: boolean;
   isNested?: (row: any) => boolean;

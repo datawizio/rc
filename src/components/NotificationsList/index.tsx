@@ -33,7 +33,7 @@ const NotificationsList: FC<ListProps<IListItem>> = props => {
       defaultPageSize: 20,
       pageSizeOptions: ["20", "35", "50", "100"],
       total,
-      showSizeChanger: true,
+      showSizeChanger: { showSearch: false },
       onChange: (page: number, pageSize: number) => {
         window.scrollTo(0, 0);
         dispatch({ type: "paginate", payload: { page, pageSize } });
