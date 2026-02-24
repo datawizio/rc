@@ -33,7 +33,9 @@ export const useRootClassNames = () => {
     let rafId: number | undefined;
 
     const updateScrollbarHiddenClass = () => {
-      const hasOpen = document.querySelector(".ant-drawer-open, .ant-modal");
+      const hasOpen = document.querySelector(
+        ".ant-drawer-open, .ant-modal, .ant-image-preview"
+      );
       root.classList.toggle(rootClassNames.scrollbarHidden, !!hasOpen);
     };
 
@@ -42,7 +44,8 @@ export const useRootClassNames = () => {
     });
 
     mutationObserver.observe(document.body, {
-      childList: true
+      childList: true,
+      subtree: true
     });
 
     /* Cleanup */

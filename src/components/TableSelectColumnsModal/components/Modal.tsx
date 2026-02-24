@@ -210,6 +210,7 @@ export const TableSelectColumnsModalModal: FC<
         title={t(locale.headerModal)}
         className={modalClassNames}
         destroyOnHidden={true}
+        centered={true}
         onCancel={handleCancel}
         footer={
           <Button
