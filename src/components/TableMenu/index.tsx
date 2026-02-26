@@ -19,6 +19,8 @@ import type { TableState } from "@/components/Table/types";
 
 import "./index.less";
 
+export type ExpandOptions = "horizontally" | "grouped" | "flat";
+
 export interface TableMenuProps extends ButtonProps {
   filename?: string;
   getFilename?: () => string;
@@ -36,7 +38,7 @@ export interface TableMenuProps extends ButtonProps {
     fileData: BlobPart | Blob,
     filename: string
   ) => MaybePromise<void>;
-  onSendClick?: (expand?: "horizontally" | "grouped") => Promise<void>;
+  onSendClick?: (expand?: ExpandOptions) => Promise<void>;
   onTotalClick?: (e: MouseEvent<HTMLElement>) => void;
   onExpandVertical?: (e: MouseEvent<HTMLElement>) => void;
   onExpandHorizontal?: (e: MouseEvent<HTMLElement>) => void;
@@ -275,7 +277,7 @@ const TableMenu: FC<TableMenuProps> = ({
             {without_expand_tree && (
               <Menu.Item
                 key="without_expand_tree"
-                onClick={() => onSendClick?.()}
+                onClick={() => onSendClick?.("flat")}
               >
                 {t("WITHOUT_EXPAND_TREE")}
               </Menu.Item>
