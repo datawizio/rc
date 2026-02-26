@@ -79,6 +79,7 @@ const TableMenu: FC<TableMenuProps> = ({
     expand_table_horizontally,
     show_export_xls,
     show_send_to_email,
+    show_send_to_email_expand_horizontally,
     is_visualization,
     dimension_count,
     has_tree
@@ -179,7 +180,9 @@ const TableMenu: FC<TableMenuProps> = ({
     expand_tree_grouped
   } = useMemo(() => {
     const res = {
-      send_xlsx_submenu: is_visualization,
+      send_xlsx_submenu:
+        is_visualization || show_send_to_email_expand_horizontally,
+
       without_expand_tree: true,
       send_xlsx_expand_submenu: false,
 
@@ -190,12 +193,13 @@ const TableMenu: FC<TableMenuProps> = ({
           dimension_count > 1),
 
       expand_tree_horizontally:
-        !expand_horizontally &&
-        hasExpandableMetrics &&
-        ((dimension_count === 1 && has_tree) ||
-          (has_tree && expand_tree) ||
-          (!has_tree && dimension_count > 1 && expand_tree) ||
-          dimension_count > 1)
+        show_send_to_email_expand_horizontally ||
+        (!expand_horizontally &&
+          hasExpandableMetrics &&
+          ((dimension_count === 1 && has_tree) ||
+            (has_tree && expand_tree) ||
+            (!has_tree && dimension_count > 1 && expand_tree) ||
+            dimension_count > 1))
     };
 
     if (res.expand_tree_horizontally || res.expand_tree_grouped) {
@@ -208,7 +212,8 @@ const TableMenu: FC<TableMenuProps> = ({
     expand_tree,
     hasExpandableMetrics,
     has_tree,
-    is_visualization
+    is_visualization,
+    show_send_to_email_expand_horizontally
   ]);
 
   const menu = (
