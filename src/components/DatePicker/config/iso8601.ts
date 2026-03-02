@@ -6,23 +6,15 @@ import type { Dayjs } from "dayjs";
 import type { GenerateConfig } from "@rc-component/picker/es/generate";
 
 export interface ISO8601CalendarConfig extends GenerateConfig<Dayjs> {
-  getStartOfMonth?: (date: Dayjs) => Dayjs;
+  type: "iso-8601";
 }
 
 const iso8601CalendarConfig: ISO8601CalendarConfig = Object.assign(
-  {},
+  { type: "iso-8601" as const },
   dayjsConfig
 );
 
 iso8601CalendarConfig.locale = Object.assign({}, iso8601CalendarConfig.locale);
-
-iso8601CalendarConfig.isAfter = (date1, date2) => {
-  return date1.isAfter(date2);
-};
-
-iso8601CalendarConfig.getStartOfMonth = date => {
-  return dayjsConfig.setDate(date, 1);
-};
 
 iso8601CalendarConfig.locale.format = (locale, date, format) => {
   if (format === "YYYY" && calendarInfo.startMonth !== 0) {
@@ -32,6 +24,7 @@ iso8601CalendarConfig.locale.format = (locale, date, format) => {
     const y2 = y1 + 1;
     return `${y1}/${y2}`;
   }
+
   return date.locale(parseLocale(locale)).format(format);
 };
 

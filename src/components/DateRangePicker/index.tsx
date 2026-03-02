@@ -216,7 +216,14 @@ const DateRangePicker: IDateRangePicker = ({
       inputReadOnly={inputReadOnly}
       renderExtraFooter={renderExtraFooter}
       className={clsx(fullWidth && "ant-picker-full-width")}
-      classNames={{ popup: { root: "dw-range-picker-dropdown" } }}
+      classNames={{
+        popup: {
+          root: clsx(
+            "dw-range-picker-dropdown",
+            type === "fiscal" && "fiscal-range-picker-dropdown"
+          )
+        }
+      }}
       onChange={onChange}
       value={previewRange ?? [dateFrom, dateTo]}
       disabledDate={isDisabledDate}

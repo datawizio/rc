@@ -5,7 +5,7 @@ const format = "DD-MM-YYYY";
 
 class FiscalCalendar {
   public static readonly DAYS_IN_YEAR = 364;
-  public static readonly DAYS_IN_QUARTAL = (4 + 4 + 5) * 7;
+  public static readonly DAYS_IN_QUARTER = (4 + 4 + 5) * 7;
 
   public pattern: number[] = [4, 4, 5];
   public calendar: Record<number, any> = {};
@@ -50,7 +50,7 @@ class FiscalCalendar {
     const year = this.getYear(date);
     const quarter = Math.ceil(month / 3);
     const res = month - (quarter - 1) * 3;
-    let dayInYear = (quarter - 1) * FiscalCalendar.DAYS_IN_QUARTAL - 1;
+    let dayInYear = (quarter - 1) * FiscalCalendar.DAYS_IN_QUARTER - 1;
     for (let i = 0; i < res; i++) {
       dayInYear += this.pattern[i] * 7;
     }
@@ -63,11 +63,11 @@ class FiscalCalendar {
     const year = this.calendar[yearNumber];
     const dayInYear = date.diff(year.from, "day") + 1;
 
-    let quarter = Math.ceil(dayInYear / FiscalCalendar.DAYS_IN_QUARTAL);
+    let quarter = Math.ceil(dayInYear / FiscalCalendar.DAYS_IN_QUARTER);
     if (quarter > 4) quarter = 4;
 
     const dayInQuarter =
-      dayInYear - (quarter - 1) * FiscalCalendar.DAYS_IN_QUARTAL;
+      dayInYear - (quarter - 1) * FiscalCalendar.DAYS_IN_QUARTER;
 
     let temp = dayInQuarter;
     let month = 0;
@@ -123,7 +123,7 @@ class FiscalCalendar {
     const obj = this.getYearObject(year);
     const quarter = Math.ceil(month / 3);
     const res = month - (quarter - 1) * 3;
-    let dayInYear = (quarter - 1) * FiscalCalendar.DAYS_IN_QUARTAL;
+    let dayInYear = (quarter - 1) * FiscalCalendar.DAYS_IN_QUARTER;
     for (let i = 0; i < res; i++) {
       dayInYear += this.pattern[i] * 7;
     }
@@ -141,7 +141,7 @@ class FiscalCalendar {
     if (isNaN(date.month())) return date;
     const quarter = this.getQuarter(date);
     const yearNumber = this.getYear(date);
-    const dayInYear = quarter * FiscalCalendar.DAYS_IN_QUARTAL;
+    const dayInYear = quarter * FiscalCalendar.DAYS_IN_QUARTER;
     const startYear = dayjs(this.calendar[yearNumber].from);
     return startYear.add(dayInYear, "day");
   }
