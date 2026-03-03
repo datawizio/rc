@@ -52,6 +52,7 @@ const InnerTree: FC<InnerTreeProps> = ({
 }) => {
   const { t } = useConfig();
   const [localExpandedKeys, setLocalExpandedKeys] = useState<Key[]>([]);
+  const [searchVisibleKeys, setSearchVisibleKeys] = useState(new Set<Key>());
 
   const nestedTreeData = useMemo(() => {
     return (simpleMode ? buildTreeData(treeData) : treeData) as TreeDataNode[];
@@ -109,7 +110,7 @@ const InnerTree: FC<InnerTreeProps> = ({
     }
 
     // Otherwise, it means that we only perform search on the client side
-    const visibleKeys = new Set(localExpandedKeys ?? []);
+    const visibleKeys = searchVisibleKeys;
 
     const filterTreeByVisibleKeys: TreeFilterFunction = nodes => {
       if (!nodes) return nodes;
@@ -127,7 +128,7 @@ const InnerTree: FC<InnerTreeProps> = ({
     return filterTreeByVisibleKeys(nestedTreeData);
   }, [
     remoteSearch,
-    localExpandedKeys,
+    searchVisibleKeys,
     nestedTreeData,
     searchValue,
     searchPredicate,
@@ -152,6 +153,7 @@ const InnerTree: FC<InnerTreeProps> = ({
 
     if (!searchValue) {
       setLocalExpandedKeys([]);
+      setSearchVisibleKeys(new Set());
       return;
     }
 
@@ -168,7 +170,9 @@ const InnerTree: FC<InnerTreeProps> = ({
       .filter((x): x is Key[] => Boolean(x))
       .reduce((acc, item) => [...acc, ...item], []);
 
-    setLocalExpandedKeys(Array.from(new Set(keysToExpand)));
+    const uniqueKeys = new Set(keysToExpand);
+    setLocalExpandedKeys(Array.from(uniqueKeys));
+    setSearchVisibleKeys(uniqueKeys);
   }, [
     searchValue,
     remoteSearch,
