@@ -8,7 +8,8 @@ import {
   buildTreeIndexes,
   applyCheckedStrategy,
   getHalfCheckedKeys,
-  expandCheckedKeysForDisplay
+  expandCheckedKeysForDisplay,
+  getDescendantLeaves
 } from "../utils/tree";
 
 import type { FC, Key } from "react";
@@ -86,11 +87,11 @@ const InnerTree: FC<InnerTreeProps> = ({
 
     // When `remoteSearch` is enabled, clear the result returned from the backend
     if (remoteSearch) {
-      const filterRemoteSearch: TreeFilterFunction = nodes => {
+      const filterTreeByPredicate: TreeFilterFunction = nodes => {
         if (!nodes) return nodes;
         return nodes
           .map(node => {
-            const children = filterRemoteSearch(node.children);
+            const children = filterTreeByPredicate(node.children);
             const filterValue = node[treeNodeFilterProp as keyof TreeDataNode];
             const isMatch = searchPredicate(filterValue);
 
@@ -104,18 +105,18 @@ const InnerTree: FC<InnerTreeProps> = ({
           .filter((node): node is TreeDataNode => Boolean(node));
       };
 
-      return filterRemoteSearch(nestedTreeData);
+      return filterTreeByPredicate(nestedTreeData);
     }
 
     // Otherwise, it means that we only perform search on the client side
     const visibleKeys = new Set(localExpandedKeys ?? []);
 
-    const filterVisible: TreeFilterFunction = nodes => {
+    const filterTreeByVisibleKeys: TreeFilterFunction = nodes => {
       if (!nodes) return nodes;
       return nodes
         .filter(node => visibleKeys.has(node.key))
         .map(node => {
-          const children = filterVisible(node.children);
+          const children = filterTreeByVisibleKeys(node.children);
           return {
             ...node,
             children: children?.length ? children : undefined
@@ -123,7 +124,7 @@ const InnerTree: FC<InnerTreeProps> = ({
         });
     };
 
-    return filterVisible(nestedTreeData);
+    return filterTreeByVisibleKeys(nestedTreeData);
   }, [
     remoteSearch,
     localExpandedKeys,
@@ -257,7 +258,24 @@ const InnerTree: FC<InnerTreeProps> = ({
               indexes.leafKeys.has(key)
             );
 
-            return Array.from(new Set([...preserved, ...rawLeavesOnly]));
+            const toggledKey = info?.node?.key;
+            const toggledIsLeaf = indexes.leafKeys.has(toggledKey);
+
+            const mergedKeys = new Set<Key>([...preserved, ...rawLeavesOnly]);
+
+            if (toggledKey != null && !toggledIsLeaf) {
+              const descendantLeaves = getDescendantLeaves(toggledKey, indexes);
+
+              if (info.checked) {
+                descendantLeaves.forEach(key => mergedKeys.add(key));
+                return Array.from(mergedKeys);
+              }
+
+              descendantLeaves.forEach(key => mergedKeys.delete(key));
+              return Array.from(mergedKeys);
+            }
+
+            return Array.from(mergedKeys);
           })()
         : rawChecked;
 
@@ -297,6 +315,7 @@ const InnerTree: FC<InnerTreeProps> = ({
   return (
     <Tree
       {...props}
+      motion={false}
       expandedKeys={
         searchingLocally ? localExpandedKeys : internalTreeDefaultExpandedKeys
       }

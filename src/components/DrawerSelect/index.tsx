@@ -880,19 +880,18 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
           />
         )}
         {showSelectAll &&
-        !searchValue &&
-        markersSelected.current.length &&
-        optionsState?.length ? (
-          <div className="drawer-tree-select-dropdown-toolbar">
-            <Checkbox
-              onChange={handleSelectAllChange}
-              checked={selectAllState === "checked"}
-              indeterminate={selectAllState === "indeterminate"}
-            >
-              {t("ALL")}
-            </Checkbox>
-          </div>
-        ) : null}
+          !!markersSelected.current.length &&
+          !!optionsState?.length && (
+            <div className="drawer-tree-select-dropdown-toolbar">
+              <Checkbox
+                onChange={handleSelectAllChange}
+                checked={selectAllState === "checked"}
+                indeterminate={selectAllState === "indeterminate"}
+              >
+                {t("ALL")}
+              </Checkbox>
+            </div>
+          )}
         {(!internalLoading || scrollLoading) && (
           <InnerOptions
             ref={optionsRef}
