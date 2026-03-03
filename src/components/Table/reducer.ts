@@ -7,7 +7,7 @@ import {
   setMultisortingForColumns
 } from "./utils/utils";
 
-import type { Key, FilterValue, SafeKey } from "antd/es/table/interface";
+import type { Key } from "antd/es/table/interface";
 import type {
   TableState,
   Action,
@@ -17,23 +17,7 @@ import type {
   IRow,
   IColumn
 } from "./types";
-
-const DEFAULT_SUBCOLUMN_WIDTH = 130;
-
-const getColumnMinWidth = (column?: IColumn): number => {
-  if (!column) return 100;
-  if (column.colMinWidth) return column.colMinWidth;
-
-  if (column.children?.length) {
-    return column.children.length * DEFAULT_SUBCOLUMN_WIDTH;
-  }
-
-  if (column.parent_key) {
-    return DEFAULT_SUBCOLUMN_WIDTH;
-  }
-
-  return 100;
-};
+import type { FilterValue, SafeKey } from "antd/es/table/interface";
 
 const genColumnsMap = (columns?: IColumn[]) => {
   const columnsMap: Record<string, IColumn> = {};
@@ -147,37 +131,28 @@ export const reducer = (state: TableState, action: Action): TableState => {
     }
 
     case "columnWidthChange": {
-      const column = state.columns?.find(
-        item => item.key === action.payload.key
-      );
-      const nextWidth = Math.max(
-        action.payload.width,
-        getColumnMinWidth(column)
-      );
-
-      if (state.columnsWidth?.[action.payload.key] === nextWidth) {
+      if (state.columnsWidth?.[action.payload.key] === action.payload.width) {
         return state;
       }
 
-      const children = column?.children ?? [];
+      const children =
+        state.columns?.find(item => item.key === action.payload.key)
+          ?.children ?? [];
 
-      const childrenWidths = children.reduce((acc, child) => {
-        const childWidth = Math.max(
-          nextWidth / children.length,
-          getColumnMinWidth(child)
-        );
-        return {
+      const childrenWidths = children.reduce(
+        (acc, child) => ({
           ...acc,
-          [child.key as string]: childWidth
-        };
-      }, {});
+          [child.key as string]: action.payload.width / children.length
+        }),
+        {}
+      );
 
       return {
         ...state,
         columnsWidth: {
           ...state.columnsWidth,
           ...childrenWidths,
-          [action.payload.key]: nextWidth
+          [action.payload.key]: action.payload.width
         }
       };
     }

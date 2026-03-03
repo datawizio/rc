@@ -385,8 +385,8 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     const getWidth = () => {
       const columnsWidthPreset = columnsWidth?.[model.key as SafeKey];
 
-      if (typeof columnsWidthPreset === "number") {
-        return { width: Math.max(columnsWidthPreset, minWidth) };
+      if (columnsWidthPreset) {
+        return { width: columnsWidthPreset };
       }
 
       if (model.colWidth) {
@@ -428,7 +428,6 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     }
 
     if (typeof conf.width === "number") {
-      conf.width = Math.max(conf.width, minWidth);
       lastWidthRef.current = conf.width;
     }
 
