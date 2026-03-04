@@ -150,14 +150,13 @@ const DateRangePicker: IDateRangePicker = ({
   }, [propsMaxDate, propsMinDate, formatDate]);
 
   const isDisabledDate = useCallback(
-    (date: Dayjs) => {
-      const formattedDate = formatDate(date.format("DD-MM-YYYY"));
-      return Boolean(
-        (maxDate && formattedDate?.isAfter(maxDate)) ||
-        (minDate && formattedDate?.isBefore(minDate))
-      );
+    (date: Dayjs, info: { from?: Dayjs }) => {
+      if (maxDate && date.isAfter(maxDate, "day")) return true;
+      if (minDate && date.isBefore(minDate, "day")) return true;
+      if (info.from && date.isBefore(info.from, "day")) return true;
+      return false;
     },
-    [maxDate, minDate, formatDate]
+    [maxDate, minDate]
   );
 
   const onChange: HandlerFn<DateRangePickerProps, "onChange"> = (
