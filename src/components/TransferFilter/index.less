@@ -93,6 +93,14 @@
           gap: 8px;
           cursor: pointer;
 
+          &-checked {
+            background-color: var(--item-checked-bg-color);
+
+            &:hover {
+              background-color: var(--item-checked-bg-color-hover);
+            }
+          }
+
           &-disabled {
             cursor: not-allowed;
             color: var(--ant-color-text-disabled);
@@ -104,7 +112,7 @@
             text-overflow: ellipsis;
           }
 
-          &:not(&-disabled):hover {
+          &:not(&-disabled):not(&-checked):hover {
             background-color: var(--ant-color-bg-text-hover);
           }
         }
