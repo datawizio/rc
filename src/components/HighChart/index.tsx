@@ -23,7 +23,7 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const firstTime = useRef<boolean>(true);
 
-    const height = useMemo(() => config?.chart?.height || 300, [config]);
+    const height = useMemo(() => config?.chart?.height || 400, [config]);
 
     useEffect(() => {
       if (containerRef.current) {
@@ -77,7 +77,7 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
     return config && config.error ? (
       <div style={{ height }}>{config.error.message}</div>
     ) : (
-      <div ref={containerRef} />
+      <div ref={containerRef} style={{ height }} />
     );
   }
 );

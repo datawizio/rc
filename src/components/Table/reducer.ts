@@ -7,7 +7,7 @@ import {
   setMultisortingForColumns
 } from "./utils/utils";
 
-import type { Key } from "antd/es/table/interface";
+import type { Key, FilterValue, SafeKey } from "antd/es/table/interface";
 import type {
   TableState,
   Action,
@@ -17,7 +17,6 @@ import type {
   IRow,
   IColumn
 } from "./types";
-import type { FilterValue, SafeKey } from "antd/es/table/interface";
 
 const genColumnsMap = (columns?: IColumn[]) => {
   const columnsMap: Record<string, IColumn> = {};
