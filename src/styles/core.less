@@ -7,7 +7,7 @@
 }
 
 .ant-tree {
-  --rc-virtual-list-scrollbar-bg: rgba(5, 5, 5, 0.2);
+  --rc-virtual-list-scrollbar-bg: var(--virtual-scrollbar-thumb-color);
 
   &-treenode:not(&-treenode-disabled).filter-node &-title {
     color: inherit !important;
@@ -20,9 +20,5 @@
 .theme-dark {
   :where(.ant-dropdown, .ant-dropdown-menu-submenu) .ant-dropdown-menu {
     box-shadow: var(--box-shadow-lg);
-  }
-
-  .ant-tree {
-    --rc-virtual-list-scrollbar-bg: rgba(253, 253, 253, 0.2);
   }
 }
