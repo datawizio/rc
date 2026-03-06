@@ -356,22 +356,41 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       }
       startedResize.current = false;
     }
-  }, [model.originalKey, model.key, model.dataIndex, onWidthChange, calculateWidth, dispatch]);
+  }, [
+    model.originalKey,
+    model.key,
+    model.dataIndex,
+    onWidthChange,
+    calculateWidth,
+    dispatch
+  ]);
 
   const onMouseDownHandler = useCallback(
     (event: MouseEvent<HTMLTableCellElement>) => {
       if (onWidthChange) {
-        startedResize.current = true;
+        const rect = event.currentTarget.getBoundingClientRect();
+        const isRightEdge = event.clientX > rect.right - 20;
+
+        if (isRightEdge && model.resizable) {
+          startedResize.current = true;
+        }
       }
       setLastWidth(calculateWidth(event.currentTarget) ?? 0);
     },
-    [onWidthChange, calculateWidth]
+    [onWidthChange, calculateWidth, model.resizable]
   );
 
   const onClickHandler = useCallback(
     (event: MouseEvent<HTMLTableCellElement>) => {
-      const currentWidth = calculateWidth(event.target as HTMLTableCellElement);
-      if (lastWidth === currentWidth && onClick) onClick(event);
+      const currentWidth = calculateWidth(event.currentTarget);
+
+      if (typeof currentWidth === "number") {
+        const isSameWidth = Math.abs(lastWidth - currentWidth) <= 1;
+
+        if (isSameWidth && onClick) {
+          onClick(event);
+        }
+      }
     },
     [lastWidth, onClick, calculateWidth]
   );
