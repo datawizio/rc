@@ -1,14 +1,9 @@
 @import "./themes";
 
+// Common styles
+
 .crisp-client {
   --crisp-customization-container-index: 1000;
-}
-
-.theme-dark {
-  .ant-dropdown .ant-dropdown-menu,
-  .ant-dropdown-menu-submenu .ant-dropdown-menu {
-    box-shadow: var(--box-shadow-lg);
-  }
 }
 
 .ant-tree {
@@ -17,5 +12,17 @@
   &-treenode:not(&-treenode-disabled).filter-node &-title {
     color: inherit !important;
     font-weight: 500 !important;
+  }
+}
+
+// Dark theme styles
+
+.theme-dark {
+  :where(.ant-dropdown, .ant-dropdown-menu-submenu) .ant-dropdown-menu {
+    box-shadow: var(--box-shadow-lg);
+  }
+
+  .ant-tree {
+    --rc-virtual-list-scrollbar-bg: rgba(0, 0, 0, 0.5);
   }
 }
