@@ -54,7 +54,8 @@ const Cell: FC<PropsWithChildren<HTMLAttributes<HTMLTableCellElement>>> = ({
   const colKey = useMemo(() => {
     const child = Array.isArray(children) && children[1];
     if (isValidElement<{ column: IColumn }>(child)) {
-      return (child?.props.column?.dataIndex || child?.props.column?.key) as string;
+      return (child?.props.column?.dataIndex ||
+        child?.props.column?.key) as string;
     }
     return undefined;
   }, [children]);
@@ -67,9 +68,9 @@ const Cell: FC<PropsWithChildren<HTMLAttributes<HTMLTableCellElement>>> = ({
 };
 
 export default React.memo(Cell, (prevProps, nextProps) => {
-  // Deep comparison of columnsWidth is expensive, but we only care about the width 
+  // Deep comparison of columnsWidth is expensive, but we only care about the width
   // of the specific column this cell belongs to.
-  // We compare the components/children (which contain the column definition) 
+  // We compare the components/children (which contain the column definition)
   // and manually check if the relevant width in the global state has changed.
   if (prevProps.children !== nextProps.children) return false;
   if (prevProps.className !== nextProps.className) return false;
