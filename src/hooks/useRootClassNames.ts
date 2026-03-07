@@ -34,7 +34,7 @@ export const useRootClassNames = () => {
 
     const updateScrollbarHiddenClass = () => {
       const hasOpen = document.querySelector(
-        ".ant-drawer-open, .ant-modal, .ant-image-preview"
+        ".ant-drawer-open, .ant-modal-mask, .ant-image-preview"
       );
       root.classList.toggle(rootClassNames.scrollbarHidden, !!hasOpen);
     };
