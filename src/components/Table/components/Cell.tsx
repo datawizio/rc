@@ -24,18 +24,24 @@ const Cell: FC<PropsWithChildren<HTMLAttributes<HTMLTableCellElement>>> = ({
 
     if (isValidElement<{ column: IColumn }>(child)) {
       const column = child?.props.column;
-      const parentWidth =
-        column?.parent_key && columnsWidth?.[column.parent_key];
 
-      if (parentWidth) {
-        const parentChildren =
-          columns?.find(item => item.key === column.parent_key)?.children ?? [];
+      if (column?.parent_key) {
+        const parentColumn = columns?.find(
+          item => item.key === column.parent_key
+        );
+        // Look up parent width by dataIndex first (matching useColumns/reducer keys),
+        // then fall back to parent_key (which is typically the parent's key)
+        const parentLookupKey = parentColumn?.dataIndex || column.parent_key;
+        const parentWidth = columnsWidth?.[parentLookupKey];
 
-        const childWidth = parentWidth / parentChildren.length;
+        if (parentWidth) {
+          const parentChildren = parentColumn?.children ?? [];
+          const childWidth = parentWidth / parentChildren.length;
 
-        if (Number.isFinite(childWidth)) {
-          output.width = `${childWidth}px`;
-          return output;
+          if (Number.isFinite(childWidth)) {
+            output.width = `${childWidth}px`;
+            return output;
+          }
         }
       }
 

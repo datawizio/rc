@@ -126,9 +126,22 @@ export const useColumns = (
 
         if (column.children && column.children.length) {
           record.children = rec(column.children, 130); // DEFAULT_SUBCOLUMN_WIDTH
+
+          // Preserve parent column width so Cell.tsx can look up
+          // columnsWidth[parent_key] to calculate child cell widths.
+          // Without this, useColumns' output overwrites reducer's columnsWidth
+          // and the parent entry is lost.
+          const parentKey = record.dataIndex || record.key;
+          const parentWidth = columnsWidth?.[parentKey as string];
+          if (parentWidth) {
+            nextColumnWidth[parentKey as string] = parentWidth;
+          }
         } else {
-          nextColumnWidth[record.dataIndex] =
-            columnsWidth?.[record.dataIndex] ?? record.colWidth ?? defaultWidth;
+          const w = columnsWidth?.[record.dataIndex] ?? record.colWidth ?? defaultWidth;
+          if (w !== undefined) {
+            nextColumnWidth[record.dataIndex] = w;
+            record.width = w; // Essential for AntD <col> alignment
+          }
         }
 
         return record;

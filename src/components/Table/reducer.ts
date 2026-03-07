@@ -135,13 +135,16 @@ export const reducer = (state: TableState, action: Action): TableState => {
       }
 
       const children =
-        state.columns?.find(item => item.key === action.payload.key)
-          ?.children ?? [];
+        state.columns?.find(
+          item =>
+            item.key === action.payload.key ||
+            item.dataIndex === action.payload.key
+        )?.children ?? [];
 
       const childrenWidths = children.reduce(
         (acc, child) => ({
           ...acc,
-          [child.key as string]: action.payload.width / children.length
+          [(child.dataIndex || child.key) as string]: action.payload.width / children.length
         }),
         {}
       );

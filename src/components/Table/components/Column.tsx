@@ -26,7 +26,7 @@ export interface ColumnProps extends HTMLAttributes<HTMLTableCellElement> {
   calcColumnWidth?: (width: number) => number;
 }
 
-const DEFAULT_SUBCOLUMN_WIDTH = 130;
+const DEFAULT_SUBCOLUMN_WIDTH = 180;
 const DEFAULT_SUBCELL_WIDTH = 20;
 const DEFAULT_MAX_VALUE = 10;
 
@@ -268,6 +268,10 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         return;
       }
 
+      /*const currentWidth = startedResize.current
+        ? parseFloat(columnRef.current.style.width) ||
+          columnRef.current.offsetWidth
+        : columnRef.current.offsetWidth;*/
       const currentWidth = columnRef.current.offsetWidth;
       const shouldUpdateDOM = startedResize.current;
       const shouldUpdateState = firstLoad.current && currentWidth > 0;
@@ -284,8 +288,25 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
           );
           columnElements.forEach(el => {
             (el as HTMLElement).style.width = currentWidth + "px";
-            (el as HTMLElement).style.minWidth = currentWidth + "px";
+            //(el as HTMLElement).style.minWidth = currentWidth + "px";
           });
+
+          // For parent columns with children: also sync child cells in the body.
+          // Child <td> elements have their own data-column-key (child key),
+          // so they are NOT matched by the parent's selector above.
+          if (model.children?.length) {
+            const childWidth = currentWidth / model.children.length;
+            model.children.forEach(child => {
+              const childKey =
+                child.dataIndex || child.key || child.originalKey;
+              const childElements = document.querySelectorAll(
+                `[data-column-key="${childKey}"]`
+              );
+              childElements.forEach(el => {
+                (el as HTMLElement).style.width = childWidth + "px";
+              });
+            });
+          }
 
           dispatchWidthThrottled(String(colKey), currentWidth);
         }
@@ -313,6 +334,22 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
           (el as HTMLElement).style.width = minWidth + "px";
           (el as HTMLElement).style.minWidth = minWidth + "px";
         });
+
+        // Also clamp child cells when parent is clamped to minWidth
+        if (model.children?.length) {
+          const childWidth = minWidth / model.children.length;
+          model.children.forEach(child => {
+            const childKey = child.dataIndex || child.key || child.originalKey;
+            const childElements = document.querySelectorAll(
+              `[data-column-key="${childKey}"]`
+            );
+            childElements.forEach(el => {
+              (el as HTMLElement).style.width = childWidth + "px";
+              (el as HTMLElement).style.minWidth = childWidth + "px";
+            });
+          });
+        }
+
         lastWidthRef.current = minWidth;
       }
 
@@ -475,7 +512,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     calcColumnWidth,
     minWidth,
     columnsWidth?.[
-      model.dataIndex || model.key || (model.originalKey as SafeKey)
+    model.dataIndex || model.key || (model.originalKey as SafeKey)
     ],
     columnsForceUpdate
   ]);
