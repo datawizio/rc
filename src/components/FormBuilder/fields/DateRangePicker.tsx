@@ -5,12 +5,10 @@ import DateRangePicker from "@/components/DateRangePicker";
 import { Form } from "antd";
 
 import type { Dayjs } from "dayjs";
-import type { ComponentProps } from "react";
-import type { DateRange, DateType } from "@/types/date";
-import type { CalendarType } from "@/types/calendar";
+import type { DateRange } from "@/types/date";
 import type { FormFieldProps } from "../types";
-import type { PresetsRangeType } from "@/components/DateRangePicker/types";
 import type { Overwrite } from "@/types/utils";
+import type { DateRangePickerProps } from "@/components/DateRangePicker/types";
 
 export interface DateRangePickerParams {
   from: Dayjs | null;
@@ -19,29 +17,13 @@ export interface DateRangePickerParams {
 
 export type FieldDateRangePickerProps = Overwrite<
   Overwrite<
-    ComponentProps<typeof DateRangePicker>,
-    FormFieldProps<DateRangePickerParams>
+    DateRangePickerProps,
+    Omit<FormFieldProps<DateRangePickerParams>, "placeholder">
   >,
   {
-    type?: CalendarType;
-    format?: string;
-    inputReadOnly?: boolean;
-    storeFormat?: string;
-    maxDateForPresets?: string;
     maxDate?: string;
     minDate?: string;
-    defaultPickerValue?: any;
-    ranges?: PresetsRangeType;
-    presets?: string[];
-    useDefaultPreset?: boolean;
-    allowClear?: boolean;
-    defaultPresetExceptions?: string[];
-    currDateRange?: {
-      date_from: DateType;
-      date_to: DateType;
-    };
-    getPopupContainer?: () => HTMLElement | null;
-    useCurrentDayPreset?: boolean;
+    storeFormat?: string;
   }
 >;
 
@@ -53,12 +35,11 @@ type FieldValue =
   | undefined;
 
 export type FieldProps = Overwrite<
-  FormFieldProps<DateRangePickerParams>,
+  Omit<FormFieldProps<DateRangePickerParams>, "name" | "placeholder">,
   {
     format?: string;
     storeFormat?: string;
     value?: FieldValue;
-    useCurrentDayPreset?: boolean;
     onChange?: (dates: DateRange | null) => void;
   }
 >;
@@ -89,7 +70,6 @@ const Field: React.FC<FieldProps> = ({
   const [dateFrom, dateTo] = normalizeFieldValue(value, storeFormat);
 
   return (
-    // @ts-expect-error: Type mismatch
     <DateRangePicker
       onChange={dates => onChange?.(dates)}
       onClear={() => onChange?.([null, null])}
@@ -111,7 +91,6 @@ export const FieldDateRangePicker: React.FC<FieldDateRangePickerProps> =
         rules={rules}
         getValueFromEvent={rangeToParams}
       >
-        {/* @ts-expect-error: Type mismatch */}
         <Field
           onChange={dates => onChange?.({ name, value: rangeToParams(dates) })}
           format={format}
