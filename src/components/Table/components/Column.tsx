@@ -7,7 +7,6 @@ import { columnIcons } from "../utils/columnIcons";
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 
 import type { DropTargetMonitor } from "react-dnd";
-import type { SafeKey } from "antd/es/table/interface";
 import type { IColumn } from "../types";
 import type {
   FC,
@@ -63,6 +62,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
   const lastWidthRef = useRef<number>(0);
   const rafRef = useRef<number | null>(null);
   const firstLoad = useRef(true);
+  const resolvedKey = model.dataIndex || model.key || model.originalKey;
 
   const {
     dispatch,
@@ -221,6 +221,35 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     { leading: true, trailing: true }
   );
 
+  const tableContainer = columnRef.current?.closest(".ant-table-container");
+
+  const immediatelyUpdateColumnWidth = useCallback(
+    (columnKey: string, columnWidth: number) => {
+      const batchUpdate = (key: string, width: number) => {
+        const columnElements = tableContainer?.querySelectorAll<HTMLElement>(
+          `[data-column-key="${key}"]`
+        );
+
+        columnElements?.forEach(el => {
+          el.style.width = width + "px";
+          el.style.minWidth = width + "px";
+        });
+      };
+
+      batchUpdate(columnKey, columnWidth);
+
+      if (model.children?.length) {
+        const childWidth = Math.floor(columnWidth / model.children.length);
+
+        model.children.forEach(child => {
+          const childKey = child.dataIndex || child.key || child.originalKey;
+          batchUpdate(childKey, childWidth);
+        });
+      }
+    },
+    [model.children, tableContainer]
+  );
+
   const [{ isOver, canDrop }, dropRef] = useDrop<
     IColumn,
     unknown,
@@ -260,8 +289,6 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
   useEffect(() => {
     if (!isHeader) return;
 
-    const colKey = model.dataIndex || model.key || model.originalKey;
-
     const fn = () => {
       if (!columnRef.current) {
         rafRef.current = requestAnimationFrame(fn);
@@ -276,18 +303,11 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         if (currentWidth !== lastWidthRef.current) {
           lastWidthRef.current = currentWidth;
 
-          // Instant Column Sync:
+          // Instant column sync:
           // Directly update ALL cells (header and body) with this column key.
           // This ensures header and body move as one, bypassing React lag.
-          const columnElements = document.querySelectorAll(
-            `[data-column-key="${colKey}"]`
-          );
-          columnElements.forEach(el => {
-            (el as HTMLElement).style.width = currentWidth + "px";
-            (el as HTMLElement).style.minWidth = currentWidth + "px";
-          });
-
-          dispatchWidthThrottled(String(colKey), currentWidth);
+          immediatelyUpdateColumnWidth(resolvedKey, currentWidth);
+          dispatchWidthThrottled(String(resolvedKey), currentWidth);
         }
       } else if (
         shouldUpdateState &&
@@ -297,7 +317,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         dispatch({
           type: "columnWidthChange",
           payload: {
-            key: String(colKey),
+            key: String(resolvedKey),
             width: currentWidth
           }
         });
@@ -306,13 +326,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       }
 
       if (currentWidth > 0 && currentWidth < minWidth) {
-        const columnElements = document.querySelectorAll(
-          `[data-column-key="${colKey}"]`
-        );
-        columnElements.forEach(el => {
-          (el as HTMLElement).style.width = minWidth + "px";
-          (el as HTMLElement).style.minWidth = minWidth + "px";
-        });
+        immediatelyUpdateColumnWidth(resolvedKey, minWidth);
         lastWidthRef.current = minWidth;
       }
 
@@ -327,6 +341,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       }
     };
   }, [
+    resolvedKey,
     isHeader,
     minWidth,
     calculateWidth,
@@ -337,7 +352,8 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     model.parent_key,
     virtual,
     dispatch,
-    dispatchWidthThrottled
+    dispatchWidthThrottled,
+    immediatelyUpdateColumnWidth
   ]);
 
   const onMouseUpHandler = useCallback(() => {
@@ -427,58 +443,62 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     restProps.className
   ]);
 
-  const styles = useMemo(() => {
-    const getCurrentWidth = () => {
-      const colKey = model.dataIndex || model.key || model.originalKey;
-      if (startedResize.current && lastWidthRef.current >= minWidth) {
-        return { width: lastWidthRef.current };
+  const styles = useMemo(
+    () => {
+      const getCurrentWidth = () => {
+        if (startedResize.current && lastWidthRef.current >= minWidth) {
+          return { width: lastWidthRef.current };
+        }
+
+        const columnsWidthPreset = columnsWidth?.[resolvedKey];
+        if (columnsWidthPreset) {
+          return { width: Math.max(columnsWidthPreset, minWidth) };
+        }
+
+        if (model.colWidth) {
+          return { width: Math.max(model.colWidth, minWidth) };
+        }
+
+        if (model.children?.length) {
+          return { width: model.children.length * DEFAULT_SUBCOLUMN_WIDTH };
+        }
+
+        if (model.max_value) {
+          return {
+            width:
+              Math.max(model.max_value, DEFAULT_MAX_VALUE) *
+              DEFAULT_SUBCELL_WIDTH
+          };
+        }
+
+        return {};
+      };
+
+      if (model.parent_key) return {};
+
+      const conf: Record<string, any> = getCurrentWidth();
+
+      if (calcColumnWidth && typeof conf.width === "number") {
+        conf.width = calcColumnWidth(conf.width);
       }
 
-      const columnsWidthPreset = columnsWidth?.[colKey as SafeKey];
-      if (columnsWidthPreset) {
-        return { width: Math.max(columnsWidthPreset, minWidth) };
+      if (typeof conf.width === "number") {
+        lastWidthRef.current = conf.width;
       }
 
-      if (model.colWidth) {
-        return { width: Math.max(model.colWidth, minWidth) };
-      }
-
-      if (model.children?.length) {
-        return { width: model.children.length * DEFAULT_SUBCOLUMN_WIDTH };
-      }
-
-      if (model.max_value) {
-        return {
-          width:
-            Math.max(model.max_value, DEFAULT_MAX_VALUE) * DEFAULT_SUBCELL_WIDTH
-        };
-      }
-
-      return {};
-    };
-
-    if (model.parent_key) return {};
-
-    const conf: Record<string, any> = getCurrentWidth();
-    if (calcColumnWidth && typeof conf.width === "number") {
-      conf.width = calcColumnWidth(conf.width);
-    }
-
-    if (typeof conf.width === "number") {
-      lastWidthRef.current = conf.width;
-    }
-
-    conf.minWidth = minWidth + "px";
-    return conf;
-  }, [
-    model,
-    calcColumnWidth,
-    minWidth,
-    columnsWidth?.[
-      model.dataIndex || model.key || (model.originalKey as SafeKey)
-    ],
-    columnsForceUpdate
-  ]);
+      conf.minWidth = minWidth + "px";
+      return conf;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      resolvedKey,
+      model,
+      calcColumnWidth,
+      minWidth,
+      columnsWidth?.[resolvedKey],
+      columnsForceUpdate
+    ]
+  );
 
   return (
     <th
@@ -486,7 +506,7 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       ref={dndRef}
       className={className}
       onClick={onClickHandler}
-      data-column-key={model.dataIndex || model.key || model.originalKey}
+      data-column-key={resolvedKey}
       title={String(model.title)}
       onMouseDown={onMouseDownHandler}
       style={
