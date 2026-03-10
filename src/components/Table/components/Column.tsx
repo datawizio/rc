@@ -61,8 +61,13 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
   const columnRef = useRef<HTMLTableCellElement>(null);
   const lastWidthRef = useRef<number>(0);
   const rafRef = useRef<number | null>(null);
+  const prevChildrenCountRef = useRef<number | undefined>(undefined);
   const firstLoad = useRef(true);
   const resolvedKey = model.dataIndex || model.key || model.originalKey;
+
+  // Used only for non-virtual table columns resizing
+  const resizePositionXRef = useRef<number>(0);
+  const resizeWidthRef = useRef<number>(0);
 
   const {
     dispatch,
@@ -117,6 +122,30 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     },
     [minWidth, virtual]
   );
+
+  useEffect(() => {
+    const currentCount = model.children?.length;
+
+    if (
+      prevChildrenCountRef.current !== undefined &&
+      prevChildrenCountRef.current !== currentCount &&
+      currentCount !== undefined
+    ) {
+      const newWidth = currentCount * DEFAULT_SUBCOLUMN_WIDTH;
+      lastWidthRef.current = 0;
+
+      if (columnRef.current) {
+        columnRef.current.style.width = newWidth + "px";
+      }
+
+      dispatch({
+        type: "columnWidthChange",
+        payload: { key: String(resolvedKey), width: newWidth }
+      });
+    }
+
+    prevChildrenCountRef.current = currentCount;
+  }, [model.children?.length, resolvedKey, dispatch]);
 
   const [, dragRef] = useDrag({
     type: "column",
@@ -225,29 +254,30 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
 
   const immediatelyUpdateColumnWidth = useCallback(
     (columnKey: string, columnWidth: number) => {
-      const batchUpdate = (key: string, width: number) => {
+      const batchUpdate = (key: string, width: number, colMinWidth: number) => {
         const columnElements = tableContainer?.querySelectorAll<HTMLElement>(
           `[data-column-key="${key}"]`
         );
 
         columnElements?.forEach(el => {
           el.style.width = width + "px";
-          el.style.minWidth = width + "px";
+          el.style.minWidth = colMinWidth + "px";
         });
       };
 
-      batchUpdate(columnKey, columnWidth);
+      batchUpdate(columnKey, columnWidth, minWidth);
 
       if (model.children?.length) {
         const childWidth = Math.floor(columnWidth / model.children.length);
 
         model.children.forEach(child => {
           const childKey = child.dataIndex || child.key || child.originalKey;
-          batchUpdate(childKey, childWidth);
+          const childMinWidth = child.colMinWidth || DEFAULT_SUBCOLUMN_WIDTH;
+          batchUpdate(childKey, childWidth, childMinWidth);
         });
       }
     },
-    [model.children, tableContainer]
+    [model.children, tableContainer, minWidth]
   );
 
   const [{ isOver, canDrop }, dropRef] = useDrop<
@@ -307,7 +337,10 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
           // Directly update ALL cells (header and body) with this column key.
           // This ensures header and body move as one, bypassing React lag.
           immediatelyUpdateColumnWidth(resolvedKey, currentWidth);
-          dispatchWidthThrottled(String(resolvedKey), currentWidth);
+
+          if (!model.children?.length) {
+            dispatchWidthThrottled(String(resolvedKey), currentWidth);
+          }
         }
       } else if (
         shouldUpdateState &&
@@ -385,19 +418,33 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     dispatchWidthThrottled
   ]);
 
+  const onMouseMoveHandler = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (!startedResize.current || virtual) return;
+      const delta = event.clientX - resizePositionXRef.current;
+      const newWidth = Math.max(resizeWidthRef.current + delta, minWidth);
+      immediatelyUpdateColumnWidth(resolvedKey, newWidth);
+      lastWidthRef.current = newWidth;
+    },
+    [virtual, minWidth, immediatelyUpdateColumnWidth, resolvedKey]
+  );
+
   const onMouseDownHandler = useCallback(
     (event: MouseEvent<HTMLTableCellElement>) => {
-      if (onWidthChange) {
-        const rect = event.currentTarget.getBoundingClientRect();
-        const isRightEdge = event.clientX > rect.right - 20;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const isRightEdge = event.clientX > rect.right - 20;
 
-        if (isRightEdge && model.resizable) {
-          startedResize.current = true;
+      if (isRightEdge && model.resizable) {
+        startedResize.current = true;
+
+        if (!virtual) {
+          resizePositionXRef.current = event.clientX;
+          resizeWidthRef.current = event.currentTarget.offsetWidth;
         }
       }
       setLastWidth(calculateWidth(event.currentTarget) ?? 0);
     },
-    [onWidthChange, calculateWidth, model.resizable]
+    [calculateWidth, model.resizable, virtual]
   );
 
   const onClickHandler = useCallback(
@@ -412,13 +459,22 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
   );
 
   useEffect(() => {
-    if (!onWidthChange) return;
+    if (!isHeader || !model.resizable) return;
     window.addEventListener("mouseup", onMouseUpHandler);
 
     return () => {
       window.removeEventListener("mouseup", onMouseUpHandler);
     };
-  }, [onWidthChange, onMouseUpHandler]);
+  }, [isHeader, model.resizable, onMouseUpHandler]);
+
+  useEffect(() => {
+    if (!isHeader || !model.resizable || virtual) return;
+    window.addEventListener("mousemove", onMouseMoveHandler);
+
+    return () => {
+      window.removeEventListener("mousemove", onMouseMoveHandler);
+    };
+  }, [isHeader, model.resizable, virtual, onMouseMoveHandler]);
 
   const className = useMemo(() => {
     return clsx(
@@ -517,15 +573,19 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
         } as CSSProperties
       }
     >
-      <div
-        className={clsx(
-          "icon-column-container",
-          !model.sorter && !model.filtered && "un-sortable-column"
-        )}
-      >
-        {showColumnIcon && model.icon && columnIcons[model.icon]}
-        {restProps.children}
-      </div>
+      {showColumnIcon ? (
+        <div
+          className={clsx(
+            "icon-column-container",
+            !model.sorter && !model.filtered && "un-sortable-column"
+          )}
+        >
+          {model.icon && columnIcons[model.icon]}
+          {restProps.children}
+        </div>
+      ) : (
+        restProps.children
+      )}
     </th>
   );
 };
