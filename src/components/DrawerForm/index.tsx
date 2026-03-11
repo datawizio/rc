@@ -7,14 +7,16 @@ import { useMemo, useEffect, useCallback } from "react";
 import { Form } from "antd";
 import { useConfig } from "@/hooks";
 
+import type { FormInstance, FormProps } from "antd";
+import type { Observable } from "@/types/store";
 import type {
   ReactElement,
   ReactNode,
   PropsWithChildren,
   CSSProperties
 } from "react";
-import type { FormInstance, FormProps } from "antd";
-import type { Observable } from "@/types/store";
+
+import "./index.less";
 
 export interface DrawerFormProps<Values> {
   title: string;
@@ -23,7 +25,7 @@ export interface DrawerFormProps<Values> {
   className?: string;
   form?: FormInstance<Values>;
   layout?: "horizontal" | "vertical";
-  hideRequiredMark?: boolean;
+  requiredMark?: FormProps["requiredMark"];
   formStore?: Observable;
   loading?: boolean;
   style?: CSSProperties;
@@ -44,7 +46,7 @@ const DrawerForm = <T extends object = any>({
   title,
   style,
   visible,
-  hideRequiredMark,
+  requiredMark,
   children,
   form,
   formStore,
@@ -124,7 +126,7 @@ const DrawerForm = <T extends object = any>({
         form={form}
         onFinish={handleFormSubmit}
         className="entity-form"
-        requiredMark={hideRequiredMark}
+        requiredMark={requiredMark}
         validateTrigger={validateTrigger}
         onFieldsChange={onFieldsChange}
         onValuesChange={onValuesChange}
