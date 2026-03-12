@@ -64,12 +64,17 @@
   .rc-virtual-list-holder {
     max-height: initial !important;
   }
+
   .rc-virtual-list-holder-inner {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr);
 
-    .ant-select-item-option-content {
-      text-align: center;
+    .ant-select-item-option {
+      border-radius: 0 !important;
+
+      &-content {
+        text-align: center;
+      }
     }
   }
 }
