@@ -19,8 +19,6 @@ const ColorPicker: FC<ColorPickerProps> = ({
   onChange,
   render
 }) => {
-  const color = value ?? "#fff";
-
   const handleChange = (val: ColorResult) => {
     onChange?.(val.hex);
   };
@@ -32,15 +30,18 @@ const ColorPicker: FC<ColorPickerProps> = ({
       destroyOnHidden={true}
       content={
         <SketchPicker
-          color={color}
+          color={value ?? "#fff"}
           presetColors={defaultColors}
           disableAlpha={true}
           onChange={handleChange}
         />
       }
     >
-      {render?.(color) ?? (
-        <div className="color-picker" style={{ background: color }}></div>
+      {render?.(value ?? "transparent") ?? (
+        <div
+          className="color-picker"
+          style={{ background: value ?? "transparent" }}
+        />
       )}
     </Popover>
   );

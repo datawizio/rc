@@ -1,13 +1,29 @@
 .color-picker-popover {
   width: 220px;
 
-  .ant-popover-inner-content {
+  .ant-popover-container {
     padding: 0;
   }
 
-  input {
-    background-color: white;
-    color: rgba(0, 0, 0, 0.65);
+  .sketch-picker {
+    background-color: var(--ant-color-bg-elevated) !important;
+
+    .flexbox-fix {
+      border-color: var(--ant-color-border) !important;
+    }
+
+    input {
+      width: 100% !important;
+      background-color: var(--ant-color-bg-container) !important;
+      border-radius: var(--ant-border-radius) !important;
+      box-shadow: var(--ant-color-border) 0px 0px 0px 1px inset !important;
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
+
+    label {
+      color: var(--text-color) !important;
+    }
   }
 }
 
