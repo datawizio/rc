@@ -5,7 +5,7 @@ import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
 import type { FormRule } from "antd";
-import type { ValidatorRule } from "rc-field-form/es/interface";
+import type { ValidatorRule } from "@rc-component/form/es/interface";
 import type { FieldPhoneProps } from "../types";
 
 const phoneValidation = (message: string) => ({

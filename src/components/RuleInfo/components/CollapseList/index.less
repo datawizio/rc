@@ -3,23 +3,30 @@
     background-color: transparent;
 
     & > .ant-collapse-item {
-      & > .ant-collapse-header {
+      &:last-child {
+        border-bottom: 1px solid var(--ant-color-border);
+      }
+
+      .ant-collapse-header {
         color: var(--text-color-title);
       }
 
-      & > .ant-collapse-content {
-        & > .ant-collapse-content-box {
-          padding: 0;
+      .ant-collapse-body {
+        padding: 0;
 
-          & > .list-search {
-            padding: 8px 16px;
-          }
+        .list-search {
+          padding: 8px 16px;
+        }
 
-          .ant-list-item {
-            height: 40px;
-          }
+        .ant-list-item {
+          height: 40px;
+          color: var(--ant-color-text-secondary);
         }
       }
+    }
+
+    .lite-search__input {
+      background-color: inherit;
     }
   }
 }

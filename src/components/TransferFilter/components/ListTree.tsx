@@ -3,8 +3,8 @@ import { Tree } from "antd";
 import { useTreeData } from "../hooks/useTreeData";
 
 import type { Key, FC, ReactNode } from "react";
-import type { DataNode } from "rc-tree-select/es/interface";
-import type { EventDataNode } from "rc-tree/es/interface";
+import type { DataNode } from "@rc-component/tree-select/es/interface";
+import type { EventDataNode } from "@rc-component/tree/es/interface";
 import type { ICheckedItem } from "../types";
 
 export interface ListTreeProps {

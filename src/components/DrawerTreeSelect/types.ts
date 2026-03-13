@@ -2,7 +2,7 @@ import type { FC, ReactElement } from "react";
 import type { TreeSelectProps as AntTreeSelectProps } from "antd";
 import type { SelectValue } from "antd/es/tree-select";
 import type { AntTreeNode } from "antd/es/tree";
-import type { SafeKey } from "rc-tree-select/es/interface";
+import type { SafeKey } from "@rc-component/tree-select/es/interface";
 
 export type SelectValues = Extract<SelectValue, unknown[]>;
 
@@ -43,7 +43,7 @@ export type DrawerTreeSelectProps<VT> = Omit<
   selectAllText?: string;
   onCheckedDependentValue?: (
     fieldName: SafeKey,
-    selectedItems: string[]
+    selectedItems: SafeKey[]
   ) => void;
   dependentItems?: any[];
   treeDataCount?: number;

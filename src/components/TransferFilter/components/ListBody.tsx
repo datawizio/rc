@@ -33,7 +33,9 @@ interface TransferListBodyState {
   current: number;
 }
 
-const parsePagination = (pagination?: PaginationType) => {
+const parsePagination = (
+  pagination?: PaginationType
+): Extract<PaginationType, object> | null => {
   if (!pagination) {
     return null;
   }
@@ -121,14 +123,14 @@ class ListBody extends Component<TransferListBodyProps, TransferListBodyState> {
     if (type !== "tree" && mergedPagination) {
       paginationNode = (
         <Pagination
-          simple
+          simple={true}
           size="small"
           disabled={globalDisabled}
           className={`${prefixCls}-pagination`}
           total={totalItemsCount}
-          pageSize={mergedPagination.pageSize}
           current={current}
           onChange={this.onPageChange}
+          {...mergedPagination}
         />
       );
     }

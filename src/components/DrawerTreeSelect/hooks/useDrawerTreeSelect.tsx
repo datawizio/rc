@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 
 import type { AntTreeNode } from "antd/es/tree";
-import type { DataNode, SafeKey } from "rc-tree-select/es/interface";
+import type { DataNode, SafeKey } from "@rc-component/tree-select/es/interface";
 import type { LevelsType, SelectValues } from "../types";
 
 export interface IDrawerTreeSelectState {

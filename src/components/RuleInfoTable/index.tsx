@@ -27,6 +27,7 @@ const RuleInfoTable: React.FC<RuleInfoTableProps> = ({
   widget_params,
   formatDateRange,
   dimensionKey = "product",
+  metricsDictionary = {},
   onShowRuleDetailsClick,
   onShowDimensionTableClick
 }) => {
@@ -45,7 +46,9 @@ const RuleInfoTable: React.FC<RuleInfoTableProps> = ({
   return (
     <div className="rule-info-table">
       <RuleInfoSection name="CONDITION" className="rule-condition">
-        {typeof logic === "string" ? t(logic) : parseLogic(logic)}
+        {typeof logic === "string"
+          ? t(logic)
+          : parseLogic(logic, metricsDictionary)}
       </RuleInfoSection>
 
       {dtype === "report_rule" && onShowDimensionTableClick && (

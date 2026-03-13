@@ -18,7 +18,7 @@ import type { AntTreeNode } from "antd/es/tree";
 import type { BaseOptionType, DefaultOptionType } from "antd/es/select";
 import type { HandlerFn } from "@/types/utils";
 import type { SelectValue } from "antd/es/select";
-import type { SafeKey } from "rc-tree-select/es/interface";
+import type { SafeKey } from "@rc-component/tree-select/es/interface";
 import type { IDrawerSelectState, SelectValues } from "./hooks/useDrawerSelect";
 
 import "./index.less";
@@ -62,13 +62,6 @@ type Handler<T extends keyof SelectProps> = HandlerFn<
   SelectProps<SelectValues>,
   T
 >;
-
-const extractProperty = <V,>(
-  array: Record<string, V>[],
-  propertyName: string
-) => {
-  return array.map(item => item[propertyName]);
-};
 
 const convertOptions = <T extends BaseOptionType>(
   source: T[],
@@ -293,9 +286,11 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         payload: state
       });
 
-      const filters = { ...additionalFilters, search };
-
-      filters.selected = extractProperty(selectedOptions.current, valueProp);
+      const filters = {
+        ...additionalFilters,
+        search,
+        selected: internalValue ?? value
+      };
 
       if (showMarkers && markersFilterName) {
         filters[markersFilterName] = markersSelected.current;
@@ -796,7 +791,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
 
   useEffect(() => {
     if (!asyncData && loadData) {
-      void loadPage(searchValue, 0, true);
+      void loadPage(searchValue, 0, false);
     }
     // eslint-disable-next-line
   }, [searchValue, asyncData]);
@@ -885,19 +880,18 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
           />
         )}
         {showSelectAll &&
-        !searchValue &&
-        markersSelected.current.length &&
-        optionsState?.length ? (
-          <div className="drawer-tree-select-dropdown-toolbar">
-            <Checkbox
-              onChange={handleSelectAllChange}
-              checked={selectAllState === "checked"}
-              indeterminate={selectAllState === "indeterminate"}
-            >
-              {t("ALL")}
-            </Checkbox>
-          </div>
-        ) : null}
+          !!markersSelected.current.length &&
+          !!optionsState?.length && (
+            <div className="drawer-tree-select-dropdown-toolbar">
+              <Checkbox
+                onChange={handleSelectAllChange}
+                checked={selectAllState === "checked"}
+                indeterminate={selectAllState === "indeterminate"}
+              >
+                {t("ALL")}
+              </Checkbox>
+            </div>
+          )}
         {(!internalLoading || scrollLoading) && (
           <InnerOptions
             ref={optionsRef}

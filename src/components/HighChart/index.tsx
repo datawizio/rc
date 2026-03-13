@@ -19,14 +19,11 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
     { config, loading, responsible = false, constructorType = "chart" },
     ref
   ) => {
-    const chartRef = useRef<Highcharts.Chart | null>(null);
-    const containerRef = useRef<HTMLDivElement | null>(null);
+    const chartRef = useRef<Highcharts.Chart>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const firstTime = useRef<boolean>(true);
 
-    const height = useMemo(() => {
-      const heightByConfig = config && config.chart && config.chart.height;
-      return heightByConfig || 300;
-    }, [config]);
+    const height = useMemo(() => config?.chart?.height || 400, [config]);
 
     useEffect(() => {
       if (containerRef.current) {
@@ -59,14 +56,7 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
             containerRef.current.style.visibility = "visible";
           }
 
-          if (chartRef.current) {
-            chartRef.current.setSize();
-
-            if (chartRef.current.series?.length > 0) {
-              // @ts-expect-error: Required options are not provided
-              chartRef.current.series[0].update();
-            }
-          }
+          chartRef.current?.reflow();
         });
       }
     }, [responsible, chartRef, loading]);
@@ -87,7 +77,7 @@ const HighChart: FC<HighChartProps> = forwardRef<HighChartRef, HighChartProps>(
     return config && config.error ? (
       <div style={{ height }}>{config.error.message}</div>
     ) : (
-      <div ref={containerRef} />
+      <div ref={containerRef} style={{ height }} />
     );
   }
 );

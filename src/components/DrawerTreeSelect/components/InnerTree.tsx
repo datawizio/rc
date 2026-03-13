@@ -6,16 +6,17 @@ import {
   buildTreeData,
   getRelatedKeys,
   buildTreeIndexes,
-  applyCheckedStrategy
+  applyCheckedStrategy,
+  getHalfCheckedKeys,
+  expandCheckedKeysForDisplay,
+  getDescendantLeaves
 } from "../utils/tree";
 
 import type { FC, Key } from "react";
 import type { TreeProps, TreeDataNode } from "antd";
-import type { SafeKey } from "rc-tree-select/es/interface";
-import type { CheckedStrategy } from "rc-tree-select/es/utils/strategyUtil";
-import type { HandlerFn } from "@/types/utils";
-import type { IDrawerTreeSelectState } from "../hooks/useDrawerTreeSelect";
-import type { SelectValues } from "../types";
+import type { SafeKey } from "@rc-component/tree-select/es/interface";
+import type { CheckedStrategy } from "@rc-component/tree-select/es/utils/strategyUtil";
+import type { HandlerFn, ReplaceParameter } from "@/types/utils";
 
 export type InnerTreeProps = Omit<
   TreeProps<any>,
@@ -27,13 +28,12 @@ export type InnerTreeProps = Omit<
   treeNodeFilterProp?: string;
   internalTreeDefaultExpandedKeys?: Key[];
   onExpandedKeysChange?: (keys: SafeKey[]) => void;
-  setState?: (state: Partial<IDrawerTreeSelectState>) => void;
   showCheckedStrategy?: CheckedStrategy;
-  checkSelectAllStatus?: (
-    values: SelectValues | undefined,
-    ignoreEmpty?: boolean,
-    forceSelectAll?: boolean
-  ) => Partial<IDrawerTreeSelectState>;
+  onCheck?: ReplaceParameter<HandlerFn<TreeProps, "onCheck">, 0, SafeKey[]>;
+};
+
+type TreeFilterFunction = {
+  (nodes?: TreeDataNode[]): TreeDataNode[] | undefined;
 };
 
 const InnerTree: FC<InnerTreeProps> = ({
@@ -45,18 +45,17 @@ const InnerTree: FC<InnerTreeProps> = ({
   checkStrictly,
   internalTreeDefaultExpandedKeys,
   checkedKeys,
-  multiple,
-  setState,
   onExpandedKeysChange,
   showCheckedStrategy,
-  checkSelectAllStatus,
+  onCheck,
   ...props
 }) => {
   const { t } = useConfig();
   const [localExpandedKeys, setLocalExpandedKeys] = useState<Key[]>([]);
+  const [searchVisibleKeys, setSearchVisibleKeys] = useState(new Set<Key>());
 
   const nestedTreeData = useMemo(() => {
-    return simpleMode ? buildTreeData(treeData) : treeData;
+    return (simpleMode ? buildTreeData(treeData) : treeData) as TreeDataNode[];
   }, [simpleMode, treeData]);
 
   const flatDataList = useMemo(() => {
@@ -83,32 +82,78 @@ const InnerTree: FC<InnerTreeProps> = ({
   );
 
   const renderedTreeData = useMemo(() => {
-    if (!searchingLocally) return nestedTreeData;
-    const visibleKeys = new Set(localExpandedKeys ?? []);
+    if (!searchValue) {
+      return nestedTreeData;
+    }
 
-    // Visually hide nodes that are not expanded during local searching (do not filter data)
-    const markHidden = (nodes?: TreeDataNode[]): TreeDataNode[] | undefined => {
+    // When `remoteSearch` is enabled, clear the result returned from the backend
+    if (remoteSearch) {
+      const filterTreeByPredicate: TreeFilterFunction = nodes => {
+        if (!nodes) return nodes;
+        return nodes
+          .map(node => {
+            const children = filterTreeByPredicate(node.children);
+            const filterValue = node[treeNodeFilterProp as keyof TreeDataNode];
+            const isMatch = searchPredicate(filterValue);
+
+            if (!children?.length && !isMatch) return null;
+
+            return {
+              ...node,
+              children: children?.length ? children : undefined
+            } as TreeDataNode;
+          })
+          .filter((node): node is TreeDataNode => Boolean(node));
+      };
+
+      return filterTreeByPredicate(nestedTreeData);
+    }
+
+    // Otherwise, it means that we only perform search on the client side
+    const visibleKeys = searchVisibleKeys;
+
+    const filterTreeByVisibleKeys: TreeFilterFunction = nodes => {
       if (!nodes) return nodes;
-      return nodes.map(node => {
-        const shouldHide = !visibleKeys.has(node.key);
-        const children = markHidden(node.children);
-
-        return {
-          ...node,
-          children,
-          style: shouldHide ? { ...node.style, display: "none" } : node.style
-        } as TreeDataNode;
-      });
+      return nodes
+        .filter(node => visibleKeys.has(node.key))
+        .map(node => {
+          const children = filterTreeByVisibleKeys(node.children);
+          return {
+            ...node,
+            children: children?.length ? children : undefined
+          } as TreeDataNode;
+        });
     };
 
-    return markHidden(nestedTreeData as TreeDataNode[]);
-  }, [searchingLocally, nestedTreeData, localExpandedKeys]);
+    return filterTreeByVisibleKeys(nestedTreeData);
+  }, [
+    remoteSearch,
+    searchVisibleKeys,
+    nestedTreeData,
+    searchValue,
+    searchPredicate,
+    treeNodeFilterProp
+  ]);
+
+  const renderedTreeKeySet = useMemo(() => {
+    const keys = new Set<Key>();
+    const traverse = (nodes?: TreeDataNode[]) => {
+      if (!nodes) return;
+      nodes.forEach(node => {
+        keys.add(node.key);
+        traverse(node.children);
+      });
+    };
+    traverse(renderedTreeData);
+    return keys;
+  }, [renderedTreeData]);
 
   useEffect(() => {
     if (remoteSearch) return;
 
     if (!searchValue) {
       setLocalExpandedKeys([]);
+      setSearchVisibleKeys(new Set());
       return;
     }
 
@@ -125,7 +170,9 @@ const InnerTree: FC<InnerTreeProps> = ({
       .filter((x): x is Key[] => Boolean(x))
       .reduce((acc, item) => [...acc, ...item], []);
 
-    setLocalExpandedKeys(Array.from(new Set(keysToExpand)));
+    const uniqueKeys = new Set(keysToExpand);
+    setLocalExpandedKeys(Array.from(uniqueKeys));
+    setSearchVisibleKeys(uniqueKeys);
   }, [
     searchValue,
     remoteSearch,
@@ -139,59 +186,129 @@ const InnerTree: FC<InnerTreeProps> = ({
 
   const handleTreeExpand = useCallback<HandlerFn<TreeProps, "onExpand">>(
     expandedKeys => {
-      if (!remoteSearch && searchValue) {
+      if (searchingLocally) {
         setLocalExpandedKeys(expandedKeys);
-        return;
+      } else {
+        onExpandedKeysChange?.(expandedKeys as SafeKey[]);
       }
-      onExpandedKeysChange?.(expandedKeys as SafeKey[]);
     },
-    [onExpandedKeysChange, remoteSearch, searchValue]
+    [onExpandedKeysChange, searchingLocally]
   );
 
   const indexes = useMemo(
-    () => buildTreeIndexes(nestedTreeData as TreeDataNode[]),
+    () => buildTreeIndexes(nestedTreeData),
     [nestedTreeData]
   );
+
+  const checkedKeysArray = useMemo(() => {
+    if (Array.isArray(checkedKeys)) {
+      return checkedKeys;
+    }
+
+    if (checkedKeys && "checked" in checkedKeys) {
+      return checkedKeys.checked;
+    }
+
+    return [];
+  }, [checkedKeys]);
+
+  const halfCheckedKeys = useMemo(() => {
+    if (!searchingLocally) return [];
+    return getHalfCheckedKeys(
+      checkedKeysArray,
+      showCheckedStrategy,
+      indexes,
+      nestedTreeData
+    );
+  }, [
+    searchingLocally,
+    checkedKeysArray,
+    showCheckedStrategy,
+    indexes,
+    nestedTreeData
+  ]);
+
+  const treeCheckedKeys = useMemo(() => {
+    if (!searchingLocally) return checkedKeysArray;
+
+    const displayChecked = expandCheckedKeysForDisplay(
+      checkedKeysArray,
+      indexes,
+      nestedTreeData
+    );
+
+    return { checked: displayChecked, halfChecked: halfCheckedKeys };
+  }, [
+    searchingLocally,
+    checkedKeysArray,
+    halfCheckedKeys,
+    indexes,
+    nestedTreeData
+  ]);
 
   const handleTreeCheck = useCallback<HandlerFn<TreeProps, "onCheck">>(
     (ck, info) => {
       const rawChecked = Array.isArray(ck) ? ck : (ck?.checked ?? []);
+      const mergedChecked = searchingLocally
+        ? (() => {
+            const preserved = checkedKeysArray.filter(
+              key => !renderedTreeKeySet.has(key)
+            );
 
-      const valueKeys = applyCheckedStrategy(
-        rawChecked,
-        showCheckedStrategy,
-        indexes,
-        nestedTreeData as TreeDataNode[]
-      );
+            // During local search we show parents as checked via `expandCheckedKeysForDisplay`.
+            // Only use leaf keys so unchecking the only item in a group actually removes it
+            // (otherwise the parent stays in `rawChecked` and gets expanded back to the leaf).
+            const rawLeavesOnly = rawChecked.filter(key =>
+              indexes.leafKeys.has(key)
+            );
 
-      let state: Record<string, any> = {};
+            const toggledKey = info?.node?.key;
+            const toggledIsLeaf = indexes.leafKeys.has(toggledKey);
 
-      if (multiple) {
-        state.internalValue = valueKeys;
-        if (valueKeys) {
-          const check = checkSelectAllStatus?.(valueKeys as SafeKey[], true);
-          state = { ...state, ...check };
-        }
-      } else {
-        state.internalValue = info?.checked ? [info?.node?.key] : [];
-      }
+            const mergedKeys = new Set<Key>([...preserved, ...rawLeavesOnly]);
 
-      state.internalTreeDataCount = (state.internalValue || []).length;
-      setState?.(state);
+            if (toggledKey != null && !toggledIsLeaf) {
+              const descendantLeaves = getDescendantLeaves(toggledKey, indexes);
+
+              if (info.checked) {
+                descendantLeaves.forEach(key => mergedKeys.add(key));
+                return Array.from(mergedKeys);
+              }
+
+              descendantLeaves.forEach(key => mergedKeys.delete(key));
+              return Array.from(mergedKeys);
+            }
+
+            return Array.from(mergedKeys);
+          })()
+        : rawChecked;
+
+      const valueKeys = checkStrictly
+        ? mergedChecked
+        : applyCheckedStrategy(
+            mergedChecked,
+            showCheckedStrategy,
+            indexes,
+            nestedTreeData
+          );
+
+      onCheck?.(valueKeys as SafeKey[], info);
     },
     [
-      multiple,
-      setState,
-      checkSelectAllStatus,
+      checkStrictly,
+      showCheckedStrategy,
       indexes,
       nestedTreeData,
-      showCheckedStrategy
+      onCheck,
+      searchingLocally,
+      checkedKeysArray,
+      renderedTreeKeySet
     ]
   );
 
-  // During local search, if nothing matched, all nodes are effectively hidden
+  // During search, if nothing matched, all nodes are effectively hidden
   if (
-    nestedTreeData?.length === 0 ||
+    renderedTreeData?.length === 0 ||
     (searchingLocally && searchValue && !localExpandedKeys?.length)
   ) {
     return (
@@ -202,17 +319,16 @@ const InnerTree: FC<InnerTreeProps> = ({
   return (
     <Tree
       {...props}
+      motion={false}
       expandedKeys={
-        !remoteSearch && searchValue
-          ? localExpandedKeys
-          : internalTreeDefaultExpandedKeys
+        searchingLocally ? localExpandedKeys : internalTreeDefaultExpandedKeys
       }
       selectable={false}
       onExpand={handleTreeExpand}
       treeData={renderedTreeData}
-      checkedKeys={checkedKeys || []}
+      checkedKeys={treeCheckedKeys}
       onCheck={handleTreeCheck}
-      checkStrictly={checkStrictly}
+      checkStrictly={searchingLocally ? true : checkStrictly}
       filterTreeNode={node => {
         return searchPredicate(node[treeNodeFilterProp as keyof TreeDataNode]);
       }}

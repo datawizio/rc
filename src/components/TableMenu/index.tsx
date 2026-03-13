@@ -19,6 +19,8 @@ import type { TableState } from "@/components/Table/types";
 
 import "./index.less";
 
+export type ExpandOptions = "horizontally" | "grouped" | "flat";
+
 export interface TableMenuProps extends ButtonProps {
   filename?: string;
   getFilename?: () => string;
@@ -36,11 +38,12 @@ export interface TableMenuProps extends ButtonProps {
     fileData: BlobPart | Blob,
     filename: string
   ) => MaybePromise<void>;
-  onSendClick?: (expand?: "horizontally" | "grouped") => Promise<void>;
+  onSendClick?: (expand?: ExpandOptions) => Promise<void>;
   onTotalClick?: (e: MouseEvent<HTMLElement>) => void;
   onExpandVertical?: (e: MouseEvent<HTMLElement>) => void;
   onExpandHorizontal?: (e: MouseEvent<HTMLElement>) => void;
   nonExpandableMetrics?: Set<string>;
+  attachToTable?: boolean;
 }
 
 const TableMenu: FC<TableMenuProps> = ({
@@ -55,6 +58,7 @@ const TableMenu: FC<TableMenuProps> = ({
   onExpandHorizontal,
   onExpandVertical,
   nonExpandableMetrics = new Set(),
+  attachToTable = false,
   ...restProps
 }) => {
   const { t } = useConfig();
@@ -63,6 +67,13 @@ const TableMenu: FC<TableMenuProps> = ({
   const context = useContext(TableContext);
   const tableMenuId = useId();
 
+  const additionalDropdownProps = attachToTable
+    ? {
+        getPopupContainer: () =>
+          document.getElementById(tableMenuId) || document.body
+      }
+    : {};
+
   const { expand_horizontally, expand_tree, vertical_axis_metrics } = settings;
   const {
     fixed_total,
@@ -70,6 +81,8 @@ const TableMenu: FC<TableMenuProps> = ({
     expand_table_horizontally,
     show_export_xls,
     show_send_to_email,
+    show_send_to_email_expand_horizontally,
+    show_send_to_email_expand_grouped,
     is_visualization,
     dimension_count,
     has_tree
@@ -170,23 +183,29 @@ const TableMenu: FC<TableMenuProps> = ({
     expand_tree_grouped
   } = useMemo(() => {
     const res = {
-      send_xlsx_submenu: is_visualization,
+      send_xlsx_submenu:
+        is_visualization ||
+        show_send_to_email_expand_horizontally ||
+        show_send_to_email_expand_grouped,
+
       without_expand_tree: true,
       send_xlsx_expand_submenu: false,
 
       expand_tree_grouped:
-        !expand_horizontally &&
-        ((has_tree && expand_tree) ||
-          (!has_tree && dimension_count > 1 && expand_tree) ||
-          dimension_count > 1),
+        show_send_to_email_expand_grouped ||
+        (!expand_horizontally &&
+          ((has_tree && expand_tree) ||
+            (!has_tree && dimension_count > 1 && expand_tree) ||
+            dimension_count > 1)),
 
       expand_tree_horizontally:
-        !expand_horizontally &&
-        hasExpandableMetrics &&
-        ((dimension_count === 1 && has_tree) ||
-          (has_tree && expand_tree) ||
-          (!has_tree && dimension_count > 1 && expand_tree) ||
-          dimension_count > 1)
+        show_send_to_email_expand_horizontally ||
+        (!expand_horizontally &&
+          hasExpandableMetrics &&
+          ((dimension_count === 1 && has_tree) ||
+            (has_tree && expand_tree) ||
+            (!has_tree && dimension_count > 1 && expand_tree) ||
+            dimension_count > 1))
     };
 
     if (res.expand_tree_horizontally || res.expand_tree_grouped) {
@@ -199,7 +218,9 @@ const TableMenu: FC<TableMenuProps> = ({
     expand_tree,
     hasExpandableMetrics,
     has_tree,
-    is_visualization
+    is_visualization,
+    show_send_to_email_expand_grouped,
+    show_send_to_email_expand_horizontally
   ]);
 
   const menu = (
@@ -250,17 +271,13 @@ const TableMenu: FC<TableMenuProps> = ({
         (send_xlsx_submenu ? (
           <Menu.SubMenu
             key="send_xlsx_submenu"
-            title={
-              <>
-                <SendOutlined className="table-menu-dropdown__icon__send" />
-                {t("SEND_XLS")}
-              </>
-            }
+            icon={<SendOutlined className="table-menu-dropdown__icon__send" />}
+            title={t("SEND_XLS")}
           >
             {without_expand_tree && (
               <Menu.Item
                 key="without_expand_tree"
-                onClick={() => onSendClick?.()}
+                onClick={() => onSendClick?.("flat")}
               >
                 {t("WITHOUT_EXPAND_TREE")}
               </Menu.Item>
@@ -312,7 +329,7 @@ const TableMenu: FC<TableMenuProps> = ({
       <Dropdown
         popupRender={() => menu}
         trigger={["click"]}
-        getPopupContainer={() => document.getElementById(tableMenuId)!}
+        {...additionalDropdownProps}
       >
         <Button
           type="link"

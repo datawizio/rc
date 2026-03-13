@@ -8,6 +8,7 @@ export interface RuleInfoProps {
   dtype: string;
   disabled?: boolean;
   tooltip?: string;
+  metricsDictionary?: Record<string, string>;
 }
 
 export type WidgetParamsDimension = {

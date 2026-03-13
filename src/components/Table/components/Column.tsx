@@ -1,14 +1,13 @@
 import clsx from "clsx";
-import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { useTable } from "@/components/Table/hooks/useTable";
 import { useDrag, useDrop } from "react-dnd";
 import { useDebouncedCallback } from "use-debounce";
 import { isSafari } from "@/utils/navigatorInfo";
 import { columnIcons } from "../utils/columnIcons";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 
 import type { DropTargetMonitor } from "react-dnd";
-import type { SafeKey } from "antd/es/table/interface";
-import type { IColumn, SorterObject } from "../types";
+import type { IColumn } from "../types";
 import type {
   FC,
   PropsWithChildren,
@@ -61,7 +60,14 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
   const startedResize = useRef<boolean>(false);
   const columnRef = useRef<HTMLTableCellElement>(null);
   const lastWidthRef = useRef<number>(0);
-  const rafRef = useRef<number>(null);
+  const rafRef = useRef<number | null>(null);
+  const prevChildrenCountRef = useRef<number | undefined>(undefined);
+  const firstLoad = useRef(true);
+  const resolvedKey = model.dataIndex || model.key || model.originalKey;
+
+  // Used only for non-virtual table columns resizing
+  const resizePositionXRef = useRef<number>(0);
+  const resizeWidthRef = useRef<number>(0);
 
   const {
     dispatch,
@@ -87,25 +93,28 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       if (idx !== -1) return idx + 1;
     }
     return 0;
-  }, [
-    model.key,
-    // eslint-disable-next-line
-    (model.sorter as SorterObject).multiple,
-    multisorting,
-    sortParams,
-    sortParamsPriority
-  ]);
+  }, [model.key, multisorting, sortParams, sortParamsPriority]);
 
   const showColumnIcon = useMemo(
     () => !!model.icon && !!columnIcons[model.icon],
     [model]
   );
 
-  const minWidth =
-    model.colMinWidth ||
-    (model.children?.length
-      ? model.children.length * DEFAULT_SUBCOLUMN_WIDTH
-      : 100);
+  const minWidth = useMemo(() => {
+    if (model.colMinWidth) {
+      return model.colMinWidth;
+    }
+
+    if (model.children?.length) {
+      return model.children.length * DEFAULT_SUBCOLUMN_WIDTH;
+    }
+
+    if (model.parent_key) {
+      return DEFAULT_SUBCOLUMN_WIDTH;
+    }
+
+    return 100;
+  }, [model]);
 
   const calculateWidth = useCallback(
     (target: HTMLElement | null) => {
@@ -113,6 +122,30 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     },
     [minWidth, virtual]
   );
+
+  useEffect(() => {
+    const currentCount = model.children?.length;
+
+    if (
+      prevChildrenCountRef.current !== undefined &&
+      prevChildrenCountRef.current !== currentCount &&
+      currentCount !== undefined
+    ) {
+      const newWidth = currentCount * DEFAULT_SUBCOLUMN_WIDTH;
+      lastWidthRef.current = 0;
+
+      if (columnRef.current) {
+        columnRef.current.style.width = newWidth + "px";
+      }
+
+      dispatch({
+        type: "columnWidthChange",
+        payload: { key: String(resolvedKey), width: newWidth }
+      });
+    }
+
+    prevChildrenCountRef.current = currentCount;
+  }, [model.children?.length, resolvedKey, dispatch]);
 
   const [, dragRef] = useDrag({
     type: "column",
@@ -206,6 +239,47 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     150
   );
 
+  const dispatchWidthThrottled = useDebouncedCallback(
+    (key: string, width: number) => {
+      dispatch({
+        type: "columnWidthChange",
+        payload: { key, width }
+      });
+    },
+    0, // Immediate update since Cells now use direct DOM sync during drag
+    { leading: true, trailing: true }
+  );
+
+  const tableContainer = columnRef.current?.closest(".ant-table-container");
+
+  const immediatelyUpdateColumnWidth = useCallback(
+    (columnKey: string, columnWidth: number) => {
+      const batchUpdate = (key: string, width: number, colMinWidth: number) => {
+        const columnElements = tableContainer?.querySelectorAll<HTMLElement>(
+          `[data-column-key="${key}"]`
+        );
+
+        columnElements?.forEach(el => {
+          el.style.width = width + "px";
+          el.style.minWidth = colMinWidth + "px";
+        });
+      };
+
+      batchUpdate(columnKey, columnWidth, minWidth);
+
+      if (model.children?.length) {
+        const childWidth = Math.floor(columnWidth / model.children.length);
+
+        model.children.forEach(child => {
+          const childKey = child.dataIndex || child.key || child.originalKey;
+          const childMinWidth = child.colMinWidth || DEFAULT_SUBCOLUMN_WIDTH;
+          batchUpdate(childKey, childWidth, childMinWidth);
+        });
+      }
+    },
+    [model.children, tableContainer, minWidth]
+  );
+
   const [{ isOver, canDrop }, dropRef] = useDrop<
     IColumn,
     unknown,
@@ -243,90 +317,164 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
   );
 
   useEffect(() => {
-    if (!onWidthChange) return;
-    window.addEventListener("mouseup", onMouseUpHandler);
-
-    return () => {
-      window.removeEventListener("mouseup", onMouseUpHandler);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     if (!isHeader) return;
 
-    const colKey = model.dataIndex || model.key || model.originalKey;
-
     const fn = () => {
-      const columnWidth = calculateWidth(columnRef.current);
-
-      // If the native resize set `width` below the minimum, immediately clamp it on the element.
-      if (columnRef.current) {
-        const styleWidth = parseInt(columnRef.current.style?.width);
-
-        if (styleWidth < minWidth) {
-          columnRef.current.style.width = minWidth + "px";
-        }
+      if (!columnRef.current) {
+        rafRef.current = requestAnimationFrame(fn);
+        return;
       }
 
-      // The width should only be changed for the current column (when `startedResize.current = true`)
-      // or when the table is not in virtual mode (i.e. the resizing is handled by the browser).
-      const shouldResize = !virtual || startedResize.current;
+      const currentWidth = columnRef.current.offsetWidth;
+      const shouldUpdateDOM = startedResize.current;
+      const shouldUpdateState = firstLoad.current && currentWidth > 0;
 
-      if (
-        shouldResize &&
-        typeof columnWidth === "number" &&
-        columnWidth !== 0
+      if (shouldUpdateDOM && currentWidth > 0 && currentWidth >= minWidth) {
+        if (currentWidth !== lastWidthRef.current) {
+          lastWidthRef.current = currentWidth;
+
+          // Instant column sync:
+          // Directly update ALL cells (header and body) with this column key.
+          // This ensures header and body move as one, bypassing React lag.
+          immediatelyUpdateColumnWidth(resolvedKey, currentWidth);
+
+          if (!model.children?.length) {
+            dispatchWidthThrottled(String(resolvedKey), currentWidth);
+          }
+        }
+      } else if (
+        shouldUpdateState &&
+        currentWidth > 0 &&
+        currentWidth >= minWidth
       ) {
         dispatch({
           type: "columnWidthChange",
           payload: {
-            key: colKey,
-            width: columnWidth
+            key: String(resolvedKey),
+            width: currentWidth
           }
         });
+        firstLoad.current = false;
+        lastWidthRef.current = currentWidth;
+      }
+
+      if (currentWidth > 0 && currentWidth < minWidth) {
+        immediatelyUpdateColumnWidth(resolvedKey, minWidth);
+        lastWidthRef.current = minWidth;
       }
 
       rafRef.current = requestAnimationFrame(fn);
     };
 
-    requestAnimationFrame(fn);
+    rafRef.current = requestAnimationFrame(fn);
 
     return () => {
       if (rafRef.current != null) {
         cancelAnimationFrame(rafRef.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHeader]);
+  }, [
+    resolvedKey,
+    isHeader,
+    minWidth,
+    calculateWidth,
+    model.dataIndex,
+    model.key,
+    model.originalKey,
+    model.children,
+    model.parent_key,
+    virtual,
+    dispatch,
+    dispatchWidthThrottled,
+    immediatelyUpdateColumnWidth
+  ]);
 
   const onMouseUpHandler = useCallback(() => {
-    if (startedResize?.current) {
-      const colKey = model.originalKey || model.key;
+    if (startedResize.current) {
+      const externalKey = model.originalKey || model.key;
+      const internalKey = model.dataIndex || model.key || model.originalKey;
       const width = calculateWidth(columnRef.current);
 
       if (typeof width === "number") {
-        onWidthChange?.(String(colKey), width);
+        onWidthChange?.(String(externalKey), width);
+        dispatchWidthThrottled.cancel();
+        dispatch({
+          type: "columnWidthChange",
+          payload: {
+            key: String(internalKey),
+            width
+          }
+        });
       }
       startedResize.current = false;
     }
-  }, [model.originalKey, model.key, onWidthChange, calculateWidth]);
+  }, [
+    model.originalKey,
+    model.key,
+    model.dataIndex,
+    onWidthChange,
+    calculateWidth,
+    dispatch,
+    dispatchWidthThrottled
+  ]);
+
+  const onMouseMoveHandler = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (!startedResize.current || virtual) return;
+      const delta = event.clientX - resizePositionXRef.current;
+      const newWidth = Math.max(resizeWidthRef.current + delta, minWidth);
+      immediatelyUpdateColumnWidth(resolvedKey, newWidth);
+      lastWidthRef.current = newWidth;
+    },
+    [virtual, minWidth, immediatelyUpdateColumnWidth, resolvedKey]
+  );
 
   const onMouseDownHandler = useCallback(
     (event: MouseEvent<HTMLTableCellElement>) => {
-      if (onWidthChange) startedResize.current = true;
-      setLastWidth(calculateWidth(event.target as HTMLTableCellElement) ?? 0);
+      const rect = event.currentTarget.getBoundingClientRect();
+      const isRightEdge = event.clientX > rect.right - 20;
+
+      if (isRightEdge && model.resizable) {
+        startedResize.current = true;
+
+        if (!virtual) {
+          resizePositionXRef.current = event.clientX;
+          resizeWidthRef.current = event.currentTarget.offsetWidth;
+        }
+      }
+      setLastWidth(calculateWidth(event.currentTarget) ?? 0);
     },
-    [onWidthChange, calculateWidth]
+    [calculateWidth, model.resizable, virtual]
   );
 
   const onClickHandler = useCallback(
     (event: MouseEvent<HTMLTableCellElement>) => {
-      const currentWidth = calculateWidth(event.target as HTMLTableCellElement);
-      if (lastWidth === currentWidth && onClick) onClick(event);
+      const currentWidth = calculateWidth(event.currentTarget);
+      if (typeof currentWidth === "number") {
+        const isSameWidth = Math.abs(lastWidth - currentWidth) <= 1;
+        if (isSameWidth && onClick) onClick(event);
+      }
     },
     [lastWidth, onClick, calculateWidth]
   );
+
+  useEffect(() => {
+    if (!isHeader || !model.resizable) return;
+    window.addEventListener("mouseup", onMouseUpHandler);
+
+    return () => {
+      window.removeEventListener("mouseup", onMouseUpHandler);
+    };
+  }, [isHeader, model.resizable, onMouseUpHandler]);
+
+  useEffect(() => {
+    if (!isHeader || !model.resizable || virtual) return;
+    window.addEventListener("mousemove", onMouseMoveHandler);
+
+    return () => {
+      window.removeEventListener("mousemove", onMouseMoveHandler);
+    };
+  }, [isHeader, model.resizable, virtual, onMouseMoveHandler]);
 
   const className = useMemo(() => {
     return clsx(
@@ -351,67 +499,62 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
     restProps.className
   ]);
 
-  const styles = useMemo(() => {
-    const getWidth = () => {
-      const columnsWidthPreset = columnsWidth?.[model.key as SafeKey];
+  const styles = useMemo(
+    () => {
+      const getCurrentWidth = () => {
+        if (startedResize.current && lastWidthRef.current >= minWidth) {
+          return { width: lastWidthRef.current };
+        }
 
-      if (columnsWidthPreset) {
-        return { width: columnsWidthPreset };
+        const columnsWidthPreset = columnsWidth?.[resolvedKey];
+        if (columnsWidthPreset) {
+          return { width: Math.max(columnsWidthPreset, minWidth) };
+        }
+
+        if (model.colWidth) {
+          return { width: Math.max(model.colWidth, minWidth) };
+        }
+
+        if (model.children?.length) {
+          return { width: model.children.length * DEFAULT_SUBCOLUMN_WIDTH };
+        }
+
+        if (model.max_value) {
+          return {
+            width:
+              Math.max(model.max_value, DEFAULT_MAX_VALUE) *
+              DEFAULT_SUBCELL_WIDTH
+          };
+        }
+
+        return {};
+      };
+
+      if (model.parent_key) return {};
+
+      const conf: Record<string, any> = getCurrentWidth();
+
+      if (calcColumnWidth && typeof conf.width === "number") {
+        conf.width = calcColumnWidth(conf.width);
       }
 
-      if (model.colWidth) {
-        return {
-          width: model.colWidth
-        };
+      if (typeof conf.width === "number") {
+        lastWidthRef.current = conf.width;
       }
 
-      if (model.children && model.children.length) {
-        return {
-          width: model.children.length * DEFAULT_SUBCOLUMN_WIDTH
-        };
-      }
-
-      if (
-        model.max_value &&
-        (model.max_value === 0 || model.max_value < DEFAULT_MAX_VALUE)
-      ) {
-        model.max_value = DEFAULT_MAX_VALUE;
-      }
-
-      if (model.max_value) {
-        return {
-          width: model.max_value * DEFAULT_SUBCELL_WIDTH
-        };
-      }
-
-      return {};
-    };
-
-    if (model.parent_key) {
-      return {};
-    }
-
-    const conf: Record<string, any> = getWidth();
-
-    if (calcColumnWidth && typeof conf.width === "number") {
-      conf.width = calcColumnWidth(conf.width);
-    }
-
-    if (typeof conf.width === "number") {
-      lastWidthRef.current = conf.width;
-    }
-
-    conf.minWidth = minWidth + "px";
-    return conf;
-
+      conf.minWidth = minWidth + "px";
+      return conf;
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    model.children,
-    model.max_value,
-    model.colWidth,
-    columnsForceUpdate,
-    columnsWidth?.[model.key as SafeKey] // eslint-disable-line
-  ]);
+    [
+      resolvedKey,
+      model,
+      calcColumnWidth,
+      minWidth,
+      columnsWidth?.[resolvedKey],
+      columnsForceUpdate
+    ]
+  );
 
   return (
     <th
@@ -419,12 +562,13 @@ const Column: FC<PropsWithChildren<ColumnProps>> = ({
       ref={dndRef}
       className={className}
       onClick={onClickHandler}
+      data-column-key={resolvedKey}
       title={String(model.title)}
       onMouseDown={onMouseDownHandler}
       style={
         {
-          ...styles,
           ...restProps.style,
+          ...styles,
           "--order": sortingPriority
         } as CSSProperties
       }

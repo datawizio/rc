@@ -79,7 +79,7 @@ const tableDefaultProps: Partial<TableProps> = {
   dataSource: [],
   pageSizeOptions: ["20", "35", "50", "100"],
 
-  showSizeChanger: true,
+  showSizeChanger: { showSearch: false },
   sortHandler: basicSortHandler,
   filterHandler: basicFilterHandler,
   searchHandler: basicSearchHandler

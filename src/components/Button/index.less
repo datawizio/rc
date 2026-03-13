@@ -5,10 +5,17 @@
     box-shadow: none;
   }
 
-  &.highlight:not(:hover) {
-    background: none;
-    border-color: transparent;
-    box-shadow: none;
+  &.highlight {
+    &:hover {
+      --ant-button-default-hover-bg: transparent;
+      --ant-button-default-active-bg: transparent;
+    }
+
+    &:not(:hover) {
+      background: none;
+      border-color: transparent;
+      box-shadow: none;
+    }
   }
 
   &-link {

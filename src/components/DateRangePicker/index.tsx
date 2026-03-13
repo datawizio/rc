@@ -150,14 +150,13 @@ const DateRangePicker: IDateRangePicker = ({
   }, [propsMaxDate, propsMinDate, formatDate]);
 
   const isDisabledDate = useCallback(
-    (date: Dayjs) => {
-      const formattedDate = formatDate(date.format("DD-MM-YYYY"));
-      return Boolean(
-        (maxDate && formattedDate?.isAfter(maxDate)) ||
-        (minDate && formattedDate?.isBefore(minDate))
-      );
+    (date: Dayjs, info: { from?: Dayjs }) => {
+      if (maxDate && date.isAfter(maxDate, "day")) return true;
+      if (minDate && date.isBefore(minDate, "day")) return true;
+      if (info.from && date.isBefore(info.from, "day")) return true;
+      return false;
     },
-    [maxDate, minDate, formatDate]
+    [maxDate, minDate]
   );
 
   const onChange: HandlerFn<DateRangePickerProps, "onChange"> = (
@@ -183,6 +182,7 @@ const DateRangePicker: IDateRangePicker = ({
           <Tag
             key={label}
             color="purple"
+            variant="outlined"
             onMouseEnter={() => setPreviewRange(value)}
             onMouseLeave={() => setPreviewRange(null)}
             onClick={() => {
@@ -215,7 +215,14 @@ const DateRangePicker: IDateRangePicker = ({
       inputReadOnly={inputReadOnly}
       renderExtraFooter={renderExtraFooter}
       className={clsx(fullWidth && "ant-picker-full-width")}
-      classNames={{ popup: { root: "dw-range-picker-dropdown" } }}
+      classNames={{
+        popup: {
+          root: clsx(
+            "dw-range-picker-dropdown",
+            type === "fiscal" && "fiscal-range-picker-dropdown"
+          )
+        }
+      }}
       onChange={onChange}
       value={previewRange ?? [dateFrom, dateTo]}
       disabledDate={isDisabledDate}

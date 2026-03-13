@@ -1,7 +1,8 @@
 import type DatePicker from "../DatePicker";
-import type { FC, ComponentProps, CSSProperties } from "react";
+import type { FC, ComponentProps } from "react";
 import type { CalendarType } from "@/types/calendar";
 import type { DateType, DateRange } from "@/types/date";
+import type { Overwrite } from "@/types/utils";
 
 export type DatePickerPlaceholder = [string, string];
 
@@ -9,35 +10,33 @@ export type PresetsRangeType = {
   [key: string]: DateRange;
 };
 
-export type DateRangePickerProps = {
-  type?: CalendarType;
-  dateFrom?: DateType;
-  dateTo?: DateType;
+export type DateRangePickerProps = Overwrite<
+  ComponentProps<typeof DatePicker.RangePicker>,
+  {
+    // Calendar settings
+    type?: CalendarType;
+    format?: string;
+    dateFrom?: DateType;
+    dateTo?: DateType;
+    minDate?: DateType;
+    maxDate?: DateType;
+    currDateRange?: { date_from: DateType; date_to: DateType };
 
-  currDateRange?: {
-    date_from: DateType;
-    date_to: DateType;
-  };
+    // Preset settings
+    ranges?: PresetsRangeType;
+    presets?: string[];
+    useCurrentDayPreset?: boolean;
+    useDefaultPreset?: boolean;
+    maxDateForPresets?: DateType;
+    defaultPresetExceptions?: string[];
 
-  maxDateForPresets?: DateType;
-  maxDate?: DateType;
-  minDate?: DateType;
-  format?: string;
-  useCurrentDayPreset?: boolean;
-
-  ranges?: PresetsRangeType;
-
-  fullWidth?: boolean;
-  useDefaultPreset?: boolean;
-  presets?: string[];
-  defaultPresetExceptions?: string[];
-  inputReadOnly?: boolean;
-  style?: CSSProperties;
-  onClear?: () => void;
-  getPopupContainer?: () => HTMLElement;
-  allowEmpty?: [boolean, boolean];
-  placeholder?: DatePickerPlaceholder;
-} & ComponentProps<typeof DatePicker.RangePicker>;
+    // UI settings
+    fullWidth?: boolean;
+    allowEmpty?: [boolean, boolean];
+    onClear?: () => void;
+    placeholder?: DatePickerPlaceholder;
+  }
+>;
 
 export type IDateRangePicker = {
   presets: DefaultPresetType;

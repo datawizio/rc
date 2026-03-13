@@ -50,9 +50,13 @@ export const getCurrentTheme = (): Theme => {
   return window.theme || DEFAULT_THEME;
 };
 
+export const themed = <T, V = T>(lightValue: T, darkValue: V) => {
+  return getCurrentTheme() === "dark" ? darkValue : lightValue;
+};
+
 /* Global style variables */
 
-export const cssVar = <T extends string>(variableName: T): string => {
+export const cssVar = <T extends string>(variableName: T) => {
   const styles = window.getComputedStyle(document.body);
   return styles.getPropertyValue(variableName);
 };

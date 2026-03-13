@@ -1,6 +1,7 @@
 import { ColumnIcons } from "./utils/columnIcons";
 
 import type { TableProps as AntdTableProps, ColumnProps } from "antd/es/table";
+import type { PaginationConfig } from "antd/es/pagination";
 import type { MaybePromise, Overwrite } from "@/types/utils";
 import type {
   TableTemplateState,
@@ -64,7 +65,7 @@ export type TableProps<RT = any> = Overwrite<
   showAllColumns?: boolean;
   sortable?: boolean;
   forceColumns?: boolean;
-  showSizeChanger?: boolean;
+  showSizeChanger?: PaginationConfig["showSizeChanger"];
   multisorting?: boolean;
   isResizableColumns?: boolean;
   isNested?: (row: any) => boolean;
@@ -72,10 +73,14 @@ export type TableProps<RT = any> = Overwrite<
   onColumnWidthChange?: (columnKey: string, width: number) => void;
   expandRowCallback?: (row: any) => void;
   sortColumnCallback?: (column: any) => void;
+
+  /**
+   * A function that provides additional column width calculation before it will be applied to the column styles.
+   * @deprecated The parameter is no longer used and will be removed in the future.
+   */
   calcColumnWidth?: (width: number) => number;
 
   error?: { message: string };
-
   errorRender?: (error: { message: string }) => ReactElement;
 
   /**
@@ -84,12 +89,13 @@ export type TableProps<RT = any> = Overwrite<
   autoHeight?: boolean;
 
   /**
-   * Sets the table size based on its parent
+   * Sets the table size based on its parent.
+   * @deprecated The parameter is no longer used and will be removed in the future.
    */
   responsiveTable?: boolean;
 
   /**
-   * Stretches columns to the width of the table if possible
+   * Stretches columns to the width of the table if possible.
    */
   responsiveColumns?: boolean;
   sortParams?: SortParams;

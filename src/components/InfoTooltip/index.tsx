@@ -4,7 +4,8 @@ import Button from "@/components/Button";
 import { useCallback, useMemo, useState } from "react";
 import { Tooltip } from "antd";
 import { CloseOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { useConfig, useTheme } from "@/hooks";
+import { useConfig } from "@/hooks";
+import { themed } from "@/utils/theme";
 
 import type { ReactNode, MouseEvent, FC } from "react";
 import type { TooltipProps } from "antd";
@@ -31,18 +32,11 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
   getPopupContainer
 }) => {
   const { t } = useConfig();
-  const theme = useTheme();
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const buttonClassNames = clsx({
     "info-tooltip-button": true,
     "info-tooltip-button-highlighted": tooltipVisible
-  });
-
-  const tooltipClassNames = clsx(className || "", {
-    "info-tooltip": true,
-    "info-tooltip-theme-light": theme !== "dark",
-    "info-tooltip-theme-dark": theme === "dark"
   });
 
   const closeTooltip = useCallback((e: MouseEvent) => {
@@ -52,21 +46,21 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
   }, []);
 
   const tooltip = useMemo(() => {
-    return description ? (
-      <div className="info-tooltip-content">
-        <CloseOutlined onClick={closeTooltip} />
-        {description}
-        {detailedLink && (
-          <p className="info-tooltip-detailed">
-            <a href={detailedLink} target="_blank" rel="noreferrer">
-              {detailedTextKey ? t(detailedTextKey) : t("DETAILED")}
-              ...
-            </a>
-          </p>
-        )}
-      </div>
-    ) : (
-      <></>
+    return (
+      description && (
+        <div className="info-tooltip-content">
+          <CloseOutlined onClick={closeTooltip} />
+          {description}
+          {detailedLink && (
+            <p className="info-tooltip-detailed">
+              <a href={detailedLink} target="_blank" rel="noreferrer">
+                {detailedTextKey ? t(detailedTextKey) : t("DETAILED")}
+                ...
+              </a>
+            </p>
+          )}
+        </div>
+      )
     );
   }, [closeTooltip, description, detailedLink, detailedTextKey, t]);
 
@@ -74,15 +68,20 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
     setTooltipVisible(visible);
   }, []);
 
-  return description ? (
+  if (!description) {
+    return null;
+  }
+
+  return (
     <Tooltip
       title={tooltip}
       placement={placement}
       trigger={trigger || ["click"]}
-      classNames={{ root: tooltipClassNames }}
+      classNames={{ root: clsx("info-tooltip", className) }}
       open={tooltipVisible}
       onOpenChange={onVisibleChangeCallback}
       getPopupContainer={getPopupContainer}
+      color={themed("#ffffff", "#424242")}
     >
       <Button
         className={buttonClassNames}
@@ -94,7 +93,7 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
         }}
       />
     </Tooltip>
-  ) : null;
+  );
 };
 
 export default InfoTooltip;

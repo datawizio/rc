@@ -1,20 +1,29 @@
 @import "./themes";
-@import "./variables";
-@import "./mixin/retina-image";
+
+// Common styles
 
 .crisp-client {
   --crisp-customization-container-index: 1000;
 }
 
-.theme-dark {
-  .ant-dropdown .ant-dropdown-menu,
-  .ant-dropdown-menu-submenu .ant-dropdown-menu {
-    box-shadow: var(--box-shadow-lg);
+.ant-tree {
+  --rc-virtual-list-scrollbar-bg: var(--virtual-scrollbar-thumb-color);
+
+  &-treenode:not(&-treenode-disabled).filter-node &-title {
+    color: inherit !important;
+    font-weight: 500 !important;
   }
 }
 
-.ant-tree {
-  &-treenode:not(&-treenode-disabled).filter-node &-title {
-    color: inherit !important;
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  font-weight: 500;
+}
+
+// Dark theme styles
+
+.theme-dark {
+  .ant-dropdown-menu,
+  .ant-select-dropdown {
+    box-shadow: var(--box-shadow-lg);
   }
 }
