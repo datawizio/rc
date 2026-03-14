@@ -423,6 +423,16 @@
   &--small .ant-table-body::-webkit-scrollbar-thumb {
     height: 30px !important;
   }
+
+  .ant-table-pagination {
+    .ant-pagination-item:not(.ant-pagination-item-active):hover {
+      background-color: inherit;
+
+      a {
+        color: var(--ant-color-primary);
+      }
+    }
+  }
 }
 
 .set-columns-positions(@n, @size, @i: 2) when (@i =< @n) {
