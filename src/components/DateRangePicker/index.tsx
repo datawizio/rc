@@ -43,16 +43,15 @@ const DateRangePicker: IDateRangePicker = ({
   const [isOpen, setIsOpen] = useState(false);
   const [previewRange, setPreviewRange] = useState<DateRange | null>(null);
 
+  /**
+   * Generate preset ranges from the provided props with the following priority:
+   * - if `ranges` is provided, returns it directly;
+   * - if `presets` is provided, returns an object containing selected presets from default preset config;
+   * - if `useDefaultPreset` is true, returns all default presets;
+   * - otherwise, returns `undefined`.
+   */
   const getPresets = useCallback(() => {
-    // Presets absent
     if (!ranges && !useDefaultPreset && !presets) return;
-
-    /* Params priority:
-     * - ranges
-     * - presets
-     * - useDefaultPreset
-     * */
-
     if (ranges) return ranges;
 
     if (presets && presets.length) {
@@ -150,10 +149,9 @@ const DateRangePicker: IDateRangePicker = ({
   }, [propsMaxDate, propsMinDate, formatDate]);
 
   const isDisabledDate = useCallback(
-    (date: Dayjs, info: { from?: Dayjs }) => {
+    (date: Dayjs) => {
       if (maxDate && date.isAfter(maxDate, "day")) return true;
       if (minDate && date.isBefore(minDate, "day")) return true;
-      if (info.from && date.isBefore(info.from, "day")) return true;
       return false;
     },
     [maxDate, minDate]
