@@ -15,7 +15,9 @@ export const rootClassNames = {
 export const useRootClassNames = () => {
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.add(browser.getBrowserName(true));
+
+    // TODO: refactor this logic later (e.g. use `slugify`)
+    root.classList.add(browser.getBrowserName(true).replace(" ", "-"));
 
     /* Check if the scrollbar is visible on the page */
 
