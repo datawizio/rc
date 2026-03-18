@@ -222,7 +222,7 @@ const DateRangePicker: IDateRangePicker = ({
         }
       }}
       onChange={onChange}
-      value={previewRange ?? [dateFrom, dateTo]}
+      value={previewRange ?? [dateFrom, dateTo]} // TODO: find a better solution for period presets
       disabledDate={isDisabledDate}
       open={props.open ?? isOpen}
       onOpenChange={open => {
