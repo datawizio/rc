@@ -2,24 +2,14 @@ import Bowser from "bowser";
 
 export const browser = Bowser.getParser(window.navigator.userAgent);
 
-/* Browser */
+/* Helpers */
 
 export const isSafari = () => {
-  return browser.getBrowserName(true) === "safari";
+  return browser.isBrowser("safari");
 };
 
-export const isChrome = () => {
-  return browser.getBrowserName(true) === "chrome";
-};
-
-/* Operating system */
-
-export const isIOS = () => {
-  return browser.getOSName(true) === "ios";
-};
-
-export const isAndroid = () => {
-  return browser.getOSName(true) === "android";
+export const isChromium = () => {
+  return browser.isEngine("blink");
 };
 
 /* Geolocation */
