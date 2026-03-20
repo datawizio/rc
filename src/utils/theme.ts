@@ -5,6 +5,10 @@ export type Theme = Exclude<ThemingMode, "system">;
 
 declare global {
   interface Window {
+    /**
+     * The current theme of the application.
+     * @deprecated Use `getCurrentTheme()` instead.
+     */
     theme: Theme;
   }
 
