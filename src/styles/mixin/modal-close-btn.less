@@ -1,0 +1,19 @@
+.modal-close-btn(@size: 24px, @spacing: 2px) {
+  .ant-modal-close {
+    width: @size;
+    height: @size;
+    top: @spacing;
+    right: @spacing;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    &-x {
+      width: @size;
+      height: @size;
+      line-height: @size;
+      color: gray;
+    }
+  }
+}

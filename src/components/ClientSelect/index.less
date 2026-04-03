@@ -35,6 +35,19 @@
   }
 }
 
+.dw-light {
+  .ant-select.client-select.ant-select-show-search.ant-select-single {
+    &,
+    & * {
+      color: var(--text-color);
+    }
+
+    &.ant-select-open .ant-select-content {
+      color: transparent !important;
+    }
+  }
+}
+
 .divider {
   height: 100%;
   border-right: 1px solid var(--divider-border-color);

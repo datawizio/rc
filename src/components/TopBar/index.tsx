@@ -13,7 +13,8 @@ export interface TopBarProps {
 const TopBar: FC<PropsWithChildren<TopBarProps>> = ({ children, theme }) => {
   const className = clsx({
     "top-bar": true,
-    "dw-dark": theme === "dark"
+    "dw-dark": theme === "dark",
+    "dw-light": theme === "light"
   });
 
   return <AntLayout.Header className={className}>{children}</AntLayout.Header>;
