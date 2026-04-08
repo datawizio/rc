@@ -1,10 +1,10 @@
-import { useEffect, type FC } from "react";
 import { Modal } from "antd";
+import { InlineWidget } from "react-calendly";
 import { useConfig } from "@/hooks";
 
-import "./index.less";
+import type { FC } from "react";
 
-const SRC = "https://assets.calendly.com/assets/external/widget.js";
+import "./index.less";
 
 const APP_SRC_LIST = {
   "BES": "chaikovsky-serhii-datawiz/product-demo-datawiz-bi",
@@ -28,24 +28,13 @@ const BookMeetingModal: FC<BookMeetingModalProps> = ({
 }) => {
   const { t } = useConfig();
 
-  const script: HTMLScriptElement = document.createElement("script");
-  script.src = SRC;
-  script.async = true;
-  document.head.appendChild(script);
-
   const handleModalClose = () => {
     onClose();
   };
 
-  useEffect(() => {
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, [script]);
-
   return (
     <Modal
-      centered
+      centered={true}
       className="book-meeting-modal"
       open={visible}
       closable={true}
@@ -58,10 +47,10 @@ const BookMeetingModal: FC<BookMeetingModalProps> = ({
     >
       <div className="book-meeting-modal-container">
         <span className="book-meeting-modal-title">{t(titleKey)}</span>
-        <div
+        <InlineWidget
           className="calendly-inline-widget"
-          data-url={`https://calendly.com/${APP_SRC_LIST[app]}?text_color=000&primary_color=582eb2`}
-        ></div>
+          url={`https://calendly.com/${APP_SRC_LIST[app]}?text_color=000&primary_color=582eb2`}
+        />
       </div>
     </Modal>
   );
