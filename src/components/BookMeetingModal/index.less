@@ -13,18 +13,31 @@
     align-items: center;
     row-gap: 18px;
     padding: 0 !important;
-
-    .calendly-inline-widget {
-      width: 100%;
-      min-width: 320px;
-      height: calc(100vh - 100px);
-    }
+    position: relative;
 
     .book-meeting-modal-title {
       font-weight: 700;
       font-size: 24px;
       text-align: center;
       margin-bottom: -48px;
+    }
+
+    .book-meeting-modal-widget-loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+    }
+
+    .calendly-inline-widget {
+      width: 100%;
+      min-width: 320px;
+      height: 800px;
+
+      @media (max-height: 900px) {
+        height: 660px;
+      }
     }
   }
 }

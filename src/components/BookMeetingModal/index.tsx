@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Modal } from "antd";
-import { InlineWidget } from "react-calendly";
+import { LoadingOutlined } from "@ant-design/icons";
+import { InlineWidget, useCalendlyEventListener } from "react-calendly";
 import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
@@ -27,10 +29,16 @@ const BookMeetingModal: FC<BookMeetingModalProps> = ({
   titleKey = "BOOK_MEETING_TITLE"
 }) => {
   const { t } = useConfig();
+  const [loadingWidget, setLoadingWidget] = useState(true);
 
   const handleModalClose = () => {
     onClose();
   };
+
+  useCalendlyEventListener({
+    onProfilePageViewed: () => setLoadingWidget(false),
+    onEventTypeViewed: () => setLoadingWidget(false)
+  });
 
   return (
     <Modal
@@ -41,15 +49,21 @@ const BookMeetingModal: FC<BookMeetingModalProps> = ({
       maskClosable={false}
       width={width}
       footer={null}
-      destroyOnHidden={true}
       okButtonProps={{ hidden: true }}
       onCancel={handleModalClose}
     >
       <div className="book-meeting-modal-container">
         <span className="book-meeting-modal-title">{t(titleKey)}</span>
+        {loadingWidget && (
+          <div className="book-meeting-modal-widget-loader">
+            <LoadingOutlined />
+          </div>
+        )}
         <InlineWidget
           className="calendly-inline-widget"
-          url={`https://calendly.com/${APP_SRC_LIST[app]}?text_color=000&primary_color=582eb2`}
+          url={`https://calendly.com/${APP_SRC_LIST[app]}`}
+          pageSettings={{ textColor: "000", primaryColor: "582eb2" }}
+          styles={{ opacity: loadingWidget ? 0 : 1 }}
         />
       </div>
     </Modal>
