@@ -29,15 +29,16 @@ const BookMeetingModal: FC<BookMeetingModalProps> = ({
   titleKey = "BOOK_MEETING_TITLE"
 }) => {
   const { t } = useConfig();
-  const [loadingWidget, setLoadingWidget] = useState(true);
+  const [loadedWidget, setLoadedWidget] = useState(false);
 
   const handleModalClose = () => {
     onClose();
+    setLoadedWidget(false);
   };
 
   useCalendlyEventListener({
-    onProfilePageViewed: () => setLoadingWidget(false),
-    onEventTypeViewed: () => setLoadingWidget(false)
+    onProfilePageViewed: () => setLoadedWidget(true),
+    onEventTypeViewed: () => setLoadedWidget(true)
   });
 
   return (
@@ -51,10 +52,11 @@ const BookMeetingModal: FC<BookMeetingModalProps> = ({
       footer={null}
       okButtonProps={{ hidden: true }}
       onCancel={handleModalClose}
+      destroyOnHidden={true}
     >
       <div className="book-meeting-modal-container">
         <span className="book-meeting-modal-title">{t(titleKey)}</span>
-        {loadingWidget && (
+        {!loadedWidget && (
           <div className="book-meeting-modal-widget-loader">
             <LoadingOutlined />
           </div>
@@ -63,7 +65,7 @@ const BookMeetingModal: FC<BookMeetingModalProps> = ({
           className="calendly-inline-widget"
           url={`https://calendly.com/${APP_SRC_LIST[app]}`}
           pageSettings={{ textColor: "000", primaryColor: "582eb2" }}
-          styles={{ opacity: loadingWidget ? 0 : 1 }}
+          styles={{ opacity: loadedWidget ? 1 : 0 }}
         />
       </div>
     </Modal>
