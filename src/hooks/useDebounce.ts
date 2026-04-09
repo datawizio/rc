@@ -1,7 +1,8 @@
 import { useCallback, useRef } from "react";
+import type { MaybePromise } from "@/types/utils";
 
 export const useDebounce = <Args extends any[], Result>(
-  fn: (...args: Args) => Promise<Result>,
+  fn: (...args: Args) => MaybePromise<Result>,
   time: number = 500
 ) => {
   const timeout = useRef<ReturnType<typeof setTimeout>>(null);

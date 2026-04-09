@@ -1,7 +1,7 @@
 {
   "name": "@datawizio/rc",
   "description": "Datawiz.io components library for React.js",
-  "version": "2.4.0",
+  "version": "2.4.10",
   "author": "Datawiz.io",
   "license": "ISC",
   "repository": {
@@ -70,6 +70,7 @@
     "file-saver": "^2.0.5",
     "libphonenumber-js": "^1.12.31",
     "lodash": "^4.17.23",
+    "react-calendly": "^4.4.0",
     "react-color": "^2.19.3",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",

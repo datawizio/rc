@@ -12,14 +12,14 @@ import type { TooltipProps } from "antd";
 
 import "./index.less";
 
-export interface InfoTooltipProps {
-  description?: string | ReactNode;
+export interface InfoTooltipProps extends Omit<
+  TooltipProps,
+  "title" | "open" | "onOpenChange" | "color"
+> {
+  className?: string;
+  description?: ReactNode;
   detailedLink?: string | null;
   detailedTextKey?: string;
-  className?: string;
-  placement?: TooltipProps["placement"];
-  trigger?: TooltipProps["trigger"];
-  getPopupContainer?: TooltipProps["getPopupContainer"];
 }
 
 const InfoTooltip: FC<InfoTooltipProps> = ({
@@ -29,7 +29,8 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
   placement,
   trigger,
   className,
-  getPopupContainer
+  getPopupContainer,
+  ...props
 }) => {
   const { t } = useConfig();
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -82,6 +83,7 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
       onOpenChange={onVisibleChangeCallback}
       getPopupContainer={getPopupContainer}
       color={themed("#ffffff", "#424242")}
+      {...props}
     >
       <Button
         className={buttonClassNames}

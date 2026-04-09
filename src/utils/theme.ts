@@ -47,7 +47,7 @@ export const getSystemTheme = (): Theme => {
 };
 
 export const getCurrentTheme = (): Theme => {
-  return window.theme || DEFAULT_THEME;
+  return (localStorage.getItem(THEME_KEY) as Theme) || DEFAULT_THEME;
 };
 
 export const themed = <T, V = T>(lightValue: T, darkValue: V) => {

@@ -21,17 +21,11 @@
 
 // Disable scroll when modal or drawer is opened.
 
-@supported-browser: chrome;
-
 html.scrollbar-hidden {
   overflow: clip !important;
 
   body {
     overflow: visible !important;
-  }
-
-  &.scrollable.@{supported-browser} > body {
-    width: calc(100% - var(--scrollbar-size));
   }
 }
 
