@@ -1,6 +1,5 @@
 import i18n from "i18next";
-import type { IColumn, IRow, TableResponse } from "@/components/Table/types";
-import type { TableProps } from "../../../es/components/Table/types";
+import type { IColumn, IRow, TableResponse, TableProps } from "@/components/Table/types";
 
 export const translateArray = (array: Array<string>) => {
   return array.map(item => i18n.t(item));
