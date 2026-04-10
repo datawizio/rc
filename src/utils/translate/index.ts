@@ -130,9 +130,7 @@ export function translateDataSource(
             return acc;
           }
           acc[dataIndex] =
-            typeof cell[0] === "string"
-              ? translateArray(cell)
-              : cell;
+            typeof cell[0] === "string" ? translateArray(cell) : cell;
           return acc;
         }
         if (typeof cell === "string" && dataIndex !== "name")
