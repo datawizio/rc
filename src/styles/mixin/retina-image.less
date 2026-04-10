@@ -2,7 +2,9 @@
   background-image: url("@{file-1x}");
   background-size: @width-1x @height-1x;
 
-  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min-resolution: 192dpi),
+    only screen and (min-resolution: 2dppx) {
     background-image: url("@{file-2x}");
   }
 }
