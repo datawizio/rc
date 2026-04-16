@@ -1,5 +1,10 @@
 import i18n from "i18next";
-import type { IColumn, IRow, TableResponse, TableProps } from "@/components/Table/types";
+import type {
+  IColumn,
+  IRow,
+  TableResponse,
+  TableProps
+} from "@/components/Table/types";
 
 export const translateArray = (array: Array<string>) => {
   return array.map(item => i18n.t(item));
@@ -122,18 +127,26 @@ export function translateDataSource(
 
     return filteredRow.reduce(
       (acc, [dataIndex, cell]: any) => {
-        if (!cell || dataIndex === "key") return acc;
+        if (!cell || dataIndex === "key") {
+          return acc;
+        }
+
         if (Array.isArray(cell)) {
           if (dataIndex === "children") {
             acc[dataIndex] = translateDataSource(cell);
             return acc;
           }
+
           acc[dataIndex] =
             typeof cell[0] === "string" ? translateArray(cell) : cell;
+
           return acc;
         }
-        if (typeof cell === "string" && dataIndex !== "name")
+
+        if (typeof cell === "string" && dataIndex !== "name") {
           acc[dataIndex] = i18n.t(cell) as string;
+        }
+
         if (typeof cell === "object") {
           acc[dataIndex] = {
             ...cell,

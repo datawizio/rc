@@ -41,7 +41,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "format": "prettier . --write",
-    "format:check": "prettier . --check || true",
+    "format:check": "prettier . --check",
     "ci": "yarn typecheck && yarn lint && yarn format:check && yarn build"
   },
   "peerDependencies": {
