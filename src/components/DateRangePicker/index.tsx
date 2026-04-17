@@ -6,6 +6,7 @@ import DatePicker from "@/components/DatePicker";
 import { Tag } from "antd";
 import { useCallback, useMemo, useState } from "react";
 import { useConfig } from "@/hooks";
+import { ClientDateFormat } from "@/utils/clientDateFormat";
 import {
   DefaultPreset,
   DefaultPresetPrev,
@@ -32,7 +33,7 @@ const DateRangePicker: IDateRangePicker = ({
   maxDateForPresets,
   useCurrentDayPreset,
   inputReadOnly = true,
-  format = "DD-MM-YYYY",
+  format = new ClientDateFormat().toString(),
   dateTo: propsDateTo = "02-12-2001",
   dateFrom: propsDateFrom = "02-12-2001",
   minDate: propsMinDate,
@@ -42,6 +43,13 @@ const DateRangePicker: IDateRangePicker = ({
   const { t } = useConfig();
   const [isOpen, setIsOpen] = useState(false);
   const [previewRange, setPreviewRange] = useState<DateRange | null>(null);
+
+  const getDate = useCallback(
+    (date: DateType | null | undefined) => {
+      return !date ? null : dayjs(date, format);
+    },
+    [format]
+  );
 
   /**
    * Generate preset ranges from the provided props with the following priority:
@@ -59,8 +67,8 @@ const DateRangePicker: IDateRangePicker = ({
 
       const defaultPreset = DefaultPreset(
         type,
-        propsMinDate ?? null,
-        maxDateForPresets ?? propsMaxDate ?? null,
+        getDate(propsMinDate ?? null),
+        getDate(maxDateForPresets ?? propsMaxDate ?? null),
         useCurrentDayPreset
       );
       const defaultPresetPrev = DefaultPresetPrev(
@@ -90,8 +98,8 @@ const DateRangePicker: IDateRangePicker = ({
       const defaultPreset = {
         ...DefaultPreset(
           type,
-          propsMinDate ?? null,
-          maxDateForPresets ?? propsMaxDate ?? null,
+          getDate(propsMinDate ?? null),
+          getDate(maxDateForPresets ?? propsMaxDate ?? null),
           useCurrentDayPreset
         )
       };
@@ -107,6 +115,7 @@ const DateRangePicker: IDateRangePicker = ({
   }, [
     currDateRange,
     defaultPresetExceptions,
+    getDate,
     presets,
     maxDateForPresets,
     propsDateFrom,
@@ -133,20 +142,13 @@ const DateRangePicker: IDateRangePicker = ({
     return translatedPresets;
   }, [getPresets, t]);
 
-  const formatDate = useCallback(
-    (date: DateType | null | undefined) => {
-      return !date ? null : dayjs(date, format);
-    },
-    [format]
-  );
-
   const [dateFrom, dateTo] = useMemo(() => {
-    return [formatDate(propsDateFrom), formatDate(propsDateTo)];
-  }, [propsDateFrom, propsDateTo, formatDate]);
+    return [getDate(propsDateFrom), getDate(propsDateTo)];
+  }, [propsDateFrom, propsDateTo, getDate]);
 
   const [maxDate, minDate] = useMemo(() => {
-    return [formatDate(propsMaxDate), formatDate(propsMinDate)];
-  }, [propsMaxDate, propsMinDate, formatDate]);
+    return [getDate(propsMaxDate), getDate(propsMinDate)];
+  }, [propsMaxDate, propsMinDate, getDate]);
 
   const isDisabledDate = useCallback(
     (date: Dayjs) => {
