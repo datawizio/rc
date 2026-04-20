@@ -26,6 +26,7 @@ export interface TransferListBodyProps extends PartialTransferListProps {
   disabledKeys?: string[];
   enabledKeys?: string[];
   disableAll?: boolean;
+  virtual?: boolean;
   onPageChange?: (page: number) => void;
 }
 
@@ -108,6 +109,7 @@ class ListBody extends Component<TransferListBodyProps, TransferListBodyState> {
       disableAll,
       enabledKeys,
       type,
+      virtual,
       pagination,
       loadTreeData,
       totalItemsCount
@@ -147,6 +149,7 @@ class ListBody extends Component<TransferListBodyProps, TransferListBodyState> {
               filteredItems={filteredItems}
               loadData={loadTreeData}
               expandedKeys={expandedKeys!}
+              virtual={virtual}
               onItemSelect={this.onItemSelect}
               onItemsSelect={this.onItemsSelect}
             />

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Tree } from "antd";
 import { useTreeData } from "../hooks/useTreeData";
+import { ButtonAddAll } from "./ButtonAddAll";
 
 import type { Key, FC, ReactNode } from "react";
 import type { DataNode } from "@rc-component/tree-select/es/interface";
@@ -11,6 +12,7 @@ export interface ListTreeProps {
   filteredItems: DataNode[];
   disabledKeys: string[];
   disableAll: boolean;
+  virtual?: boolean;
   enabledKeys: string[];
   checkedKeys: string[];
   expandedKeys: string[];
@@ -23,6 +25,7 @@ export const ListTree: FC<ListTreeProps> = ({
   filteredItems,
   disabledKeys,
   disableAll,
+  virtual,
   enabledKeys,
   checkedKeys,
   expandedKeys,
@@ -46,6 +49,21 @@ export const ListTree: FC<ListTreeProps> = ({
       simpleMode: true
     }
   );
+
+  const checkedSet = useMemo(() => new Set(checkedKeys), [checkedKeys]);
+
+  const titleRender = (node: any) => {
+    return (
+      <>
+        {node.sourceTitle}
+        <ButtonAddAll
+          node={node}
+          selected={checkedSet}
+          onClick={onItemsSelect}
+        />
+      </>
+    );
+  };
 
   const handleExpand = (expanded: Key[]) => {
     setInternalExpandedKeys(expanded as string[]);
@@ -80,6 +98,8 @@ export const ListTree: FC<ListTreeProps> = ({
       treeData={treeData}
       loadData={loadData}
       loadedKeys={[]}
+      height={virtual ? 386 : undefined}
+      titleRender={titleRender}
       onExpand={handleExpand}
       onCheck={handleCheck}
       onSelect={handleSelect}
