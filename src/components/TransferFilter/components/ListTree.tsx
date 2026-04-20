@@ -12,6 +12,7 @@ export interface ListTreeProps {
   filteredItems: DataNode[];
   disabledKeys: string[];
   disableAll: boolean;
+  virtual?: boolean;
   enabledKeys: string[];
   checkedKeys: string[];
   expandedKeys: string[];
@@ -24,6 +25,7 @@ export const ListTree: FC<ListTreeProps> = ({
   filteredItems,
   disabledKeys,
   disableAll,
+  virtual,
   enabledKeys,
   checkedKeys,
   expandedKeys,
@@ -96,7 +98,7 @@ export const ListTree: FC<ListTreeProps> = ({
       treeData={treeData}
       loadData={loadData}
       loadedKeys={[]}
-      height={386}
+      height={virtual ? 386 : undefined}
       titleRender={titleRender}
       onExpand={handleExpand}
       onCheck={handleCheck}

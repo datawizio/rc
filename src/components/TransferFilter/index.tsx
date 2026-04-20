@@ -33,7 +33,8 @@ const TransferFilter: FC<TransferFilterProps> = ({
   onChange,
   loadData,
   loadDataByIds,
-  disableRoots
+  disableRoots,
+  virtual
 }) => {
   const { t } = useConfig();
 
@@ -317,6 +318,7 @@ const TransferFilter: FC<TransferFilterProps> = ({
         onItemSelect={onLeftItemSelect}
         onItemsSelect={onLeftItemsSelect}
         disableRoots={disableRoots}
+        virtual={virtual}
       />
       <Operation
         className={`${prefixCls}-operation`}
