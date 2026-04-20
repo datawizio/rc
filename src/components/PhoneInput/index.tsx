@@ -41,7 +41,7 @@ const PhoneInput: PhoneInputComponent = ({
 
   const [selectedCountry, setSelectedCountry] = useState<
     CountryCode | undefined
-  >("UA");
+  >(defaultCountry);
 
   const inputRef = useRef<InputRef>(null);
 
@@ -92,7 +92,14 @@ const PhoneInput: PhoneInputComponent = ({
   };
 
   useEffect(() => {
-    if (internalValue === value || !value || !selectedCountry) return;
+    if (internalValue === value) return;
+
+    if (!value) {
+      setInternalValue(undefined);
+      setFormatedValue(undefined);
+      setSelectedCountry(defaultCountry);
+      return;
+    }
 
     const {
       value: val,
@@ -114,6 +121,7 @@ const PhoneInput: PhoneInputComponent = ({
         className="phone-input-select"
         classNames={{ popup: { root: "phone-input-select-dropdown" } }}
         value={selectedCountry}
+        placeholder={<span className="phone-input-flag-placeholder" />}
         popupMatchSelectWidth={false}
         optionLabelProp="label"
         optionFilterProp="title"
