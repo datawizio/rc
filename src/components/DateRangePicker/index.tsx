@@ -6,7 +6,7 @@ import DatePicker from "@/components/DatePicker";
 import { Tag } from "antd";
 import { useCallback, useMemo, useState } from "react";
 import { useConfig } from "@/hooks";
-import { ClientDateFormat } from "@/utils/clientDateFormat";
+import { DATE_FORMATS } from "@/utils/dateFormat/constants";
 import {
   DefaultPreset,
   DefaultPresetPrev,
@@ -33,7 +33,7 @@ const DateRangePicker: IDateRangePicker = ({
   maxDateForPresets,
   useCurrentDayPreset,
   inputReadOnly = true,
-  format = new ClientDateFormat().toString(),
+  format = DATE_FORMATS.DATE,
   dateTo: propsDateTo = "02-12-2001",
   dateFrom: propsDateFrom = "02-12-2001",
   minDate: propsMinDate,
@@ -73,8 +73,8 @@ const DateRangePicker: IDateRangePicker = ({
       );
       const defaultPresetPrev = DefaultPresetPrev(
         type,
-        currDateRange?.date_from || propsDateFrom,
-        currDateRange?.date_to || propsDateTo
+        getDate(currDateRange?.date_from || propsDateFrom),
+        getDate(currDateRange?.date_to || propsDateTo)
       );
 
       type PresetKey = keyof typeof defaultPreset;

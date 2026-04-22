@@ -13,6 +13,20 @@ const TOKENS_ORDER_MAP: Record<DateFormatOrder, DateFormatToken[]> = {
   YMD: ["year", "month", "day"]
 };
 
+/**
+ * Manages user-facing date format structures and serialization.
+ *
+ * Allows custom configuration of date format tokens and their order, as well as the separator.
+ * Common usage is to create a format (or use the default), then call `toString` to get a string
+ * representation suitable for libraries such as `dayjs`.
+ *
+ * @example
+ * const defaultFormat = new ClientDateFormat();
+ * defaultFormat.toString(); // "DD-MM-YYYY"
+ *
+ * const customFormat = new ClientDateFormat({ day: "D", month: "M", year: "YYYY" }, { separator: "." });
+ * customFormat.toString(); // "M.D.YYYY"
+ */
 export class ClientDateFormat {
   public static readonly DEFAULT_CONFIG: ClientDateFormatConfig = {
     day: "DD",
@@ -27,13 +41,9 @@ export class ClientDateFormat {
   public static order: DateFormatOrder = "DMY";
 
   constructor(
-    private cfg: ClientDateFormatConfig | null = ClientDateFormat.DEFAULT_CONFIG,
+    private config: ClientDateFormatConfig = ClientDateFormat.DEFAULT_CONFIG,
     private settings: ClientDateFormatSettings = ClientDateFormat.DEFAULT_SETTINGS
   ) {}
-
-  public get config() {
-    return this.cfg ?? ClientDateFormat.DEFAULT_CONFIG;
-  }
 
   public toString() {
     return TOKENS_ORDER_MAP[ClientDateFormat.order]
