@@ -7,6 +7,7 @@ import { useConfig } from "@/hooks";
 import { useLinkGroups } from "./helpers/data";
 import { UserMenuItem } from "./components/UserMenuItem";
 import { LogOutIcon } from "./images/LogOut";
+import { DATE_FORMATS } from "@/utils/dateFormat/constants";
 
 import type { FC } from "react";
 import type { ILinkGroup, ILinkItem } from "./helpers/data";
@@ -23,8 +24,6 @@ export interface UserMenuProps {
   permissions?: Set<string>;
   path?: string;
 }
-
-const DATE_FORMAT = "DD.MM.YYYY";
 
 const UserMenu: FC<UserMenuProps> = ({
   photo,
@@ -67,7 +66,7 @@ const UserMenu: FC<UserMenuProps> = ({
         {expireDateTo && (
           <span className="user-menu-info-date">
             {t("ACCOUNT_IS_ACTIVE_TO")}:{" "}
-            {dayjs(expireDateTo).format(DATE_FORMAT)}
+            {dayjs(expireDateTo).format(DATE_FORMATS.DATE_WITH_DOTS)}
           </span>
         )}
       </div>

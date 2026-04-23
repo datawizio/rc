@@ -1,12 +1,13 @@
 import dayjs from "dayjs";
 import i18next, { type TFunction } from "i18next";
 import { capitalize } from "lodash";
+import { DATE_FORMATS } from "./dateFormat/constants";
 
 export const formatDateTime = (
   dateOrigin: string | dayjs.Dayjs,
   translate: TFunction
 ) => {
-  const dateFormat = "DD.MM.YYYY";
+  const dateFormat = DATE_FORMATS.DATE_WITH_DOTS;
   const timeFormat = "HH:mm";
 
   const today = dayjs().format(dateFormat);

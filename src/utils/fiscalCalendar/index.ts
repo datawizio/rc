@@ -1,7 +1,6 @@
 import dayjs, { type Dayjs } from "dayjs";
+import { DATE_FORMATS } from "../dateFormat/constants";
 import type { DateType } from "@/types/date";
-
-const format = "DD-MM-YYYY";
 
 class FiscalCalendar {
   public static readonly DAYS_IN_YEAR = 364;
@@ -182,28 +181,28 @@ class FiscalCalendar {
 
   public presetCurrentMonth(maxDate: DateType = null) {
     const min = maxDate
-      ? this.getStartOfMonth(dayjs(maxDate, format))
+      ? this.getStartOfMonth(dayjs(maxDate, DATE_FORMATS.DATE))
       : this.getStartOfMonth(dayjs());
 
-    const max = maxDate ? dayjs(maxDate, format) : dayjs();
+    const max = maxDate ? dayjs(maxDate, DATE_FORMATS.DATE) : dayjs();
     return [min, max];
   }
 
   public presetCurrentQuarter(maxDate: DateType = null) {
     const min = maxDate
-      ? this.getStartOfQuarter(dayjs(maxDate, format))
+      ? this.getStartOfQuarter(dayjs(maxDate, DATE_FORMATS.DATE))
       : this.getStartOfQuarter(dayjs());
 
-    const max = maxDate ? dayjs(maxDate, format) : dayjs();
+    const max = maxDate ? dayjs(maxDate, DATE_FORMATS.DATE) : dayjs();
     return [min, max];
   }
 
   public presetCurrentYear(maxDate: DateType = null) {
     const min = maxDate
-      ? this.getStartOfYear(dayjs(maxDate, format))
+      ? this.getStartOfYear(dayjs(maxDate, DATE_FORMATS.DATE))
       : this.getStartOfYear(dayjs());
 
-    const max = maxDate ? dayjs(maxDate, format) : dayjs();
+    const max = maxDate ? dayjs(maxDate, DATE_FORMATS.DATE) : dayjs();
     return [min, max];
   }
 
@@ -227,7 +226,7 @@ class FiscalCalendar {
     let dateToDays = 91;
 
     if (dateFrom) {
-      const dateFromDay = dayjs(dateFrom, format);
+      const dateFromDay = dayjs(dateFrom, DATE_FORMATS.DATE);
       const dateFromYear = dateFrom ? this.getYear(dateFromDay) : 0;
 
       if (
@@ -241,7 +240,7 @@ class FiscalCalendar {
     }
 
     if (dateTo) {
-      const dateToDay = dayjs(dateTo, format);
+      const dateToDay = dayjs(dateTo, DATE_FORMATS.DATE);
       const dateToYear = dateTo ? this.getYear(dateToDay) : 0;
       if (
         (this.is53WeeksYear(dateToYear) && this.isDateInLastWeek(dateToDay)) ||
@@ -251,8 +250,11 @@ class FiscalCalendar {
       }
     }
 
-    const min = dayjs(dateFrom, format).subtract(dateFromDays, "days");
-    const max = dayjs(dateTo, format).subtract(dateToDays, "days");
+    const min = dayjs(dateFrom, DATE_FORMATS.DATE).subtract(
+      dateFromDays,
+      "days"
+    );
+    const max = dayjs(dateTo, DATE_FORMATS.DATE).subtract(dateToDays, "days");
     return [min, max];
   }
 
@@ -261,7 +263,7 @@ class FiscalCalendar {
     let dateToDays = 364;
 
     if (dateFrom) {
-      const dateFromDay = dayjs(dateFrom, format);
+      const dateFromDay = dayjs(dateFrom, DATE_FORMATS.DATE);
       const dateFromYear = dateFrom ? this.getYear(dateFromDay) : 0;
 
       if (
@@ -275,7 +277,7 @@ class FiscalCalendar {
     }
 
     if (dateTo) {
-      const dateToDay = dayjs(dateTo, format);
+      const dateToDay = dayjs(dateTo, DATE_FORMATS.DATE);
       const dateToYear = dateTo ? this.getYear(dateToDay) : 0;
       if (
         (this.is53WeeksYear(dateToYear) && this.isDateInLastWeek(dateToDay)) ||
@@ -285,8 +287,11 @@ class FiscalCalendar {
       }
     }
 
-    const min = dayjs(dateFrom, format).subtract(dateFromDays, "days");
-    const max = dayjs(dateTo, format).subtract(dateToDays, "days");
+    const min = dayjs(dateFrom, DATE_FORMATS.DATE).subtract(
+      dateFromDays,
+      "days"
+    );
+    const max = dayjs(dateTo, DATE_FORMATS.DATE).subtract(dateToDays, "days");
     return [min, max];
   }
 
