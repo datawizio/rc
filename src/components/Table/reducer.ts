@@ -523,6 +523,8 @@ export const reducer = (state: TableState, action: Action): TableState => {
         );
       }
 
+      console.log({ newState });
+
       return { ...state, ...newState };
     }
 
