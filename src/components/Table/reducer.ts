@@ -517,7 +517,10 @@ export const reducer = (state: TableState, action: Action): TableState => {
         Object.keys(data).forEach(key => {
           expandedRecord[key as keyof typeof expandedRecord] = data[key];
         });
-        newState.dataSource = nextDataSource;
+        
+        newState.dataSource = nextDataSource?.map(row =>
+          row.key === (expandedRecord as any).key ? { ...expandedRecord } : row
+        );
       }
 
       return { ...state, ...newState };
