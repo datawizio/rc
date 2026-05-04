@@ -8,7 +8,13 @@ import ToolBar from "./components/ToolBar";
 import TableWrapper from "./components/TableWrapper";
 import HeaderWrapper from "./components/HeaderWrapper";
 
-import { useMemo, useReducer, useCallback, useImperativeHandle } from "react";
+import {
+  useMemo,
+  useReducer,
+  useCallback,
+  useImperativeHandle,
+  useRef
+} from "react";
 import { mergeWith } from "lodash";
 import { Table as AntdTable } from "antd";
 import { DndProvider } from "react-dnd";
@@ -141,6 +147,9 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
     }),
     [baseState, columnsState, dataSourceState]
   );
+
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
   if (!isAsync) {
     if (state.pagination.total !== state.dataSource.length) {
@@ -371,7 +380,7 @@ const Table = React.forwardRef<TableRef, TableProps>((customProps, ref) => {
       dispatch({ type: "updateRow", payload: [rowKey, data] });
     },
     getState() {
-      return state;
+      return stateRef.current;
     },
     addLoadingRow(rowKey: string) {
       dispatch({ type: "addLoadingRow", payload: rowKey });
