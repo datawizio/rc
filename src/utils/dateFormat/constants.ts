@@ -12,6 +12,7 @@ const STATIC_DATE_FORMATS = {
   DATE_TIME_WITH_PIPE: () => `${fullDate} | HH:mm`,
   YEAR: () => "YYYY",
   YEAR_MONTH: () => `${yearMonthDate}`,
+  API_YEAR_MONTH: () => "YYYY-MM",
   API_DATE: () => "YYYY-MM-DD",
   API_DATE_TIME: () => "YYYY-MM-DD HH:mm:ss"
 };
