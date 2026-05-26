@@ -3,7 +3,7 @@ import type { Locale } from "antd/es/locale";
 export type IDirection = "ltr" | "rtl" | undefined;
 
 export const getLanguagesRTL = (): string[] => {
-  return ["ar"];
+  return ["ar", "he"];
 };
 
 export const getLangDirection = (locale?: Locale): IDirection => {
