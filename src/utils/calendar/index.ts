@@ -32,7 +32,26 @@ class Calendar {
       date = date.year(date.year() - 1);
     }
 
-    return date.month(calendarInfo.startMonth).date(1);
+    return date.date(1).month(calendarInfo.startMonth);
+  }
+
+  public getStartOfWeek(date: Dayjs) {
+    const diff = (date.day() - this.startWeek + 7) % 7;
+    return date.subtract(diff, "day");
+  }
+
+  public getStartOfQuarter(date: Dayjs) {
+    if (this.type === "fiscal") {
+      return fiscalCalendar.getStartOfQuarter(date);
+    }
+
+    let startQuarter = this.getStartOfYear(date);
+
+    while (!startQuarter.add(3, "month").isAfter(date)) {
+      startQuarter = startQuarter.add(3, "month");
+    }
+
+    return startQuarter;
   }
 }
 
