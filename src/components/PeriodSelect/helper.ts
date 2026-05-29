@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { calendarInfo } from "@/utils/calendar";
 import {
   AVAILABLE_PERIODS_FOR_DATES,
   CUSTOM_PERIOD_KEY,
@@ -22,6 +23,33 @@ import type {
   PeriodEnum,
   PrevPeriodEnum
 } from "./types";
+
+const startOfWeek = (date: Dayjs) => {
+  return calendarInfo.getStartOfWeek(date);
+};
+
+const endOfWeek = (date: Dayjs) => {
+  return calendarInfo.getStartOfWeek(date).add(6, "day");
+};
+
+const startOfYear = (date: Dayjs) => {
+  return calendarInfo.getStartOfYear(date);
+};
+
+const endOfYear = (date: Dayjs) => {
+  return calendarInfo.getStartOfYear(date).add(1, "year").subtract(1, "day");
+};
+
+const startOfQuarter = (date: Dayjs) => {
+  return calendarInfo.getStartOfQuarter(date);
+};
+
+const endOfQuarter = (date: Dayjs) => {
+  return calendarInfo
+    .getStartOfQuarter(date)
+    .add(3, "month")
+    .subtract(1, "day");
+};
 
 export const getPrevPeriod = ({
   date,
@@ -59,17 +87,19 @@ export const getPrevPeriod = ({
     }
 
     case "prev_week": {
-      newPrevPeriod.startDate = dayjs(clientDate)
-        .startOf("week")
-        .subtract(2, "week");
-      newPrevPeriod.endDate = dayjs(newPrevPeriod.startDate).endOf("week");
+      newPrevPeriod.startDate = startOfWeek(dayjs(clientDate)).subtract(
+        2,
+        "week"
+      );
+      newPrevPeriod.endDate = endOfWeek(newPrevPeriod.startDate);
       break;
     }
 
     case "week_begin": {
-      newPrevPeriod.startDate = dayjs(clientDate)
-        .startOf("week")
-        .subtract(1, "week");
+      newPrevPeriod.startDate = startOfWeek(dayjs(clientDate)).subtract(
+        1,
+        "week"
+      );
       newPrevPeriod.endDate = dayjs(clientDate).subtract(1, "week");
       break;
     }
@@ -91,20 +121,19 @@ export const getPrevPeriod = ({
     }
 
     case "quarter_begin": {
-      newPrevPeriod.startDate = dayjs(clientDate)
-        .startOf("quarter")
-        .subtract(1, "quarter");
+      newPrevPeriod.startDate = startOfQuarter(dayjs(clientDate)).subtract(
+        1,
+        "quarter"
+      );
       newPrevPeriod.endDate = dayjs(clientDate).subtract(1, "quarter");
       break;
     }
 
     case "prev_quarter": {
-      newPrevPeriod.startDate = dayjs(clientDate)
-        .startOf("quarter")
-        .subtract(2, "quarter");
+      const quarterStart = startOfQuarter(dayjs(clientDate));
+      newPrevPeriod.startDate = quarterStart.subtract(2, "quarter");
 
-      newPrevPeriod.endDate = dayjs(clientDate)
-        .startOf("quarter")
+      newPrevPeriod.endDate = quarterStart
         .subtract(1, "quarter")
         .subtract(1, "day");
 
@@ -112,9 +141,10 @@ export const getPrevPeriod = ({
     }
 
     case "year_begin": {
-      newPrevPeriod.startDate = dayjs(clientDate)
-        .startOf("year")
-        .subtract(1, "year");
+      newPrevPeriod.startDate = startOfYear(dayjs(clientDate)).subtract(
+        1,
+        "year"
+      );
 
       newPrevPeriod.endDate = dayjs(clientDate).subtract(1, "year");
       break;
@@ -127,8 +157,8 @@ export const getPrevPeriod = ({
     }
 
     case "current_week": {
-      newPrevPeriod.startDate = dayjs().startOf("week").subtract(1, "week");
-      newPrevPeriod.endDate = dayjs().endOf("week").subtract(1, "week");
+      newPrevPeriod.startDate = startOfWeek(dayjs()).subtract(1, "week");
+      newPrevPeriod.endDate = endOfWeek(dayjs()).subtract(1, "week");
       break;
     }
 
@@ -139,16 +169,14 @@ export const getPrevPeriod = ({
     }
 
     case "current_quarter": {
-      newPrevPeriod.startDate = dayjs()
-        .startOf("quarter")
-        .subtract(1, "quarter");
-      newPrevPeriod.endDate = dayjs().endOf("quarter").subtract(1, "quarter");
+      newPrevPeriod.startDate = startOfQuarter(dayjs()).subtract(1, "quarter");
+      newPrevPeriod.endDate = endOfQuarter(dayjs()).subtract(1, "quarter");
       break;
     }
 
     case "current_year": {
-      newPrevPeriod.startDate = dayjs().startOf("year").subtract(1, "year");
-      newPrevPeriod.endDate = dayjs().endOf("year").subtract(1, "year");
+      newPrevPeriod.startDate = startOfYear(dayjs()).subtract(1, "year");
+      newPrevPeriod.endDate = endOfYear(dayjs()).subtract(1, "year");
       break;
     }
 
@@ -177,14 +205,10 @@ export const getPrevPeriod = ({
     }
 
     case "prev_year": {
-      newPrevPeriod.startDate = dayjs(clientDate)
-        .startOf("year")
-        .subtract(2, "year");
+      const prevYearStart = startOfYear(dayjs(clientDate)).subtract(2, "year");
 
-      newPrevPeriod.endDate = dayjs(clientDate)
-        .startOf("year")
-        .subtract(2, "year")
-        .endOf("year");
+      newPrevPeriod.startDate = prevYearStart;
+      newPrevPeriod.endDate = endOfYear(prevYearStart);
 
       break;
     }
@@ -289,15 +313,13 @@ export const getPeriod: GetPeriod = ({
     }
 
     case "prev_week": {
-      newPeriod.startDate = dayjs(clientDate)
-        .startOf("week")
-        .subtract(1, "week");
-      newPeriod.endDate = dayjs(newPeriod.startDate).endOf("week");
+      newPeriod.startDate = startOfWeek(dayjs(clientDate)).subtract(1, "week");
+      newPeriod.endDate = endOfWeek(newPeriod.startDate);
       break;
     }
 
     case "week_begin": {
-      newPeriod.startDate = dayjs(clientDate).startOf("week");
+      newPeriod.startDate = startOfWeek(dayjs(clientDate));
       newPeriod.endDate = dayjs(clientDate);
       break;
     }
@@ -318,7 +340,7 @@ export const getPeriod: GetPeriod = ({
     }
 
     case "quarter_begin": {
-      newPeriod.startDate = dayjs(clientDate).startOf("quarter");
+      newPeriod.startDate = startOfQuarter(dayjs(clientDate));
       newPeriod.endDate = dayjs(clientDate);
       break;
     }
@@ -330,8 +352,8 @@ export const getPeriod: GetPeriod = ({
     }
 
     case "current_week": {
-      newPeriod.startDate = dayjs().startOf("week");
-      newPeriod.endDate = dayjs().endOf("week");
+      newPeriod.startDate = startOfWeek(dayjs());
+      newPeriod.endDate = endOfWeek(dayjs());
       break;
     }
 
@@ -342,31 +364,28 @@ export const getPeriod: GetPeriod = ({
     }
 
     case "current_quarter": {
-      newPeriod.startDate = dayjs().startOf("quarter");
-      newPeriod.endDate = dayjs().endOf("quarter");
+      newPeriod.startDate = startOfQuarter(dayjs());
+      newPeriod.endDate = endOfQuarter(dayjs());
       break;
     }
 
     case "current_year": {
-      newPeriod.startDate = dayjs().startOf("year");
-      newPeriod.endDate = dayjs().endOf("year");
+      newPeriod.startDate = startOfYear(dayjs());
+      newPeriod.endDate = endOfYear(dayjs());
       break;
     }
 
     case "prev_quarter": {
-      newPeriod.startDate = dayjs(clientDate)
-        .startOf("quarter")
-        .subtract(1, "quarter");
+      const quarterStart = startOfQuarter(dayjs(clientDate));
+      newPeriod.startDate = quarterStart.subtract(1, "quarter");
 
-      newPeriod.endDate = dayjs(clientDate)
-        .startOf("quarter")
-        .subtract(1, "day");
+      newPeriod.endDate = quarterStart.subtract(1, "day");
 
       break;
     }
 
     case "year_begin": {
-      newPeriod.startDate = dayjs(clientDate).startOf("year");
+      newPeriod.startDate = startOfYear(dayjs(clientDate));
       newPeriod.endDate = dayjs(clientDate);
       break;
     }
@@ -396,10 +415,9 @@ export const getPeriod: GetPeriod = ({
     }
 
     case "prev_year": {
-      newPeriod.startDate = dayjs(clientDate)
-        .startOf("year")
-        .subtract(1, "year");
-      newPeriod.endDate = dayjs(clientDate).startOf("year").subtract(1, "day");
+      const yearStart = startOfYear(dayjs(clientDate));
+      newPeriod.startDate = yearStart.subtract(1, "year");
+      newPeriod.endDate = yearStart.subtract(1, "day");
       break;
     }
 
