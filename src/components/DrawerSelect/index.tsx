@@ -840,7 +840,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       <Drawer
         className={clsx({
           "drawer-select-dropdown": true,
-          "drawer-select-dropdown-show-all": showSelectAll
+          "drawer-select-dropdown-show-all": showSelectAll,
+          "drawer-select-dropdown-custom-options": !!optionRender
         })}
         title={drawerTitle ? drawerTitle : restProps.placeholder}
         onClose={handleDrawerCancel}
@@ -909,6 +910,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
             }
             onCheck={handleTreeCheck}
             onScroll={handleScroll}
+            optionRender={optionRender}
           />
         )}
         <div className="drawer-select-loader-container">
@@ -957,13 +959,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
 
   return (
     <>
-      {optionRender ? (
-        <Select {...properties} mode="multiple">
-          {optionsState && optionsState.map(option => optionRender(option))}
-        </Select>
-      ) : (
-        <Select {...properties} mode="multiple" options={optionsState} />
-      )}
+      <Select {...properties} mode="multiple" options={optionsState} />
       {dropdownRender()}
     </>
   );
