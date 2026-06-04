@@ -4,6 +4,7 @@ import { TreeSelect as AntTreeSelect } from "antd";
 import type { FC } from "react";
 import type { TreeSelectProps as AntTreeSelectProps } from "antd";
 import type { SelectValue } from "antd/es/tree-select";
+import type { DataNode } from "@rc-component/tree-select/es/interface";
 
 import "./index.less";
 
@@ -39,6 +40,25 @@ export interface TreeSelectCompoundComponent extends TreeSelectComponent {
   TreeNode: typeof AntTreeSelect.TreeNode;
 }
 
+const normalizeTreeData = (
+  treeData?: TreeSelectProps<SelectValue>["treeData"]
+) => {
+  if (!treeData) return treeData;
+
+  const walk = (item: DataNode): DataNode => {
+    const resolvedKey = item.key ?? item.id;
+
+    return {
+      ...item,
+      key: resolvedKey,
+      value: item.value ?? resolvedKey,
+      children: item.children?.map(walk)
+    };
+  };
+
+  return treeData.map(walk);
+};
+
 const TreeSelect: TreeSelectCompoundComponent = ({
   flat,
   className,
@@ -51,15 +71,16 @@ const TreeSelect: TreeSelectCompoundComponent = ({
   maxTagCount = 10,
   ...restProps
 }) => {
-  let customTreeData = treeData;
+  let customTreeData = normalizeTreeData(treeData);
   const customTreeExpandedKeys = treeDefaultExpandedKeys;
 
   if (showCheckAll) {
     customTreeData = [
       {
         key: checkAllKey,
+        value: checkAllKey,
         title: checkAllTitle,
-        children: treeData,
+        children: customTreeData,
         className: "tree-check-all"
       }
     ];
