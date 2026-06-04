@@ -46,12 +46,32 @@ export const getMainLevelItems = (
 export const getAllLeafItems = (items: any[] = []) => {
   const array: string[] = [];
   for (const item of items) {
-    if (item.isLeaf) {
+    if (item.isLeaf && !item.disabled) {
       array.push(item.id);
     }
   }
 
   return array;
+};
+
+/**
+ * Check if a tree node is disabled.
+ * @param node - Tree node
+ */
+export const isNodeDisabled = (node: TreeDataNode | undefined) => {
+  return Boolean(node?.disabled || node?.disableCheckbox);
+};
+
+/**
+ * Remove disabled node keys from a checked-key list.
+ */
+export const omitDisabledCheckedKeys = (
+  keys: Iterable<Key>,
+  indexes: TreeIndexes
+): Key[] => {
+  return Array.from(keys).filter(
+    key => !isNodeDisabled(indexes.keyToNode.get(key))
+  );
 };
 
 /**
@@ -92,6 +112,23 @@ export const calcEmptyIsAll = (
 };
 
 /**
+ * Normalize tree node key.
+ * @param id - Node ID
+ */
+export const toNodeKey = (id: number | string) => {
+  return String(id);
+};
+
+/**
+ * Normalize parent key (`null` or `0` means root) and coerce types.
+ * @param pId - Parent ID
+ */
+export const toParentKey = (pId: number | string | null | undefined) => {
+  if (pId == null || pId === 0) return null;
+  return String(pId);
+};
+
+/**
  * Build a nested tree from flat simple data
  * (with fields `id` as key and `pId` as a parent key).
  *
@@ -104,20 +141,22 @@ export const buildTreeData = <
 >(
   simpleData: T[] | undefined
 ) => {
-  const nodeMap = new Map<number | string, TreeDataNode>();
+  const nodeMap = new Map<string, TreeDataNode>();
   const roots: TreeDataNode[] = [];
 
   simpleData?.forEach(item => {
-    nodeMap.set(item.id, { ...item, children: [] });
+    nodeMap.set(toNodeKey(item.id), { ...item, children: [] });
   });
 
   simpleData?.forEach(item => {
-    const node = nodeMap.get(item.id)!;
-    // If a parent is missing (or explicitly 0), treat as a root
-    if (item.pId === 0 || !nodeMap.has(item.pId)) {
+    const node = nodeMap.get(toNodeKey(item.id))!;
+    const parentKey = toParentKey(item.pId);
+
+    // If a parent is missing (or explicitly root), treat as a root
+    if (parentKey === null || !nodeMap.has(parentKey)) {
       roots.push(node);
     } else {
-      nodeMap.get(item.pId)!.children!.push(node);
+      nodeMap.get(parentKey)!.children!.push(node);
     }
   });
 
@@ -226,7 +265,9 @@ export const getDescendantLeaves = (key: Key, indexes: TreeIndexes): Key[] => {
   const node = indexes.keyToNode.get(key);
 
   if (!node) return [];
-  if (!node.children || node.children.length === 0) return [key];
+  if (!node.children || node.children.length === 0) {
+    return isNodeDisabled(node) ? [] : [key];
+  }
 
   const res: Key[] = [];
   const stack = [...(indexes.childrenMap.get(key) || [])];
@@ -237,7 +278,9 @@ export const getDescendantLeaves = (key: Key, indexes: TreeIndexes): Key[] => {
 
     if (!currentNode) continue;
     if (!currentNode.children || currentNode.children.length === 0) {
-      res.push(currentKey);
+      if (!isNodeDisabled(currentNode)) {
+        res.push(currentKey);
+      }
     } else {
       stack.push(...(indexes.childrenMap.get(currentKey) || []));
     }
@@ -272,7 +315,9 @@ export const applyCheckedStrategy = (
 
   raw.forEach(key => {
     if (indexes.leafKeys.has(key)) {
-      selectedLeaves.add(key);
+      if (!isNodeDisabled(indexes.keyToNode.get(key))) {
+        selectedLeaves.add(key);
+      }
     } else {
       // Expand non-leaf selections into their leaf descendants
       getDescendantLeaves(key, indexes).forEach(d => selectedLeaves.add(d));
@@ -280,11 +325,14 @@ export const applyCheckedStrategy = (
   });
 
   if (chosen === "SHOW_CHILD") {
-    return Array.from(selectedLeaves);
+    return omitDisabledCheckedKeys(selectedLeaves, indexes);
   }
 
   if (chosen === "SHOW_ALL") {
-    return Array.from(new Set<Key>([...raw, ...selectedLeaves]));
+    return omitDisabledCheckedKeys(
+      new Set<Key>([...raw, ...selectedLeaves]),
+      indexes
+    );
   }
 
   // SHOW_PARENT: collapse fully selected subtrees
@@ -293,7 +341,9 @@ export const applyCheckedStrategy = (
     const allLeavesSelected = leaves.every(l => selectedLeaves.has(l));
     if (allLeavesSelected) return [node.key];
     if (!node.children || node.children.length === 0) {
-      return selectedLeaves.has(node.key) ? [node.key] : [];
+      return selectedLeaves.has(node.key) && !isNodeDisabled(node)
+        ? [node.key]
+        : [];
     }
 
     let acc: Key[] = [];
