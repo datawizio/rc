@@ -13,6 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Skeleton, Tag, TreeSelect } from "antd";
 import { useConfig } from "@/hooks";
 import { useDrawerTreeSelect } from "./hooks/useDrawerTreeSelect";
+import { useTreeContainerHeight } from "./hooks/useTreeContainerHeight";
 import {
   getAllLeafItems,
   getMainLevelItems,
@@ -54,7 +55,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   drawerTitle = "",
   drawerWidth = 400,
   selectedMarkers,
-  headerHeight,
   treeDefaultExpandedKeys,
   dependentItems,
   treeData,
@@ -119,6 +119,9 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     internalTreeDataCount: 0,
     internalTreeExpandedKeys: []
   });
+
+  const { ref: treeContainerRef, height: treeContainerHeight } =
+    useTreeContainerHeight(drawerVisible);
 
   const [searchValue, setSearchValue] = useState<string>("");
   const mainLevelItems = useRef<string[]>([]);
@@ -906,43 +909,48 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
             </Checkbox>
           </div>
         )}
-        {fakeVisible && !internalLoading && (
-          <InnerTree
-            treeData={internalTreeData}
-            simpleMode={Boolean(restProps.treeDataSimpleMode)}
-            remoteSearch={remoteSearch}
-            searchValue={searchValueRef.current}
-            treeNodeFilterProp={restProps.treeNodeFilterProp}
-            height={listHeight}
-            checkStrictly={checkStrictly}
-            internalTreeDefaultExpandedKeys={internalTreeDefaultExpandedKeys}
-            defaultExpandedKeys={treeDefaultExpandedKeys}
-            checkable={Boolean(restProps.treeCheckable)}
-            checkedKeys={(internalValue as Key[]) || []}
-            multiple={multiple}
-            showCheckedStrategy={
-              searchValueRef.current ? "SHOW_CHILD" : showCheckedStrategy
-            }
-            onCheck={handleTreeCheck}
-            onSelect={handleTreeSelect}
-            onExpandedKeysChange={handlerTreeExpand}
-            loadData={loadChildren ? handleTreeLoadData : undefined}
-          />
-        )}
-        <div className="drawer-select-loader-container">
-          {internalLoading && (
-            <>
-              <div className="drawer-tree-select-list-placeholder">
-                {t("LOADING")}
-              </div>
-              <Skeleton
-                title={{ width: 330 }}
-                paragraph={{ rows: 1 }}
-                loading={true}
-                active
-              />
-            </>
+        <div
+          ref={treeContainerRef}
+          className="drawer-tree-select-tree-container"
+        >
+          {fakeVisible && !internalLoading && (
+            <InnerTree
+              treeData={internalTreeData}
+              simpleMode={Boolean(restProps.treeDataSimpleMode)}
+              remoteSearch={remoteSearch}
+              searchValue={searchValueRef.current}
+              treeNodeFilterProp={restProps.treeNodeFilterProp}
+              height={treeContainerHeight}
+              checkStrictly={checkStrictly}
+              internalTreeDefaultExpandedKeys={internalTreeDefaultExpandedKeys}
+              defaultExpandedKeys={treeDefaultExpandedKeys}
+              checkable={Boolean(restProps.treeCheckable)}
+              checkedKeys={(internalValue as Key[]) || []}
+              multiple={multiple}
+              showCheckedStrategy={
+                searchValueRef.current ? "SHOW_CHILD" : showCheckedStrategy
+              }
+              onCheck={handleTreeCheck}
+              onSelect={handleTreeSelect}
+              onExpandedKeysChange={handlerTreeExpand}
+              loadData={loadChildren ? handleTreeLoadData : undefined}
+            />
           )}
+          <div className="drawer-select-loader-container">
+            {internalLoading && (
+              <>
+                <div className="drawer-tree-select-list-placeholder">
+                  {t("LOADING")}
+                </div>
+                <Skeleton
+                  title={{ width: 330 }}
+                  paragraph={{ rows: 1 }}
+                  loading={true}
+                  active
+                />
+              </>
+            )}
+          </div>
         </div>
         {(multiple || maxSelected) && (
           <div
@@ -965,22 +973,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
       </Drawer>
     );
   };
-
-  const getMarkersFieldHeight = () => {
-    return (
-      document.getElementsByClassName("select-markers-field")[0]?.clientHeight +
-        12 || 44
-    );
-  };
-
-  const listHeight =
-    window.innerHeight -
-    (headerHeight ? headerHeight : 0) -
-    204 -
-    (showMarkers || markersRender ? getMarkersFieldHeight() : 0) -
-    (isLevelShowed ? 44 : 0) -
-    (strictlyModeCheckbox ? 30 : 0) -
-    (showSelectAll ? 34 : 0);
 
   return (
     <>

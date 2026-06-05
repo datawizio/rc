@@ -126,7 +126,7 @@ export type FieldDrawerTreeSelectProps = FormFieldProps<string> &
 
 export type ImageProps = Omit<
   ImgCropProps,
-  "modalTitle" | "modalOk" | "modalCancel" | "cropShape"
+  "modalTitle" | "modalOk" | "modalCancel" | "cropShape" | "children"
 > & {
   name: string | string[];
   value?: string | File | null;
