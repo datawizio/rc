@@ -17,7 +17,8 @@ import {
   getAllLeafItems,
   getMainLevelItems,
   isAllItemsChecked,
-  calcEmptyIsAll
+  calcEmptyIsAll,
+  toInternalValue
 } from "./utils/tree";
 
 import type { Key, ChangeEvent } from "react";
@@ -109,7 +110,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     showSelectAll: propsShowSelectAll,
     fakeVisible: false,
     drawerVisible: false,
-    internalValue: value,
+    internalValue: toInternalValue(value, multiple),
     selected: undefined,
     stateTreeData: treeData,
     internalLoading: loading,
@@ -458,7 +459,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
       allLeafItems.current = getAllLeafItems(stateTreeData);
     }
 
-    const values = internalValue?.map(item => {
+    const values = toInternalValue(internalValue, multiple).map(item => {
       return typeof item === "object" && "value" in item ? item.value : item;
     });
 
@@ -488,7 +489,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   //  -------- HANDLERS --------
 
   const handlerDrawerCancel = useCallback(() => {
-    const prevValue = !multiple && !value ? [] : value;
+    const prevValue = toInternalValue(value, multiple);
 
     if (prevValue && prevValue.length === 0) {
       showAllRef.current = true;
@@ -571,10 +572,10 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   );
 
   const handleTreeSelect = useCallback<HandlerFn<TreeProps, "onSelect">>(
-    keys => {
+    (_, info) => {
       dispatch({
         type: "setSelected",
-        payload: keys
+        payload: info.node
       });
     },
     [dispatch]
@@ -603,6 +604,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         }
       } else {
         state.internalValue = info.checked ? [getKey(info)] : [];
+        state.selected = info.checked ? info.node : undefined;
       }
 
       state.internalTreeDataCount = state.internalValue?.length;
@@ -718,7 +720,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
 
     dispatch({
       type: "internalValue",
-      payload: !multiple && !value ? [] : value
+      payload: toInternalValue(value, multiple)
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

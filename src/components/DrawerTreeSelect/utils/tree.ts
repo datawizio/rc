@@ -4,10 +4,26 @@ import type { Key } from "react";
 import type { TreeDataNode } from "antd";
 import type { CheckedStrategy } from "@rc-component/tree-select/es/utils/strategyUtil";
 import type { SimpleModeConfig } from "@rc-component/tree-select/es/interface";
+import type { SelectValue } from "antd/es/tree-select";
 import type {
   IDrawerTreeSelectFilters,
   SelectValues
 } from "@/components/DrawerTreeSelect/types";
+
+/**
+ * Converts the raw external value from the TreeSelect into a normalized internal array format.
+ *
+ * @param value - The value received from the TreeSelect.
+ * @param multiple - Optional flag indicating if the select allows multiple selections.
+ */
+export const toInternalValue = (
+  value: SelectValue | undefined,
+  multiple?: boolean
+) => {
+  if (value == null || value === "") return [];
+  if (Array.isArray(value)) return value;
+  return !multiple ? ([value] as SelectValues) : [];
+};
 
 /**
  * Get ids of the first-level items (or of a specific level) from a flat, level-sorted list.
