@@ -19,7 +19,8 @@ import {
   getMainLevelItems,
   isAllItemsChecked,
   calcEmptyIsAll,
-  toInternalValue
+  toInternalValue,
+  getExpandedKeysByValue
 } from "./utils/tree";
 
 import type { Key, ChangeEvent } from "react";
@@ -45,6 +46,7 @@ type Handler<Name extends keyof TreeSelectProps> = HandlerFn<
 const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   additionalFilters,
   asyncData,
+  expandToSelectedNodes = false,
   showLevels = false,
   showMarkers = false,
   noticeRender,
@@ -466,9 +468,25 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
       return typeof item === "object" && "value" in item ? item.value : item;
     });
 
+    let keysFromValue: Key[] = [];
+    if (expandToSelectedNodes) {
+      keysFromValue = getExpandedKeysByValue(
+        values,
+        stateTreeData,
+        !!restProps.treeDataSimpleMode
+      );
+    }
+
+    const payloadStatus = checkSelectAllStatus(values);
+
     dispatch({
       type: "openDrawer",
-      payload: checkSelectAllStatus(values)
+      payload: {
+        ...payloadStatus,
+        internalTreeExpandedKeys: Array.from(
+          new Set([...internalTreeExpandedKeys, ...keysFromValue])
+        )
+      }
     });
 
     onDrawerOpenCallback?.();

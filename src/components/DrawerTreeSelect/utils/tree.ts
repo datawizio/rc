@@ -2,6 +2,7 @@ import { difference } from "lodash";
 
 import type { Key } from "react";
 import type { TreeDataNode } from "antd";
+import type { DataNode } from "@rc-component/tree-select/es/interface";
 import type { CheckedStrategy } from "@rc-component/tree-select/es/utils/strategyUtil";
 import type { SimpleModeConfig } from "@rc-component/tree-select/es/interface";
 import type { SelectValue } from "antd/es/tree-select";
@@ -177,6 +178,66 @@ export const buildTreeData = <
   });
 
   return roots;
+};
+
+/**
+ * Collect ancestor keys that must be expanded to reveal the given selected values.
+ *
+ * Supports both flat simple-mode data (`id` / `pId`) and nested hierarchical trees.
+ * Value objects from `treeCheckStrictly` mode are unwrapped before lookup.
+ *
+ * @param values - Selected node keys/values
+ * @param treeData - Current tree data (flat or nested)
+ * @param isSimpleMode - Whether `treeDataSimpleMode` is enabled
+ * @returns Array of parent keys to expand
+ */
+export const getExpandedKeysByValue = (
+  values: SelectValues | undefined,
+  treeData: DataNode[] | undefined,
+  isSimpleMode: boolean
+): Key[] => {
+  if (!values?.length || !treeData?.length) return [];
+
+  const selectedIds = new Set(
+    values.map(v =>
+      String(v !== null && typeof v === "object" && "value" in v ? v.value : v)
+    )
+  );
+
+  const parentMap = new Map<string, Key | null>();
+
+  if (isSimpleMode) {
+    for (const node of treeData) {
+      const id = node.id ?? node.value;
+      if (id != null) {
+        parentMap.set(String(id), node.pId ?? null);
+      }
+    }
+  } else {
+    const flatten = (nodes: DataNode[], parentId: Key | null) => {
+      for (const node of nodes) {
+        const id = node.id ?? node.value ?? node.key;
+        if (id != null) {
+          parentMap.set(String(id), parentId);
+        }
+        if (node.children?.length) {
+          flatten(node.children, id as Key);
+        }
+      }
+    };
+    flatten(treeData, null);
+  }
+
+  const expandedKeys = new Set<Key>();
+  Array.from(selectedIds).forEach(id => {
+    let pId = parentMap.get(id);
+    while (pId != null) {
+      expandedKeys.add(pId);
+      pId = parentMap.get(String(pId));
+    }
+  });
+
+  return Array.from(expandedKeys);
 };
 
 /**
