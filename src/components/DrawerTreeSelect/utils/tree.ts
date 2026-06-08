@@ -2,12 +2,29 @@ import { difference } from "lodash";
 
 import type { Key } from "react";
 import type { TreeDataNode } from "antd";
+import type { DataNode } from "@rc-component/tree-select/es/interface";
 import type { CheckedStrategy } from "@rc-component/tree-select/es/utils/strategyUtil";
 import type { SimpleModeConfig } from "@rc-component/tree-select/es/interface";
+import type { SelectValue } from "antd/es/tree-select";
 import type {
   IDrawerTreeSelectFilters,
   SelectValues
 } from "@/components/DrawerTreeSelect/types";
+
+/**
+ * Converts the raw external value from the TreeSelect into a normalized internal array format.
+ *
+ * @param value - The value received from the TreeSelect.
+ * @param multiple - Optional flag indicating if the select allows multiple selections.
+ */
+export const toInternalValue = (
+  value: SelectValue | undefined,
+  multiple?: boolean
+) => {
+  if (value == null || value === "") return [];
+  if (Array.isArray(value)) return value;
+  return !multiple ? ([value] as SelectValues) : [];
+};
 
 /**
  * Get ids of the first-level items (or of a specific level) from a flat, level-sorted list.
@@ -46,12 +63,32 @@ export const getMainLevelItems = (
 export const getAllLeafItems = (items: any[] = []) => {
   const array: string[] = [];
   for (const item of items) {
-    if (item.isLeaf) {
+    if (item.isLeaf && !item.disabled) {
       array.push(item.id);
     }
   }
 
   return array;
+};
+
+/**
+ * Check if a tree node is disabled.
+ * @param node - Tree node
+ */
+export const isNodeDisabled = (node: TreeDataNode | undefined) => {
+  return Boolean(node?.disabled || node?.disableCheckbox);
+};
+
+/**
+ * Remove disabled node keys from a checked-key list.
+ */
+export const omitDisabledCheckedKeys = (
+  keys: Iterable<Key>,
+  indexes: TreeIndexes
+): Key[] => {
+  return Array.from(keys).filter(
+    key => !isNodeDisabled(indexes.keyToNode.get(key))
+  );
 };
 
 /**
@@ -92,6 +129,23 @@ export const calcEmptyIsAll = (
 };
 
 /**
+ * Normalize tree node key.
+ * @param id - Node ID
+ */
+export const toNodeKey = (id: number | string) => {
+  return String(id);
+};
+
+/**
+ * Normalize parent key (`null` or `0` means root) and coerce types.
+ * @param pId - Parent ID
+ */
+export const toParentKey = (pId: number | string | null | undefined) => {
+  if (pId == null || pId === 0) return null;
+  return String(pId);
+};
+
+/**
  * Build a nested tree from flat simple data
  * (with fields `id` as key and `pId` as a parent key).
  *
@@ -104,24 +158,86 @@ export const buildTreeData = <
 >(
   simpleData: T[] | undefined
 ) => {
-  const nodeMap = new Map<number | string, TreeDataNode>();
+  const nodeMap = new Map<string, TreeDataNode>();
   const roots: TreeDataNode[] = [];
 
   simpleData?.forEach(item => {
-    nodeMap.set(item.id, { ...item, children: [] });
+    nodeMap.set(toNodeKey(item.id), { ...item, children: [] });
   });
 
   simpleData?.forEach(item => {
-    const node = nodeMap.get(item.id)!;
-    // If a parent is missing (or explicitly 0), treat as a root
-    if (item.pId === 0 || !nodeMap.has(item.pId)) {
+    const node = nodeMap.get(toNodeKey(item.id))!;
+    const parentKey = toParentKey(item.pId);
+
+    // If a parent is missing (or explicitly root), treat as a root
+    if (parentKey === null || !nodeMap.has(parentKey)) {
       roots.push(node);
     } else {
-      nodeMap.get(item.pId)!.children!.push(node);
+      nodeMap.get(parentKey)!.children!.push(node);
     }
   });
 
   return roots;
+};
+
+/**
+ * Collect ancestor keys that must be expanded to reveal the given selected values.
+ *
+ * Supports both flat simple-mode data (`id` / `pId`) and nested hierarchical trees.
+ * Value objects from `treeCheckStrictly` mode are unwrapped before lookup.
+ *
+ * @param values - Selected node keys/values
+ * @param treeData - Current tree data (flat or nested)
+ * @param isSimpleMode - Whether `treeDataSimpleMode` is enabled
+ * @returns Array of parent keys to expand
+ */
+export const getExpandedKeysByValue = (
+  values: SelectValues | undefined,
+  treeData: DataNode[] | undefined,
+  isSimpleMode: boolean
+): Key[] => {
+  if (!values?.length || !treeData?.length) return [];
+
+  const selectedIds = new Set(
+    values.map(v =>
+      String(v !== null && typeof v === "object" && "value" in v ? v.value : v)
+    )
+  );
+
+  const parentMap = new Map<string, Key | null>();
+
+  if (isSimpleMode) {
+    for (const node of treeData) {
+      const id = node.id ?? node.value;
+      if (id != null) {
+        parentMap.set(String(id), node.pId ?? null);
+      }
+    }
+  } else {
+    const flatten = (nodes: DataNode[], parentId: Key | null) => {
+      for (const node of nodes) {
+        const id = node.id ?? node.value ?? node.key;
+        if (id != null) {
+          parentMap.set(String(id), parentId);
+        }
+        if (node.children?.length) {
+          flatten(node.children, id as Key);
+        }
+      }
+    };
+    flatten(treeData, null);
+  }
+
+  const expandedKeys = new Set<Key>();
+  Array.from(selectedIds).forEach(id => {
+    let pId = parentMap.get(id);
+    while (pId != null) {
+      expandedKeys.add(pId);
+      pId = parentMap.get(String(pId));
+    }
+  });
+
+  return Array.from(expandedKeys);
 };
 
 /**
@@ -226,7 +342,9 @@ export const getDescendantLeaves = (key: Key, indexes: TreeIndexes): Key[] => {
   const node = indexes.keyToNode.get(key);
 
   if (!node) return [];
-  if (!node.children || node.children.length === 0) return [key];
+  if (!node.children || node.children.length === 0) {
+    return isNodeDisabled(node) ? [] : [key];
+  }
 
   const res: Key[] = [];
   const stack = [...(indexes.childrenMap.get(key) || [])];
@@ -237,7 +355,9 @@ export const getDescendantLeaves = (key: Key, indexes: TreeIndexes): Key[] => {
 
     if (!currentNode) continue;
     if (!currentNode.children || currentNode.children.length === 0) {
-      res.push(currentKey);
+      if (!isNodeDisabled(currentNode)) {
+        res.push(currentKey);
+      }
     } else {
       stack.push(...(indexes.childrenMap.get(currentKey) || []));
     }
@@ -272,7 +392,9 @@ export const applyCheckedStrategy = (
 
   raw.forEach(key => {
     if (indexes.leafKeys.has(key)) {
-      selectedLeaves.add(key);
+      if (!isNodeDisabled(indexes.keyToNode.get(key))) {
+        selectedLeaves.add(key);
+      }
     } else {
       // Expand non-leaf selections into their leaf descendants
       getDescendantLeaves(key, indexes).forEach(d => selectedLeaves.add(d));
@@ -280,11 +402,14 @@ export const applyCheckedStrategy = (
   });
 
   if (chosen === "SHOW_CHILD") {
-    return Array.from(selectedLeaves);
+    return omitDisabledCheckedKeys(selectedLeaves, indexes);
   }
 
   if (chosen === "SHOW_ALL") {
-    return Array.from(new Set<Key>([...raw, ...selectedLeaves]));
+    return omitDisabledCheckedKeys(
+      new Set<Key>([...raw, ...selectedLeaves]),
+      indexes
+    );
   }
 
   // SHOW_PARENT: collapse fully selected subtrees
@@ -293,7 +418,9 @@ export const applyCheckedStrategy = (
     const allLeavesSelected = leaves.every(l => selectedLeaves.has(l));
     if (allLeavesSelected) return [node.key];
     if (!node.children || node.children.length === 0) {
-      return selectedLeaves.has(node.key) ? [node.key] : [];
+      return selectedLeaves.has(node.key) && !isNodeDisabled(node)
+        ? [node.key]
+        : [];
     }
 
     let acc: Key[] = [];

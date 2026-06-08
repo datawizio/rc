@@ -3,15 +3,23 @@
 .ant-space-compact.phone-input {
   .ant-select.phone-input-select {
     width: 60px;
+    flex: none;
 
-    .ant-select-selection-item {
+    .ant-select-content-value {
       display: flex;
+      align-items: center;
+      overflow: visible;
 
       svg {
-        width: 100%;
+        width: 18px;
+        height: auto;
+        aspect-ratio: 3 / 2;
+        flex-shrink: 0;
+        border-radius: 2px;
       }
     }
 
+    .ant-select-placeholder,
     .ant-select-selection-placeholder {
       display: flex;
       align-items: center;
@@ -19,13 +27,15 @@
   }
 
   .ant-input.phone-input-input {
-    width: calc(100% - 60px);
+    flex: 1;
+    min-width: 0;
+    width: auto;
   }
 }
 
 .phone-input-flag-placeholder {
   display: inline-block;
-  width: 20px;
+  width: 18px;
   height: auto;
   aspect-ratio: 3 / 2;
   background-color: var(--box-placeholder-color);

@@ -26,6 +26,8 @@ export type DrawerTreeSelectProps<VT> = Omit<
 > & {
   additionalFilters?: any;
   asyncData?: boolean;
+  expandToSelectedNodes?: boolean;
+  /** @deprecated This prop is no longer used. */
   headerHeight?: number;
   drawerTitle?: string;
   drawerWidth?: number;

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { Dayjs } from "dayjs";
 import type { SelectProps, FormRule, DatePickerProps } from "antd";
 import type { SwitchSize } from "antd/es/switch";
+import type { ImgCropProps } from "antd-img-crop";
 import type { CalendarType } from "@/types/calendar";
 import type { InfoTooltipProps } from "@/components/InfoTooltip";
 import type { DrawerSelectProps } from "../DrawerSelect";
@@ -123,11 +124,22 @@ export type FieldDrawerSelectProps = FormFieldProps<string | string[]> &
 export type FieldDrawerTreeSelectProps = FormFieldProps<string> &
   DrawerTreeSelectProps<SelectValues>;
 
-export type FieldImageProps = FormFieldProps<string | null>;
-
-export interface ImageProps {
+export type ImageProps = Omit<
+  ImgCropProps,
+  "modalTitle" | "modalOk" | "modalCancel" | "cropShape" | "children"
+> & {
   name: string | string[];
-  value?: string;
+  value?: string | File | null;
+  disabled?: boolean;
   placeholder?: string;
-  onChange?: (change: IFormFieldChanged<string | null>) => void;
-}
+  onChange?: (change: IFormFieldChanged<string | File | null>) => void;
+  /** Maximum allowed file size in megabytes (MB). */
+  maxFileSize?: number;
+  saveAs?: "base64" | "file";
+  shape?: "rect" | "round";
+};
+
+export type FieldImageProps = Omit<
+  FormFieldProps<string | File | null> & ImageProps,
+  "initialValue" | "onDeselect" | "infoTooltip"
+>;
