@@ -72,7 +72,7 @@ const TreeSelect: TreeSelectCompoundComponent = ({
   ...restProps
 }) => {
   let customTreeData = normalizeTreeData(treeData);
-  const customTreeExpandedKeys = treeDefaultExpandedKeys;
+  const customTreeExpandedKeys = [...treeDefaultExpandedKeys];
 
   if (showCheckAll) {
     customTreeData = [
