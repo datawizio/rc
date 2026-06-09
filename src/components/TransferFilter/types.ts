@@ -99,6 +99,7 @@ export interface TransferFilterProps {
 
   pagination?: PaginationType;
   disableRoots?: boolean;
+  virtual?: boolean;
 }
 
 export interface TransferLocale {

@@ -69,6 +69,7 @@ export interface TransferListProps {
   onItemSelect: (item: ICheckedItem, check: boolean) => void;
   onItemsSelect?: (items: ICheckedItem[], check: boolean) => void;
   disableRoots?: boolean;
+  virtual?: boolean;
 }
 
 interface TransferListState {
@@ -459,7 +460,8 @@ export default class TransferList extends PureComponent<
     loading?: boolean,
     showSearch?: boolean,
     disabled?: boolean,
-    type?: "tree" | "list"
+    type?: "tree" | "list",
+    virtual?: boolean
   ): ReactNode {
     const { include, exclude } = this.props.value;
     const isLeftDirection = this.props.direction === "left";
@@ -514,6 +516,7 @@ export default class TransferList extends PureComponent<
         totalItemsCount={this.getTotalCount(filteredItems)}
         loadTreeData={this.loadTreeData}
         onPageChange={this.handlePageChange}
+        virtual={virtual}
       />
     );
 
@@ -675,6 +678,7 @@ export default class TransferList extends PureComponent<
       actions,
       showSelectAll,
       type,
+      virtual,
       onItemsSelect
     } = this.props;
 
@@ -695,7 +699,8 @@ export default class TransferList extends PureComponent<
       loading,
       showSearch,
       disabled,
-      type
+      type,
+      virtual
     );
 
     // List Footer

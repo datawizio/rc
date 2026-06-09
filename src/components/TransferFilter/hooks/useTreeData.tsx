@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { ButtonAddAll } from "../components/ButtonAddAll";
 import { convertChildrenToData } from "@rc-component/tree-select/es/utils/legacyUtil";
 
 import type { ReactNode } from "react";
@@ -18,8 +17,6 @@ const parseSimpleTreeData = (
   disableAll: boolean,
   disabledSet: Set<string>,
   enabledSet: Set<string>,
-  selectedSet: Set<string>,
-  onItemsSelect: (items: ICheckedItem[], checked: boolean) => void,
   { id, pId, rootPId }: SimpleModeConfig
 ): DataNode[] => {
   const keyNodes: Record<string, DataNode> = {};
@@ -34,17 +31,6 @@ const parseSimpleTreeData = (
     clone.key = clone.key || key;
     clone.disabled = disableAll ? !enabledSet.has(key) : disabledSet.has(key);
     clone.sourceTitle = clone.title;
-    clone.title = (
-      <>
-        {clone.title}
-        <ButtonAddAll
-          node={keyNodes[key]}
-          selected={selectedSet}
-          onClick={onItemsSelect}
-        />
-      </>
-    );
-
     return clone;
   });
 
@@ -138,7 +124,7 @@ export const useTreeData = (
   disabled: string[],
   enabled: string[],
   selected: string[],
-  onItemsSelect: (items: ICheckedItem[], checked: boolean) => void,
+  _onItemsSelect: (items: ICheckedItem[], checked: boolean) => void,
   children: ReactNode,
   {
     getLabelProp,
@@ -173,8 +159,6 @@ export const useTreeData = (
                   disableAll,
                   new Set(disabled),
                   new Set(enabled),
-                  new Set(selected),
-                  onItemsSelect,
                   {
                     id: "id",
                     pId: "pId",
