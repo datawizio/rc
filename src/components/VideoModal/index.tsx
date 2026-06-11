@@ -69,6 +69,7 @@ const VideoModal: FC<VideoModalProps> = ({
       )}
       <Modal
         {...modalProps}
+        classNames={{ container: "video-modal-container" }}
         open={modalVisible}
         footer={null}
         title={null}
