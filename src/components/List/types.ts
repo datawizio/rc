@@ -3,11 +3,11 @@ import type { ListProps } from "antd";
 import type { ListItemTypeProps as AntListItemTypeProps } from "antd/es/list/Item";
 
 export interface ListItemFieldProps {
-  title: string;
-  description: string;
-  value?: string;
-  customIcon?: ReactNode | null;
   id?: string;
+  title: ReactNode;
+  description: ReactNode;
+  value?: ReactNode;
+  customIcon?: ReactNode;
   onClick?: () => void;
 }
 
