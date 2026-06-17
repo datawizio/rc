@@ -31,3 +31,7 @@ lib
 *.njsproj
 *.sln
 *.sw?
+
+
+# Coverage
+coverage
