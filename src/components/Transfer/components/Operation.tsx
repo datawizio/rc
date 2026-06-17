@@ -1,7 +1,4 @@
-import LeftOutlined from "@ant-design/icons/LeftOutlined";
-import DoubleLeftOutlined from "@ant-design/icons/DoubleLeftOutlined";
-import RightOutlined from "@ant-design/icons/RightOutlined";
-import DoubleRightOutlined from "@ant-design/icons/DoubleRightOutlined";
+import { LeftOutlined, DoubleLeftOutlined, RightOutlined, DoubleRightOutlined } from "@ant-design/icons";
 import Button from "@/components/Button";
 import { useConfig } from "@/hooks";
 import type { FC, MouseEventHandler, CSSProperties } from "react";

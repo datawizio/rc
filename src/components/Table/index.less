@@ -157,11 +157,9 @@
     }
 
     &--drop-hover {
-      background-color: color-mix(
-        in srgb,
-        white 80%,
-        var(--primary-color)
-      ) !important;
+      background-color: color-mix(in srgb,
+      white 80%,
+      var(--primary-color)) !important;
     }
 
     &--fixed {
@@ -339,6 +337,25 @@
         .dw-table__cell {
           justify-content: center;
         }
+      }
+    }
+  }
+
+  &--empty:not(.always-show-header) {
+    .dw-table__wrapper {
+      table {
+        width: auto !important;
+        min-width: 100%;
+      }
+    }
+
+    .ant-table-thead:not(:has(.ant-table-filter-column)) {
+      display: none;
+    }
+
+    .ant-table-thead:has(.ant-table-filter-column) {
+      .dw-table__column--resizable {
+        resize: none !important;
       }
     }
   }
