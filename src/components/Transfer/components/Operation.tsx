@@ -1,4 +1,9 @@
-import { LeftOutlined, DoubleLeftOutlined, RightOutlined, DoubleRightOutlined } from "@ant-design/icons";
+import {
+  LeftOutlined,
+  DoubleLeftOutlined,
+  RightOutlined,
+  DoubleRightOutlined
+} from "@ant-design/icons";
 import Button from "@/components/Button";
 import { useConfig } from "@/hooks";
 import type { FC, MouseEventHandler, CSSProperties } from "react";
