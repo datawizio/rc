@@ -343,6 +343,25 @@
     }
   }
 
+  &--empty:not(.always-show-header) {
+    .dw-table__wrapper {
+      table {
+        width: auto !important;
+        min-width: 100%;
+      }
+    }
+
+    .ant-table-thead:not(:has(.ant-table-filter-column)) {
+      display: none;
+    }
+
+    .ant-table-thead:has(.ant-table-filter-column) {
+      .dw-table__column--resizable {
+        resize: none !important;
+      }
+    }
+  }
+
   .ant-table-bordered {
     .ant-table-cell {
       border-right: 1px solid var(--ant-table-border-color);
