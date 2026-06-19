@@ -6,7 +6,7 @@ import { Preview } from "./Preview";
 import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
-import type { RcFile } from "antd/es/upload";
+import type { RcFile, UploadProps } from "antd/es/upload";
 import type { ImageProps } from "../../types";
 
 const MAX_IMAGE_SIZE_MB = 2;
@@ -46,19 +46,21 @@ export const Image: FC<ImageProps> = ({
     return isAllowedType && isAllowedSize;
   };
 
-  const upload = (file: RcFile) => {
+  const customRequest: UploadProps["customRequest"] = ({ file, onSuccess }) => {
     if (saveAs === "file") {
-      onChange?.({ name, value: file });
-    } else {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (reader.result && onChange) {
-          onChange({ name, value: reader.result as string });
-        }
-      };
+      onChange?.({ name, value: file as RcFile });
+      onSuccess?.({});
+      return;
     }
-    return "";
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file as Blob);
+    reader.onload = () => {
+      if (reader.result && onChange) {
+        onChange({ name, value: reader.result as string });
+      }
+      onSuccess?.({});
+    };
   };
 
   const handleDelete = () => {
@@ -85,11 +87,10 @@ export const Image: FC<ImageProps> = ({
       <Upload.Dragger
         disabled={disabled}
         beforeUpload={file => beforeUpload(file, maxFileSize)}
-        action={upload}
         listType="picture-card"
         showUploadList={false}
         className={clsx("field-image-upload-container", `crop-shape-${shape}`)}
-        customRequest={() => void 0}
+        customRequest={customRequest}
       >
         {uploadButton}
       </Upload.Dragger>
