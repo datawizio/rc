@@ -6,6 +6,7 @@ import DatePicker from "@/components/DatePicker";
 import { Tag } from "antd";
 import { useCallback, useMemo, useState } from "react";
 import { useConfig } from "@/hooks";
+import { usePickerLocale } from "@/components/DatePicker/utils/locale";
 import { DATE_FORMATS } from "@/utils/dateFormat/constants";
 import {
   DefaultPreset,
@@ -175,6 +176,8 @@ const DateRangePicker: IDateRangePicker = ({
 
   const RangePicker = DatePicker.Picker[type].RangePicker;
 
+  const locale = usePickerLocale(format, props.locale);
+
   const renderExtraFooter = () => (
     <>
       {translatedPreset?.map(({ label, value }) => {
@@ -212,6 +215,7 @@ const DateRangePicker: IDateRangePicker = ({
     <RangePicker
       {...props}
       format={format}
+      locale={locale}
       inputReadOnly={inputReadOnly}
       renderExtraFooter={renderExtraFooter}
       className={clsx(fullWidth && "ant-picker-full-width")}
