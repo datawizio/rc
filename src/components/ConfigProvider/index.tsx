@@ -19,6 +19,7 @@ initTheme();
 
 const ConfigProvider: FC<ConfigProviderProps> = ({
   t,
+  locale,
   direction,
   children,
   ...props
@@ -61,15 +62,17 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
     const nextValue = defaultContextValue;
 
     if (t) nextValue.t = t;
+    if (locale) nextValue.locale = locale;
     if (direction) nextValue.direction = direction;
 
     return nextValue;
-  }, [direction, t]);
+  }, [t, locale, direction]);
 
   return (
     <ConfigContext.Provider value={contextValue}>
       <AntdConfigProvider
         {...props}
+        locale={locale}
         theme={themeConfig}
         drawer={{ mask: { blur: false } }}
         modal={{ mask: { blur: false } }}
