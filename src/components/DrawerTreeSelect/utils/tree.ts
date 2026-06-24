@@ -37,7 +37,7 @@ export const toInternalValue = (
  * @returns Set of item ids belonging to the requested level
  */
 export const getMainLevelItems = (
-  items: any[] | undefined = [],
+  items: DataNode[] | undefined = [],
   level: string | number | null = 1
 ) => {
   const set = new Set<string>();
@@ -60,7 +60,7 @@ export const getMainLevelItems = (
  * @param items - Flat list of items with `id` and `isLeaf`
  * @returns Array of leaf ids
  */
-export const getAllLeafItems = (items: any[] = []) => {
+export const getAllLeafItems = (items: DataNode[] = []) => {
   const array: string[] = [];
   for (const item of items) {
     if (item.isLeaf && !item.disabled) {
@@ -367,6 +367,24 @@ export const getDescendantLeaves = (key: Key, indexes: TreeIndexes): Key[] => {
 };
 
 /**
+ * Keep only the selected keys, ordered by their position in the tree.
+ *
+ * @param selected - Keys to keep
+ * @param treeOrder - Keys in tree (DFS) order, e.g. `indexes.leafKeys`
+ * @param indexes - Precomputed tree indexes (used to skip disabled nodes)
+ * @returns Selected keys in tree order, excluding disabled nodes
+ */
+const orderKeysByTree = (
+  selected: Set<Key>,
+  treeOrder: Iterable<Key>,
+  indexes: TreeIndexes
+) => {
+  return Array.from(treeOrder).filter(
+    key => selected.has(key) && !isNodeDisabled(indexes.keyToNode.get(key))
+  );
+};
+
+/**
  * Apply rc-tree-select `CheckedStrategy` to a raw set of checked keys.
  *
  * Behavior by strategy:
@@ -402,14 +420,12 @@ export const applyCheckedStrategy = (
   });
 
   if (chosen === "SHOW_CHILD") {
-    return omitDisabledCheckedKeys(selectedLeaves, indexes);
+    return orderKeysByTree(selectedLeaves, indexes.leafKeys, indexes);
   }
 
   if (chosen === "SHOW_ALL") {
-    return omitDisabledCheckedKeys(
-      new Set<Key>([...raw, ...selectedLeaves]),
-      indexes
-    );
+    const checked = new Set<Key>([...raw, ...selectedLeaves]);
+    return orderKeysByTree(checked, indexes.keyToNode.keys(), indexes);
   }
 
   // SHOW_PARENT: collapse fully selected subtrees
