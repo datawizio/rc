@@ -423,7 +423,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
 
     const payload: any = {};
 
-    if (searchValue) {
+    if (searchValue && loadData) {
       payload.optionsState = uniqBy(
         selectedOptions.current.concat(firstLoadedOptions.current),
         "key"
@@ -443,7 +443,14 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     }
 
     // eslint-disable-next-line
-  }, [dispatch, triggerOnChange, closeDrawer, internalValue, searchValue]);
+  }, [
+    dispatch,
+    triggerOnChange,
+    closeDrawer,
+    internalValue,
+    searchValue,
+    loadData
+  ]);
 
   const handleSelectClick = () => {
     // if (internalLoading) return;
