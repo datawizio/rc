@@ -1021,8 +1021,12 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         }
         onClick={handleSelectClick}
         onChange={(values, _labels, extra) => {
+          const normalizedValues = values.map(item => {
+            return typeof item === "object" ? item.value : item;
+          });
+
           return handleChangeWithInfo(
-            values as SafeKey[],
+            normalizedValues,
             extra,
             extra => extra.triggerValue
           );
