@@ -735,7 +735,12 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   }, [dependentItems]);
 
   useEffect(() => {
-    if (emptyIsAll && !value?.length && internalValue?.length) {
+    if (
+      emptyIsAll &&
+      !value?.length &&
+      internalValue?.length &&
+      drawerVisibleRef.current
+    ) {
       return;
     }
 
