@@ -37,6 +37,10 @@ export const useColumns = (
             ...(columnsConfig?.[column.key as SafeKey] || {})
           };
 
+          nextColumn.filterDropdownProps = {
+            align: { offset: [0, 18] }
+          };
+
           const isParent = nextColumn.children && nextColumn.children.length;
           const hasCheckedChildren =
             isParent &&
