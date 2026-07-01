@@ -110,8 +110,8 @@ export const isAllItemsChecked = (
  *
  * Rules:
  * - If `emptyIsAll` is disabled, returns false
- * - If there is a search query, returns false
- * - If level is set and not equal to 1, returns false
+ * - If there is a search query, it returns false
+ * - If the level is set and not equal to 1, returns false
  * - If there are shop markers, returns false
  * - Otherwise, returns true
  *
@@ -129,7 +129,7 @@ export const calcEmptyIsAll = (
 };
 
 /**
- * Normalize tree node key.
+ * Normalize a tree node key.
  * @param id - Node ID
  */
 export const toNodeKey = (id: number | string) => {
@@ -147,7 +147,7 @@ export const toParentKey = (pId: number | string | null | undefined) => {
 
 /**
  * Build a nested tree from flat simple data
- * (with fields `id` as key and `pId` as a parent key).
+ * (with fields `id` as a key and `pId` as a parent key).
  *
  * @param simpleData - Flat array with `id`, `pId`, and any `TreeDataNode` fields
  * @returns Array of root `TreeDataNode` with populated `children`
@@ -332,7 +332,7 @@ export const buildTreeIndexes = (
 
 /**
  * Get all descendant leaf keys for the given node key.
- * If the node itself is a leaf, returns an array with only that key.
+ * If the node itself is a leaf, it returns an array with only that key.
  *
  * @param key - Starting node key
  * @param indexes - Precomputed tree indexes
@@ -462,7 +462,7 @@ export const applyCheckedStrategy = (
  * show correctly as half-checked when only one visible child is checked.
  *
  * @param checkedKeys - Current checked keys (strategy-applied value)
- * @param strategy - Same strategy used for the checked keys (to expand to leaves)
+ * @param _strategy - Same strategy used for the checked keys (to expand to leaves)
  * @param indexes - Precomputed indexes for the full tree
  * @param roots - Full tree roots
  * @returns Array of keys that are half-checked
@@ -503,14 +503,14 @@ export const getHalfCheckedKeys = (
 /**
  * Expand checked keys for display so that parent nodes appear checked when
  * all their descendant leaves are in the checked set. Used when the stored
- * value is leaf-only (e.g. SHOW_CHILD with emptyIsAll) but the tree is shown
- * with checkStrictly (e.g. during client search), so parents must be added
- * to the checked set for correct visual state.
+ * value is leaf-only (e.g., SHOW_CHILD with emptyIsAll), but the tree is shown
+ * with checkStrictly (e.g., during client search), so parents must be added
+ * to the checked set for the correct visual state.
  *
- * @param checkedKeys - Current checked keys (may be leaf-only)
+ * @param checkedKeys - Current checked keys (can be leaf-only)
  * @param indexes - Precomputed tree indexes
  * @param roots - Full tree roots
- * @returns Array of keys to display as checked (includes fully-selected parents)
+ * @returns Array of keys to display as checked (includes fully selected parents)
  */
 export const expandCheckedKeysForDisplay = (
   checkedKeys: Iterable<Key>,

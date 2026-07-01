@@ -86,6 +86,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   placeholder,
   maxSelected,
   maxTagLength,
+  tagClosable = true,
   treeCheckStrictly,
   disableParentsOnSearch,
   maxTagCount = 10,
@@ -735,7 +736,12 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   }, [dependentItems]);
 
   useEffect(() => {
-    if (emptyIsAll && !value?.length && internalValue?.length) {
+    if (
+      emptyIsAll &&
+      !value?.length &&
+      internalValue?.length &&
+      drawerVisibleRef.current
+    ) {
       return;
     }
 
@@ -807,11 +813,18 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         );
       }
 
-      if (internalLoading === false)
+      if (internalLoading === false) {
+        const allowClose = tagClosable && closable;
+
         return (
-          <span className="ant-select-selection-item">
+          <span
+            className={clsx(
+              "ant-select-selection-item",
+              allowClose && "tag-closable"
+            )}
+          >
             <Tag
-              closable={closable}
+              closable={allowClose}
               onClose={onClose}
               className="ant-select-selection-item-content"
             >
@@ -821,10 +834,11 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
             </Tag>
           </span>
         );
+      }
 
       return <></>;
     },
-    [internalLoading, isSelectedAll, maxTagLength, placeholder, t]
+    [internalLoading, isSelectedAll, maxTagLength, placeholder, t, tagClosable]
   );
 
   const maxTagPlaceholder = useCallback<Handler<"maxTagPlaceholder">>(
@@ -1021,8 +1035,12 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         }
         onClick={handleSelectClick}
         onChange={(values, _labels, extra) => {
+          const normalizedValues = values.map(item => {
+            return typeof item === "object" ? item.value : item;
+          });
+
           return handleChangeWithInfo(
-            values as SafeKey[],
+            normalizedValues,
             extra,
             extra => extra.triggerValue
           );
