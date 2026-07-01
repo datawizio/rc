@@ -46,6 +46,9 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
     },
     Form: {
       itemMarginBottom: 14
+    },
+    Modal: {
+      fontWeightStrong: 500
     }
   };
 
