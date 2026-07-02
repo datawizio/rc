@@ -80,7 +80,7 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
         drawer={{ mask: { blur: false } }}
         modal={{ mask: { blur: false } }}
       >
-        <App>{children}</App>
+        <App notification={{ maxCount: 3, stack: false }}>{children}</App>
       </AntdConfigProvider>
     </ConfigContext.Provider>
   );
