@@ -10,7 +10,8 @@ import {
   getHalfCheckedKeys,
   expandCheckedKeysForDisplay,
   getDescendantLeaves,
-  omitDisabledCheckedKeys
+  omitDisabledCheckedKeys,
+  preserveSelectionOrder
 } from "../utils/tree";
 
 import type { FC, Key } from "react";
@@ -293,7 +294,10 @@ const InnerTree: FC<InnerTreeProps> = ({
             nestedTreeData
           );
 
-      const valueKeys = omitDisabledCheckedKeys(checkedKeys, indexes);
+      const valueKeys = preserveSelectionOrder(
+        checkedKeysArray,
+        omitDisabledCheckedKeys(checkedKeys, indexes)
+      );
 
       onCheck?.(valueKeys as SafeKey[], info);
     },
