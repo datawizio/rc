@@ -99,7 +99,13 @@ export const omitDisabledCheckedKeys = (
  * @returns Array of keys in the order of their selection
  */
 export const preserveSelectionOrder = (prev: Key[], next: Key[]): Key[] => {
-  return [...prev.filter(key => next.includes(key)), ...difference(next, prev)];
+  const nextKeys = new Set(next);
+  const prevKeys = new Set(prev);
+
+  return [
+    ...prev.filter(key => nextKeys.has(key)),
+    ...next.filter(key => !prevKeys.has(key))
+  ];
 };
 
 /**
