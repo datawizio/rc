@@ -92,6 +92,23 @@ export const omitDisabledCheckedKeys = (
 };
 
 /**
+ * Keep previous selected keys first and append newly selected keys in received order.
+ *
+ * @param prev - Previous selected keys
+ * @param next - Newly selected keys
+ * @returns Array of keys in the order of their selection
+ */
+export const preserveSelectionOrder = (prev: Key[], next: Key[]): Key[] => {
+  const nextKeys = new Set(next);
+  const prevKeys = new Set(prev);
+
+  return [
+    ...prev.filter(key => nextKeys.has(key)),
+    ...next.filter(key => !prevKeys.has(key))
+  ];
+};
+
+/**
  * Check whether every value from `items` is present in the provided set.
  *
  * @param selectedItems - Values that should be present (can contain other values)
