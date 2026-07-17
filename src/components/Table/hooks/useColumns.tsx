@@ -38,7 +38,7 @@ export const useColumns = (
           };
 
           nextColumn.filterDropdownProps = {
-            align: { offset: [0, 18] }
+            align: { offset: [0, 10] }
           };
 
           const isParent = nextColumn.children && nextColumn.children.length;
