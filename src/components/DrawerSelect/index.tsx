@@ -63,6 +63,11 @@ type Handler<T extends keyof SelectProps> = HandlerFn<
   T
 >;
 
+const toArrayValue = (value: SelectValue | null | undefined) => {
+  if (value === undefined || value === null) return value;
+  return (Array.isArray(value) ? value : [value]) as SelectValues;
+};
+
 const convertOptions = <T extends BaseOptionType>(
   source: T[],
   valueProp: keyof T,
@@ -177,6 +182,11 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     return options ? convertOptions(options, valueProp, labelProp).options : [];
   }, [options, valueProp, labelProp]);
 
+  const arrayValue = useMemo(
+    () => (multiple ? value : toArrayValue(value)),
+    [value, multiple]
+  );
+
   // SELECT ALL LOGIC ----------------------------
   // This logic supports only a flat list of options
 
@@ -252,21 +262,22 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
 
   const triggerOnChange = useCallback(
     (value: SelectValues | undefined) => {
-      if (!onChange) return;
-      if (!multiple) {
-        if (Array.isArray(value) && !value.length) {
-          callOnChange([]);
-        } else {
-          callOnChange(
-            value,
-            Array.isArray(value) && value.length ? selected : undefined
-          );
-        }
+      if (multiple) {
+        callOnChange(value);
         return;
       }
-      callOnChange(value);
+
+      const hasValues = Array.isArray(value) && value.length > 0;
+      const selectedNodes = hasValues ? selected : undefined;
+
+      if (showMarkers) {
+        // Markers payload keeps the array shape regardless of `multiple`.
+        callOnChange(hasValues ? value : [], selectedNodes);
+      } else {
+        callOnChange(hasValues ? value[0] : undefined, selectedNodes);
+      }
     },
-    [onChange, multiple, callOnChange, selected]
+    [multiple, showMarkers, callOnChange, selected]
   );
 
   const loadPage = useCallback(
@@ -289,7 +300,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       const filters = {
         ...additionalFilters,
         search,
-        selected: internalValue ?? value
+        selected: internalValue ?? arrayValue
       };
 
       if (showMarkers && markersFilterName) {
@@ -297,17 +308,15 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
       }
 
       if (first) {
-        filters.selected = value;
+        filters.selected = arrayValue;
         filters.first = true;
       }
 
       const { data, totalPages: pages } = await loadData(filters, page, search);
 
       if (onLoadData) {
-        const { value: loadValue } = onLoadData(data, value);
-        if (loadValue) {
-          triggerOnChange(loadValue);
-        }
+        const { value: loadValue } = onLoadData(data, arrayValue);
+        if (loadValue) triggerOnChange(loadValue);
       }
 
       const options = convertOptions(
@@ -315,7 +324,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
         valueProp,
         labelProp,
         first ? [] : selectedOptions.current,
-        first ? value : []
+        first ? arrayValue : []
       );
 
       if (first) {
@@ -343,11 +352,11 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
 
       if (showSelectAll && markersSelected.current.length) {
         state.selectAllState = first
-          ? checkSelectAllStatus(value, state.optionsState)
+          ? checkSelectAllStatus(arrayValue, state.optionsState)
           : "checked";
 
         state.internalValue = first
-          ? (value ?? undefined)
+          ? (arrayValue ?? undefined)
           : (state.optionsState?.map(option => option.value) as SelectValues);
       }
 
@@ -383,11 +392,11 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
   const handleDrawerCancel = useCallback(() => {
     closeDrawer();
 
-    const payload: any = { internalValue: !multiple && !value ? [] : value };
+    const payload: any = { internalValue: arrayValue ?? [] };
 
     // Reset selectAllState based on the actual value when canceling
     if (showSelectAll) {
-      payload.selectAllState = checkSelectAllStatus(value, optionsState);
+      payload.selectAllState = checkSelectAllStatus(arrayValue, optionsState);
     }
 
     if (searchValue && loadData) {
@@ -409,7 +418,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
   }, [
     dispatch,
     closeDrawer,
-    value,
+    arrayValue,
     multiple,
     searchValue,
     loadData,
@@ -716,9 +725,9 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
   useEffect(() => {
     dispatch({
       type: "setInternalValue",
-      payload: !multiple && !value ? [] : value
+      payload: arrayValue ?? []
     });
-  }, [dispatch, value, multiple]);
+  }, [dispatch, arrayValue]);
 
   useEffect(() => {
     if (!internalValue || !valueToUncheck) return;
