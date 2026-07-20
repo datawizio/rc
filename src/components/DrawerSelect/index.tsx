@@ -64,8 +64,9 @@ type Handler<T extends keyof SelectProps> = HandlerFn<
 >;
 
 const toArrayValue = (value: SelectValue | null | undefined) => {
-  if (value === undefined || value === null) return value;
-  return (Array.isArray(value) ? value : [value]) as SelectValues;
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  return [value] as SelectValues;
 };
 
 const convertOptions = <T extends BaseOptionType>(
