@@ -14,7 +14,7 @@ export const isChromium = () => {
 
 export const getBrowserWithVersion = () => {
   const name = browser.getBrowserName();
-  const version = browser.getBrowserVersion()?.split(".").at(0);
+  const version = browser.getBrowserVersion()?.split(".").slice(0, 2).join(".");
   return !version ? name : `${name} ${version}`;
 };
 
