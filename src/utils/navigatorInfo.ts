@@ -12,6 +12,12 @@ export const isChromium = () => {
   return browser.isEngine("blink");
 };
 
+export const getBrowserWithVersion = () => {
+  const name = browser.getBrowserName();
+  const version = browser.getBrowserVersion()?.split(".").at(0);
+  return !version ? name : `${name} ${version}`;
+};
+
 /* Geolocation */
 
 export type GeolocationCallback = (
