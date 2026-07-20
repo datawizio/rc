@@ -22,7 +22,7 @@ const TechnicalMaintenance: FC<TechnicalMaintenanceProps> = ({
   return visible ? (
     <Row className="maintenance-container">
       <div className="maintenance-container-message">
-        <p>{t(messageKey)}</p>
+        <p dangerouslySetInnerHTML={{ __html: t(messageKey) }} />
       </div>
       <CloseOutlined
         className="maintenance-container-close-btn"
