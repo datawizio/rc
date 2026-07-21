@@ -2,8 +2,10 @@ import React, { useMemo } from "react";
 import dayjs from "dayjs";
 import DatePicker from "@/components/DatePicker";
 import { Form } from "antd";
+import { usePickerLocale } from "@/components/DatePicker/utils/locale";
 
 import type { Dayjs } from "dayjs";
+import type { PickerLocale } from "antd/es/date-picker/generatePicker";
 import type { CalendarType } from "@/types/calendar";
 import type { FieldDatePickerProps, FormFieldProps } from "../types";
 
@@ -16,6 +18,7 @@ interface FieldProps extends Omit<FormFieldProps<any>, "onChange" | "name"> {
   onChange?: (date: Dayjs | null, dateString: string | null) => void;
   inputReadOnly?: boolean;
   className?: string;
+  locale?: PickerLocale;
 }
 
 const Field: React.FC<FieldProps> = ({
@@ -31,6 +34,8 @@ const Field: React.FC<FieldProps> = ({
     return value;
   }, [value]);
 
+  const locale = usePickerLocale(format, restProps.locale);
+
   const Component = DatePicker.Picker[type];
 
   return (
@@ -38,6 +43,7 @@ const Field: React.FC<FieldProps> = ({
       {...restProps}
       onChange={onChange}
       format={format}
+      locale={locale}
       value={formatedValue}
     />
   );

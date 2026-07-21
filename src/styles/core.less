@@ -2,11 +2,17 @@
 
 // Common styles
 
+::selection {
+  color: var(--ant-color-white);
+  background: var(--primary-color);
+}
+
 .crisp-client {
   --crisp-customization-container-index: 1000;
 }
 
-.ant-tree {
+.ant-tree,
+.ant-select-tree {
   --rc-virtual-list-scrollbar-bg: var(--virtual-scrollbar-thumb-color);
 
   &-treenode:not(&-treenode-disabled).filter-node &-title {
@@ -17,6 +23,10 @@
 
 .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   font-weight: 500;
+}
+
+.ant-select .ant-select-content-value {
+  transition: visibility 0s;
 }
 
 // Dark theme styles

@@ -13,11 +13,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Skeleton, Tag, TreeSelect } from "antd";
 import { useConfig } from "@/hooks";
 import { useDrawerTreeSelect } from "./hooks/useDrawerTreeSelect";
+import { useTreeContainerHeight } from "./hooks/useTreeContainerHeight";
 import {
   getAllLeafItems,
   getMainLevelItems,
   isAllItemsChecked,
-  calcEmptyIsAll
+  calcEmptyIsAll,
+  toInternalValue,
+  getExpandedKeysByValue
 } from "./utils/tree";
 
 import type { Key, ChangeEvent } from "react";
@@ -43,6 +46,7 @@ type Handler<Name extends keyof TreeSelectProps> = HandlerFn<
 const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   additionalFilters,
   asyncData,
+  expandToSelectedNodes = false,
   showLevels = false,
   showMarkers = false,
   noticeRender,
@@ -53,7 +57,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   drawerTitle = "",
   drawerWidth = 400,
   selectedMarkers,
-  headerHeight,
   treeDefaultExpandedKeys,
   dependentItems,
   treeData,
@@ -83,6 +86,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   placeholder,
   maxSelected,
   maxTagLength,
+  tagClosable = true,
   treeCheckStrictly,
   disableParentsOnSearch,
   maxTagCount = 10,
@@ -109,7 +113,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     showSelectAll: propsShowSelectAll,
     fakeVisible: false,
     drawerVisible: false,
-    internalValue: value,
+    internalValue: toInternalValue(value, multiple),
     selected: undefined,
     stateTreeData: treeData,
     internalLoading: loading,
@@ -118,6 +122,9 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     internalTreeDataCount: 0,
     internalTreeExpandedKeys: []
   });
+
+  const { ref: treeContainerRef, height: treeContainerHeight } =
+    useTreeContainerHeight(drawerVisible);
 
   const [searchValue, setSearchValue] = useState<string>("");
   const mainLevelItems = useRef<string[]>([]);
@@ -458,13 +465,29 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
       allLeafItems.current = getAllLeafItems(stateTreeData);
     }
 
-    const values = internalValue?.map(item => {
+    const values = toInternalValue(internalValue, multiple).map(item => {
       return typeof item === "object" && "value" in item ? item.value : item;
     });
 
+    let keysFromValue: Key[] = [];
+    if (expandToSelectedNodes) {
+      keysFromValue = getExpandedKeysByValue(
+        values,
+        stateTreeData,
+        !!restProps.treeDataSimpleMode
+      );
+    }
+
+    const payloadStatus = checkSelectAllStatus(values);
+
     dispatch({
       type: "openDrawer",
-      payload: checkSelectAllStatus(values)
+      payload: {
+        ...payloadStatus,
+        internalTreeExpandedKeys: Array.from(
+          new Set([...internalTreeExpandedKeys, ...keysFromValue])
+        )
+      }
     });
 
     onDrawerOpenCallback?.();
@@ -488,7 +511,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   //  -------- HANDLERS --------
 
   const handlerDrawerCancel = useCallback(() => {
-    const prevValue = !multiple && !value ? [] : value;
+    const prevValue = toInternalValue(value, multiple);
 
     if (prevValue && prevValue.length === 0) {
       showAllRef.current = true;
@@ -571,10 +594,10 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   );
 
   const handleTreeSelect = useCallback<HandlerFn<TreeProps, "onSelect">>(
-    keys => {
+    (_, info) => {
       dispatch({
         type: "setSelected",
-        payload: keys
+        payload: info.node
       });
     },
     [dispatch]
@@ -603,6 +626,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         }
       } else {
         state.internalValue = info.checked ? [getKey(info)] : [];
+        state.selected = info.checked ? info.node : undefined;
       }
 
       state.internalTreeDataCount = state.internalValue?.length;
@@ -712,13 +736,18 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   }, [dependentItems]);
 
   useEffect(() => {
-    if (emptyIsAll && !value?.length && internalValue?.length) {
+    if (
+      emptyIsAll &&
+      !value?.length &&
+      internalValue?.length &&
+      drawerVisibleRef.current
+    ) {
       return;
     }
 
     dispatch({
       type: "internalValue",
-      payload: !multiple && !value ? [] : value
+      payload: toInternalValue(value, multiple)
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -784,11 +813,18 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         );
       }
 
-      if (internalLoading === false)
+      if (internalLoading === false) {
+        const allowClose = tagClosable && closable;
+
         return (
-          <span className="ant-select-selection-item">
+          <span
+            className={clsx(
+              "ant-select-selection-item",
+              allowClose && "tag-closable"
+            )}
+          >
             <Tag
-              closable={closable}
+              closable={allowClose}
               onClose={onClose}
               className="ant-select-selection-item-content"
             >
@@ -798,10 +834,11 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
             </Tag>
           </span>
         );
+      }
 
       return <></>;
     },
-    [internalLoading, isSelectedAll, maxTagLength, placeholder, t]
+    [internalLoading, isSelectedAll, maxTagLength, placeholder, t, tagClosable]
   );
 
   const maxTagPlaceholder = useCallback<Handler<"maxTagPlaceholder">>(
@@ -904,43 +941,48 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
             </Checkbox>
           </div>
         )}
-        {fakeVisible && !internalLoading && (
-          <InnerTree
-            treeData={internalTreeData}
-            simpleMode={Boolean(restProps.treeDataSimpleMode)}
-            remoteSearch={remoteSearch}
-            searchValue={searchValueRef.current}
-            treeNodeFilterProp={restProps.treeNodeFilterProp}
-            height={listHeight}
-            checkStrictly={checkStrictly}
-            internalTreeDefaultExpandedKeys={internalTreeDefaultExpandedKeys}
-            defaultExpandedKeys={treeDefaultExpandedKeys}
-            checkable={Boolean(restProps.treeCheckable)}
-            checkedKeys={(internalValue as Key[]) || []}
-            multiple={multiple}
-            showCheckedStrategy={
-              searchValueRef.current ? "SHOW_CHILD" : showCheckedStrategy
-            }
-            onCheck={handleTreeCheck}
-            onSelect={handleTreeSelect}
-            onExpandedKeysChange={handlerTreeExpand}
-            loadData={loadChildren ? handleTreeLoadData : undefined}
-          />
-        )}
-        <div className="drawer-select-loader-container">
-          {internalLoading && (
-            <>
-              <div className="drawer-tree-select-list-placeholder">
-                {t("LOADING")}
-              </div>
-              <Skeleton
-                title={{ width: 330 }}
-                paragraph={{ rows: 1 }}
-                loading={true}
-                active
-              />
-            </>
+        <div
+          ref={treeContainerRef}
+          className="drawer-tree-select-tree-container"
+        >
+          {fakeVisible && !internalLoading && (
+            <InnerTree
+              treeData={internalTreeData}
+              simpleMode={Boolean(restProps.treeDataSimpleMode)}
+              remoteSearch={remoteSearch}
+              searchValue={searchValueRef.current}
+              treeNodeFilterProp={restProps.treeNodeFilterProp}
+              height={treeContainerHeight}
+              checkStrictly={checkStrictly}
+              internalTreeDefaultExpandedKeys={internalTreeDefaultExpandedKeys}
+              defaultExpandedKeys={treeDefaultExpandedKeys}
+              checkable={Boolean(restProps.treeCheckable)}
+              checkedKeys={(internalValue as Key[]) || []}
+              multiple={multiple}
+              showCheckedStrategy={
+                searchValueRef.current ? "SHOW_CHILD" : showCheckedStrategy
+              }
+              onCheck={handleTreeCheck}
+              onSelect={handleTreeSelect}
+              onExpandedKeysChange={handlerTreeExpand}
+              loadData={loadChildren ? handleTreeLoadData : undefined}
+            />
           )}
+          <div className="drawer-select-loader-container">
+            {internalLoading && (
+              <>
+                <div className="drawer-tree-select-list-placeholder">
+                  {t("LOADING")}
+                </div>
+                <Skeleton
+                  title={{ width: 330 }}
+                  paragraph={{ rows: 1 }}
+                  loading={true}
+                  active
+                />
+              </>
+            )}
+          </div>
         </div>
         {(multiple || maxSelected) && (
           <div
@@ -963,22 +1005,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
       </Drawer>
     );
   };
-
-  const getMarkersFieldHeight = () => {
-    return (
-      document.getElementsByClassName("select-markers-field")[0]?.clientHeight +
-        12 || 44
-    );
-  };
-
-  const listHeight =
-    window.innerHeight -
-    (headerHeight ? headerHeight : 0) -
-    204 -
-    (showMarkers || markersRender ? getMarkersFieldHeight() : 0) -
-    (isLevelShowed ? 44 : 0) -
-    (strictlyModeCheckbox ? 30 : 0) -
-    (showSelectAll ? 34 : 0);
 
   return (
     <>
@@ -1009,8 +1035,12 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
         }
         onClick={handleSelectClick}
         onChange={(values, _labels, extra) => {
+          const normalizedValues = values.map(item => {
+            return typeof item === "object" ? item.value : item;
+          });
+
           return handleChangeWithInfo(
-            values as SafeKey[],
+            normalizedValues,
             extra,
             extra => extra.triggerValue
           );

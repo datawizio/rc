@@ -26,6 +26,8 @@ export type DrawerTreeSelectProps<VT> = Omit<
 > & {
   additionalFilters?: any;
   asyncData?: boolean;
+  expandToSelectedNodes?: boolean;
+  /** @deprecated This prop is no longer used. */
   headerHeight?: number;
   drawerTitle?: string;
   drawerWidth?: number;
@@ -65,6 +67,7 @@ export type DrawerTreeSelectProps<VT> = Omit<
   onMarkerChange?: (markers: any) => void;
   maxSelected?: number;
   maxTagLength?: number;
+  tagClosable?: boolean;
   disableParentsOnSearch?: boolean;
   onDrawerCloseCallback?: (payload?: any) => void;
   onDrawerCancelCallback?: (payload?: any) => void;

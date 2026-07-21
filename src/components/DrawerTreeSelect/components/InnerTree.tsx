@@ -9,7 +9,9 @@ import {
   applyCheckedStrategy,
   getHalfCheckedKeys,
   expandCheckedKeysForDisplay,
-  getDescendantLeaves
+  getDescendantLeaves,
+  omitDisabledCheckedKeys,
+  preserveSelectionOrder
 } from "../utils/tree";
 
 import type { FC, Key } from "react";
@@ -283,7 +285,7 @@ const InnerTree: FC<InnerTreeProps> = ({
           })()
         : rawChecked;
 
-      const valueKeys = checkStrictly
+      const checkedKeys = checkStrictly
         ? mergedChecked
         : applyCheckedStrategy(
             mergedChecked,
@@ -291,6 +293,11 @@ const InnerTree: FC<InnerTreeProps> = ({
             indexes,
             nestedTreeData
           );
+
+      const valueKeys = preserveSelectionOrder(
+        checkedKeysArray,
+        omitDisabledCheckedKeys(checkedKeys, indexes)
+      );
 
       onCheck?.(valueKeys as SafeKey[], info);
     },

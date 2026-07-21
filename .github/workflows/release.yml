@@ -143,9 +143,26 @@ jobs:
           git fetch origin dev:dev
           git checkout dev
 
-          if git merge master -m "Merge master into dev (v${{ env.NEW_VERSION }}) [skip ci]"; then
+          MERGE_MESSAGE="Merge master into dev (v${{ env.NEW_VERSION }}) [skip ci]"
+
+          if git merge master -m "$MERGE_MESSAGE"; then
             git push origin dev
             echo "Dev branch successfully synced with master"
+          elif git diff --name-only --diff-filter=U | grep -qx 'package.json'; then
+            echo "Resolving package.json conflict by accepting master's version..."
+            git checkout --theirs package.json
+            git add package.json
+
+            if [ -n "$(git diff --name-only --diff-filter=U)" ]; then
+              git merge --abort
+              echo "Merge conflict detected in files other than package.json. Dev branch was not updated."
+              echo "Please manually merge master into dev to sync the branches."
+              exit 1
+            fi
+
+            git commit -m "$MERGE_MESSAGE"
+            git push origin dev
+            echo "Dev branch successfully synced with master (package.json conflict resolved)"
           else
             git merge --abort
             echo "Merge conflict detected. Dev branch was not updated."
