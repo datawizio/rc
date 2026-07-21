@@ -1,7 +1,7 @@
 {
   "name": "@datawizio/rc",
   "description": "Datawiz.io components library for React.js",
-  "version": "2.13.0",
+  "version": "2.14.0",
   "author": "Datawiz.io",
   "license": "ISC",
   "repository": {
