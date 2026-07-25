@@ -23,8 +23,8 @@ export const ANTD_THEME_CLASS = "ant-theme";
 /* Theming */
 
 const applyTheme = (theme: Theme) => {
-  document.body.classList.remove("theme-light", "theme-dark");
-  document.body.classList.add(ANTD_THEME_CLASS, `theme-${theme}`);
+  document.documentElement.classList.remove("theme-light", "theme-dark");
+  document.documentElement.classList.add(ANTD_THEME_CLASS, `theme-${theme}`);
 
   window.theme = theme;
   localStorage.setItem(THEME_KEY, theme);
@@ -57,6 +57,6 @@ export const themed = <T, V = T>(lightValue: T, darkValue: V) => {
 /* Global style variables */
 
 export const cssVar = <T extends string>(variableName: T) => {
-  const styles = window.getComputedStyle(document.body);
+  const styles = window.getComputedStyle(document.documentElement);
   return styles.getPropertyValue(variableName);
 };
