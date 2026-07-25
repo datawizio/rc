@@ -39,7 +39,7 @@ const ListActions: React.FC<ListActionsProps> = ({
   const isSomeUnread = checkedKeysData?.some(item => !item.read);
 
   const showReadButton = state?.checkedAll
-    ? unreadNotificationsCount && unreadNotificationsCount > 0
+    ? (unreadNotificationsCount ?? 0) > 0
     : isSomeUnread;
 
   const showUnreadButton =
