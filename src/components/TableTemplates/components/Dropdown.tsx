@@ -4,7 +4,13 @@ import { Input } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { useConfig, useDeepEqualMemo } from "@/hooks";
 
-import type { FC, MouseEvent, ChangeEvent, PropsWithChildren } from "react";
+import type {
+  FC,
+  MouseEvent,
+  ChangeEvent,
+  KeyboardEvent,
+  PropsWithChildren
+} from "react";
 import type { InputRef } from "antd";
 
 export interface DropdownProps {
@@ -33,24 +39,39 @@ const Dropdown: FC<PropsWithChildren<DropdownProps>> = ({
     setInputValue(e.target.value);
   }, []);
 
+  const submitCreate = useCallback(() => {
+    setIsInputValueValid(Boolean(inputValue?.trim()));
+    if (!inputValue?.trim()) return;
+
+    onCreate(inputValue);
+    setInputValue("");
+  }, [inputValue, onCreate]);
+
   const handleCreateClick = useCallback(
     (e: MouseEvent<HTMLSpanElement>) => {
       e.stopPropagation();
-      setIsInputValueValid(Boolean(inputValue?.trim()));
-      if (inputValue?.trim()) {
-        onCreate(inputValue);
-        setInputValue("");
-      }
+      submitCreate();
     },
-    [inputValue, onCreate]
+    [submitCreate]
+  );
+
+  const handleInputKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key !== "Enter") return;
+
+      // Prevent Select from treating Enter as option confirm / closing the popup.
+      e.preventDefault();
+      e.stopPropagation();
+      submitCreate();
+    },
+    [submitCreate]
   );
 
   const onFooterMouseDown = useCallback((e: MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
+    if (e.target instanceof Element && e.target.closest("input, textarea"))
+      return;
 
-    if (e.target instanceof HTMLElement && e.target.tagName === "INPUT") {
-      inputRef.current?.focus();
-    }
+    e.preventDefault();
   }, []);
 
   return (
@@ -64,6 +85,7 @@ const Dropdown: FC<PropsWithChildren<DropdownProps>> = ({
           className={clsx({ "error-field": !isInputValueValid })}
           placeholder={t("INPUT_TITLE")}
           onChange={handleChangeInput}
+          onKeyDown={handleInputKeyDown}
         />
         <SaveOutlined
           onClick={handleCreateClick}
