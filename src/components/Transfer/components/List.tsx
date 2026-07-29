@@ -220,7 +220,7 @@ export default class TransferList extends PureComponent<
         {...partialProps}
         loading={loading}
         filteredItems={filteredItems}
-        onScroll={e => this.onScroll.bind(this, e)}
+        onScroll={this.onScroll}
         selectedKeys={checkedKeys}
       />
     );
