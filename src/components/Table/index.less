@@ -294,16 +294,20 @@
       }
     }
 
-    // Keep horizontal scroll for wide nested content, but do not create a
-    // vertical scrollport — nested overflow:auto containers cause Chromium
-    // scroll-latching delays when the wheel direction changes.
+    // Clip only — do not make the expanded cell a scrollport.
+    // A scrollable td + sticky nested headers can hang Chromium layout;
+    // horizontal scroll is handled by the nested table wrapper below.
     .ant-table-expanded-row > td {
-      overflow-x: auto;
-      overflow-y: hidden;
+      overflow: hidden;
     }
   }
 
   &.nested-table {
+    // Force nested table to respect the expanded cell width.
+    width: 0;
+    min-width: 100%;
+    max-width: 100%;
+
     .ant-table {
       --ant-table-cell-padding-block-md: 8px;
       margin-left: 39px !important;
@@ -318,10 +322,12 @@
       z-index: 4 !important;
     }
 
-    // Nested tables are height:auto. Do not create a second scrollport —
-    // horizontal scrolling is handled by the expanded-row cell above.
+    // Single horizontal scrollport on a div (not a table cell).
+    // overflow-y: hidden lets vertical wheel reach the parent table immediately.
     .dw-table__wrapper {
-      overflow: visible;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
     }
   }
 
