@@ -294,8 +294,12 @@
       }
     }
 
+    // Keep horizontal scroll for wide nested content, but do not create a
+    // vertical scrollport — nested overflow:auto containers cause Chromium
+    // scroll-latching delays when the wheel direction changes.
     .ant-table-expanded-row > td {
-      overflow: auto;
+      overflow-x: auto;
+      overflow-y: hidden;
     }
   }
 
@@ -312,6 +316,12 @@
     th,
     .dw-table__column {
       z-index: 4 !important;
+    }
+
+    // Nested tables are height:auto. Do not create a second scrollport —
+    // horizontal scrolling is handled by the expanded-row cell above.
+    .dw-table__wrapper {
+      overflow: visible;
     }
   }
 
