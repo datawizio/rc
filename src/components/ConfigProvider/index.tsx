@@ -1,6 +1,6 @@
 import ConfigContext, { defaultContextValue } from "./context";
 
-import { useMemo } from "react";
+import { useLayoutEffect, useMemo } from "react";
 import { ConfigProvider as AntdConfigProvider, App, theme } from "antd";
 import { useTheme } from "@/hooks";
 import { ANTD_THEME_CLASS, cssVar, initTheme } from "@/utils/theme";
@@ -13,14 +13,20 @@ import type {
 } from "antd";
 
 export type ConfigProviderProps = Partial<ConfigContextValue> &
-  AntdConfigProviderProps;
-
-initTheme();
+  AntdConfigProviderProps & {
+    /**
+     * When `false`, the app always uses the light theme.
+     * Theme is not read from or written to `localStorage`.
+     * @default true
+     */
+    themingEnabled?: boolean;
+  };
 
 const ConfigProvider: FC<ConfigProviderProps> = ({
   t,
   locale,
   direction,
+  themingEnabled = true,
   children,
   ...props
 }) => {
@@ -70,6 +76,10 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
 
     return nextValue;
   }, [t, locale, direction]);
+
+  useLayoutEffect(() => {
+    initTheme({ enabled: themingEnabled });
+  }, [themingEnabled]);
 
   return (
     <ConfigContext.Provider value={contextValue}>
