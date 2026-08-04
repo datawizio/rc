@@ -42,7 +42,6 @@ const applyTheme = (theme: Theme) => {
 };
 
 export const initTheme = (config: { enabled?: boolean } = {}) => {
-  if (themingEnabled === config.enabled) return;
   themingEnabled = config.enabled ?? true;
 
   if (!themingEnabled) {
