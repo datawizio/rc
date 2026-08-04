@@ -1,6 +1,6 @@
 import ConfigContext, { defaultContextValue } from "./context";
 
-import { useLayoutEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { ConfigProvider as AntdConfigProvider, App, theme } from "antd";
 import { useTheme } from "@/hooks";
 import { ANTD_THEME_CLASS, cssVar, initTheme } from "@/utils/theme";
@@ -30,6 +30,9 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   children,
   ...props
 }) => {
+  // Must run before cssVar() so `.theme-*` CSS variables exist on `document.body`.
+  initTheme({ enabled: themingEnabled });
+
   const customTheme = useTheme();
   const isDark = customTheme === "dark";
 
@@ -77,10 +80,6 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
 
     return nextValue;
   }, [t, locale, direction]);
-
-  useLayoutEffect(() => {
-    initTheme({ enabled: themingEnabled });
-  }, [themingEnabled]);
 
   return (
     <ConfigContext.Provider value={contextValue}>
