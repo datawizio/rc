@@ -13,17 +13,26 @@ import type {
 } from "antd";
 
 export type ConfigProviderProps = Partial<ConfigContextValue> &
-  AntdConfigProviderProps;
-
-initTheme();
+  AntdConfigProviderProps & {
+    /**
+     * When `false`, the app always uses the light theme.
+     * Theme is not read from or written to `localStorage`.
+     * @default true
+     */
+    themingEnabled?: boolean;
+  };
 
 const ConfigProvider: FC<ConfigProviderProps> = ({
   t,
   locale,
   direction,
+  themingEnabled = true,
   children,
   ...props
 }) => {
+  // Must run before cssVar() so `.theme-*` CSS variables exist on `document.body`.
+  initTheme({ enabled: themingEnabled });
+
   const customTheme = useTheme();
   const isDark = customTheme === "dark";
 
