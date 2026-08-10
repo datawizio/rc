@@ -24,6 +24,11 @@ export class WebSocketManager {
 
   private readonly CONNECTION_LIMIT = 20;
 
+  private _extractPrimaryMessageId(id?: unknown) {
+    if (typeof id !== "string") return undefined;
+    return id.split("|")[0];
+  }
+
   private _initEvents() {
     window.addEventListener("online", () => {
       this._isOnline = true;
@@ -126,7 +131,7 @@ export class WebSocketManager {
 
   public sendMessage(message: WebSocketMessage) {
     if (this._ws && this._ws.readyState === WebSocket.OPEN && this._authToken) {
-      const id = message.id?.split("|")[0];
+      const id = this._extractPrimaryMessageId(message.id);
       const query = message.payload?.query;
 
       if (id && !query?.startsWith("mutation")) {
@@ -165,7 +170,7 @@ export class WebSocketManager {
     // The notification ID may have a "salt" at the end, separated by a pipe
     // because we cannot send two subscriptions with the same ID.
     // Here we remove this salt to find the correct subscription handler by primary ID.
-    const id = message.id?.split("|")[0];
+    const id = this._extractPrimaryMessageId(message.id);
 
     if (!id || !this._subscriptions[id]) return;
     this._subscriptions[id].forEach(callback => callback(message));

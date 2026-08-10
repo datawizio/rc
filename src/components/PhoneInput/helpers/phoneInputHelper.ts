@@ -248,7 +248,7 @@ export const couldNumberBelongToCountry = (
  */
 export const getInitialParsedInput = (
   value: string,
-  country: CountryCode,
+  country: CountryCode | undefined,
   international: boolean
 ) => {
   // If `international` property is `true`,
@@ -268,7 +268,7 @@ export const generateInitialParsedInput = (
   phoneNumber: PhoneNumber | undefined,
   additionalParams: {
     international: boolean;
-    defaultCountry: CountryCode;
+    defaultCountry?: CountryCode;
     displayInitialValueAsLocalNumber: boolean;
   }
 ) => {
@@ -300,14 +300,14 @@ export const generateInitialParsedInput = (
 export const formatNumber = (
   val: string,
   country: CountryCode | undefined,
-  defaultCountry: CountryCode,
+  defaultCountry: CountryCode | undefined,
   international: boolean
 ) => {
   const phoneNumber = parsePhoneNumber(val);
 
   let value = generateInitialParsedInput(val, phoneNumber, {
     international,
-    defaultCountry,
+    defaultCountry: defaultCountry ?? country,
     displayInitialValueAsLocalNumber: false
   });
 

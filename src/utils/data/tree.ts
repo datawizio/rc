@@ -19,6 +19,7 @@ export type FilterOptionFn = (searchValue: string, node: any) => boolean;
 interface FilterOptionsConfig {
   optionFilterProp?: string;
   filterOption?: FilterOptionFn | null;
+  showAllChildrenIfParentFound?: boolean;
 }
 
 /**
@@ -53,7 +54,7 @@ export function filterOptions(
   treeData: DataNode[] = [],
   config: FilterOptionsConfig = {}
 ): DataNode[] {
-  const { filterOption } = config;
+  const { filterOption, showAllChildrenIfParentFound } = config;
 
   if (!searchValue) return treeData;
 
@@ -68,10 +69,17 @@ export function filterOptions(
 
   const dfs = (nodes: DataNode[]): DataNode[] => {
     const acc: DataNode[] = [];
+
     nodes.forEach(node => {
       const children = node.children || [];
-      const filteredChildren = children.length ? dfs(children) : [];
       const isMatch = predicate(searchValue, node);
+
+      const filteredChildren =
+        isMatch && showAllChildrenIfParentFound
+          ? children
+          : children.length
+            ? dfs(children)
+            : [];
 
       if (isMatch || filteredChildren.length) {
         const cloned: DataNode = {
@@ -82,6 +90,7 @@ export function filterOptions(
         acc.push(cloned);
       }
     });
+
     return acc;
   };
 

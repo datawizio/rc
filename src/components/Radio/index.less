@@ -1,13 +1,14 @@
 .ant-radio-group.ant-radio-group-vertical {
   width: 100%;
+  row-gap: 14px;
 
   .ant-radio-wrapper {
     width: 100%;
     display: flex;
-    margin-top: var(--ant-margin-lg);
 
     .ant-radio {
-      padding-top: 3px;
+      margin-top: 3px;
+      align-self: flex-start;
 
       &:after {
         top: 3px;
@@ -29,6 +30,7 @@
 
     .ant-list-item-meta-description {
       line-height: 1.3;
+      color: var(--ant-color-text-secondary);
     }
   }
 }

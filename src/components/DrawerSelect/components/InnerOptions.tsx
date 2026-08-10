@@ -3,7 +3,7 @@ import { Tree } from "antd";
 import { useConfig } from "@/hooks";
 import { buildTreeData } from "@/components/DrawerTreeSelect/utils/tree";
 
-import type { FC, Key, Ref } from "react";
+import type { FC, Key, ReactNode, Ref } from "react";
 import type { TreeProps, TreeDataNode, GetRef } from "antd";
 import type {
   SafeKey,
@@ -32,6 +32,7 @@ export type InnerOptionsProps = Omit<
   keyProp?: string;
   labelProp?: string;
   filterProp?: string;
+  optionRender?: (option: DefaultOptionType) => ReactNode;
   onCheck?: (checked: SafeKey[]) => void;
 };
 
@@ -44,6 +45,7 @@ const InnerOptions: FC<InnerOptionsProps> = ({
   keyProp = "key",
   labelProp = "title",
   filterProp = "title",
+  optionRender,
   onCheck,
   ...props
 }) => {
@@ -62,6 +64,22 @@ const InnerOptions: FC<InnerOptionsProps> = ({
       }))
     );
   }, [options, labelProp, keyProp]);
+
+  const optionsByKey = useMemo(() => {
+    const map = new Map<string, DefaultOptionType>();
+    options.forEach(option => map.set(String(option[keyProp]), option));
+    return map;
+  }, [options, keyProp]);
+
+  const titleRender = useCallback(
+    (node: TreeDataNode) => {
+      if (!optionRender) return node.title as ReactNode;
+
+      const option = optionsByKey.get(String(node.key));
+      return option ? optionRender(option) : (node.title as ReactNode);
+    },
+    [optionRender, optionsByKey]
+  );
 
   /* Search logic */
 
@@ -160,6 +178,7 @@ const InnerOptions: FC<InnerOptionsProps> = ({
       checkStrictly={true}
       virtual={!searchingLocally}
       blockNode={true}
+      titleRender={optionRender ? titleRender : undefined}
     />
   );
 };

@@ -30,7 +30,7 @@ export interface PhoneInputComponent extends FC<PhoneInputProps> {
 }
 
 const PhoneInput: PhoneInputComponent = ({
-  defaultCountry = "UA",
+  defaultCountry,
   placeholder,
   value,
   onChange
@@ -41,7 +41,7 @@ const PhoneInput: PhoneInputComponent = ({
 
   const [selectedCountry, setSelectedCountry] = useState<
     CountryCode | undefined
-  >(defaultCountry);
+  >();
 
   const inputRef = useRef<InputRef>(null);
 
@@ -97,7 +97,7 @@ const PhoneInput: PhoneInputComponent = ({
     if (!value) {
       setInternalValue(undefined);
       setFormatedValue(undefined);
-      setSelectedCountry(defaultCountry);
+      setSelectedCountry(undefined);
       return;
     }
 
@@ -116,11 +116,11 @@ const PhoneInput: PhoneInputComponent = ({
   }, [defaultCountry, value]);
 
   return (
-    <Space.Compact className="phone-input">
+    <Space.Compact className="phone-input" block={true}>
       <Select
         className="phone-input-select"
         classNames={{ popup: { root: "phone-input-select-dropdown" } }}
-        value={selectedCountry}
+        value={selectedCountry ?? null}
         placeholder={<span className="phone-input-flag-placeholder" />}
         popupMatchSelectWidth={false}
         optionLabelProp="label"

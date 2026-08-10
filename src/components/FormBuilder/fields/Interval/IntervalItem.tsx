@@ -1,5 +1,6 @@
 import DatePicker from "@/components/DatePicker";
 import { useConfig } from "@/hooks";
+import { usePickerLocale } from "@/components/DatePicker/utils/locale";
 
 import type { FC } from "react";
 import type { Dayjs } from "dayjs";
@@ -15,6 +16,7 @@ export const IntervalItem: FC<IntervalItemProps> = ({
   onChange
 }) => {
   const { t } = useConfig();
+  const locale = usePickerLocale(format);
 
   return (
     <>
@@ -30,6 +32,7 @@ export const IntervalItem: FC<IntervalItemProps> = ({
         value={value}
         onChange={value => onChange(value as Dayjs)}
         format={format}
+        locale={locale}
       />
     </>
   );
