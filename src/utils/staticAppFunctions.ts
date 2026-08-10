@@ -11,7 +11,8 @@ import type { NotificationInstance } from "antd/es/notification/interface";
 
 let message: MessageInstance = messageApi;
 let notification: NotificationInstance = notificationApi;
-let modal: Omit<ModalStaticFunctions, "warn"> = modalApi;
+let modal: Omit<ModalStaticFunctions, "warn"> & { destroyAll: () => void } =
+  modalApi;
 
 /**
  * Synchronize Ant Design's static functions (`message`, `notification`, `modal`)
@@ -27,7 +28,7 @@ let modal: Omit<ModalStaticFunctions, "warn"> = modalApi;
 export const useAppFunctions = () => {
   const staticFunction = App.useApp();
   message = staticFunction.message;
-  modal = staticFunction.modal;
+  modal = { ...staticFunction.modal, destroyAll: () => modalApi.destroyAll() };
   notification = staticFunction.notification;
 };
 

@@ -148,17 +148,9 @@ const TreeSearch: FC<TreeSearchProps> = ({
 
     const filteredOptions = filterOptions(searchValue, treeData ?? [], {
       optionFilterProp: "title",
-      filterOption: internalSearchCondition
+      filterOption: internalSearchCondition,
+      showAllChildrenIfParentFound
     });
-
-    if (!showAllChildrenIfParentFound) {
-      filteredOptions.forEach(item => {
-        item.children = filterOptions(searchValue, item.children ?? [], {
-          optionFilterProp: "title",
-          filterOption: internalSearchCondition
-        });
-      });
-    }
 
     return filteredOptions;
   }, [

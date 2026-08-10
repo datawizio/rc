@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import ImgCrop from "antd-img-crop";
 import { App, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -5,43 +6,61 @@ import { Preview } from "./Preview";
 import { useConfig } from "@/hooks";
 
 import type { FC } from "react";
-import type { RcFile } from "antd/es/upload";
+import type { RcFile, UploadProps } from "antd/es/upload";
 import type { ImageProps } from "../../types";
+
+const MAX_IMAGE_SIZE_MB = 2;
+const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png"]);
 
 export const Image: FC<ImageProps> = ({
   name,
   value,
+  disabled,
   placeholder,
-  onChange
+  onChange,
+  maxFileSize = MAX_IMAGE_SIZE_MB,
+  shape = "round",
+  saveAs = "base64",
+  ...props
 }) => {
   const { t } = useConfig();
   const { message } = App.useApp();
 
-  const beforeUpload = (file: RcFile) => {
-    const hasAllowedType =
-      file.type === "image/jpeg" || file.type === "image/png";
+  const beforeUpload = (file: RcFile, sizeLimit: number) => {
+    const isAllowedType = ALLOWED_IMAGE_TYPES.has(file.type);
+    const isAllowedSize = file.size / 1024 / 1024 <= sizeLimit;
 
-    if (!hasAllowedType) {
-      void message.error("You can only upload JPG/PNG file!");
+    if (!isAllowedType) {
+      void message.error(t("INVALID_FORMAT"));
     }
 
-    const isLessThan2M = file.size / 1024 / 1024 < 2;
-
-    if (!isLessThan2M) {
-      void message.error("Image must smaller than 2MB!");
+    if (!isAllowedSize) {
+      void message.error(
+        t("FILE_TOO_LARGE", {
+          file_name: file.name,
+          size: sizeLimit
+        })
+      );
     }
 
-    return hasAllowedType && isLessThan2M;
+    return isAllowedType && isAllowedSize;
   };
 
-  const upload = (file: RcFile) => {
+  const customRequest: UploadProps["customRequest"] = ({ file, onSuccess }) => {
+    if (saveAs === "file") {
+      onChange?.({ name, value: file as RcFile });
+      onSuccess?.({});
+      return;
+    }
+
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file as Blob);
     reader.onload = () => {
-      if (reader.result && onChange)
+      if (reader.result && onChange) {
         onChange({ name, value: reader.result as string });
+      }
+      onSuccess?.({});
     };
-    return "";
   };
 
   const handleDelete = () => {
@@ -49,27 +68,29 @@ export const Image: FC<ImageProps> = ({
   };
 
   const uploadButton = value ? (
-    <Preview value={value} onDelete={handleDelete} />
+    <Preview value={value} onDelete={handleDelete} disabled={disabled} />
   ) : (
     <div>
       <PlusOutlined />
       <div className="ant-upload-text">{placeholder}</div>
     </div>
   );
+
   return (
     <ImgCrop
-      cropShape="round"
+      cropShape={shape}
       modalTitle={t("EDIT_IMAGE")}
       modalOk={t("SUBMIT")}
       modalCancel={t("CANCEL")}
+      {...props}
     >
       <Upload.Dragger
-        beforeUpload={beforeUpload}
-        action={upload}
+        disabled={disabled}
+        beforeUpload={file => beforeUpload(file, maxFileSize)}
         listType="picture-card"
         showUploadList={false}
-        className="field-image-upload-container"
-        customRequest={() => {}}
+        className={clsx("field-image-upload-container", `crop-shape-${shape}`)}
+        customRequest={customRequest}
       >
         {uploadButton}
       </Upload.Dragger>
