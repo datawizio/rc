@@ -28,13 +28,12 @@ export function parseErrorText(errors: ErrorsObject, t: TFunction) {
     return t(errors.message, errors.message_params);
   }
 
-  return Object.keys(errors)
-    .map(key => {
-      return Array.isArray(errors[key])
-        ? errors[key].map(v => t(v)).join("<br />")
-        : t(errors[key]);
-    })
-    .join("<br />");
+  const messages = Object.keys(errors).flatMap(key => {
+    const value = errors[key];
+    return Array.isArray(value) ? value.map(v => t(v)) : [t(value)];
+  });
+
+  return [...new Set(messages)].join("<br>");
 }
 
 export function showApiErrors(errors: ErrorsObject, t: TFunction) {

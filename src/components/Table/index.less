@@ -294,8 +294,11 @@
       }
     }
 
+    // Horizontal only — vertical overflow:auto here creates a nested
+    // scrollport and Chromium latches the wheel when the axis changes.
     .ant-table-expanded-row > td {
-      overflow: auto;
+      overflow-x: auto;
+      overflow-y: hidden;
     }
   }
 
@@ -312,6 +315,11 @@
     th,
     .dw-table__column {
       z-index: 4 !important;
+    }
+
+    // Avoid a second scrollport inside the expanded cell.
+    .dw-table__wrapper {
+      overflow: visible;
     }
   }
 
@@ -339,6 +347,25 @@
         .dw-table__cell {
           justify-content: center;
         }
+      }
+    }
+  }
+
+  &--empty:not(.always-show-header) {
+    .dw-table__wrapper {
+      table {
+        width: auto !important;
+        min-width: 100%;
+      }
+    }
+
+    .ant-table-thead:not(:has(.ant-table-filter-column)) {
+      display: none;
+    }
+
+    .ant-table-thead:has(.ant-table-filter-column) {
+      .dw-table__column--resizable {
+        resize: none !important;
       }
     }
   }
