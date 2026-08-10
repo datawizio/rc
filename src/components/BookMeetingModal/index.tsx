@@ -21,6 +21,10 @@ export interface BookMeetingModalProps {
   app?: keyof typeof APP_SRC_LIST;
 }
 
+/**
+ * Modal for booking a meeting with the sales team via Calendly.
+ * @deprecated Replaced by custom logic, will be removed in the future
+ */
 const BookMeetingModal: FC<BookMeetingModalProps> = ({
   visible,
   onClose,

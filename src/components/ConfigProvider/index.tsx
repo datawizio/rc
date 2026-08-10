@@ -40,7 +40,8 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
     borderRadius: 4,
     colorText: cssVar("--text-color"),
     colorPrimary: cssVar("--primary-color"),
-    colorLink: cssVar("--primary-color")
+    colorLink: cssVar("--primary-color"),
+    colorInfo: cssVar("--primary-color")
   };
 
   const components: ThemeConfig["components"] = {
@@ -62,12 +63,12 @@ const ConfigProvider: FC<ConfigProviderProps> = ({
   };
 
   const themeConfig: ThemeConfig = {
+    ...props.theme,
     cssVar: { key: ANTD_THEME_CLASS },
     hashed: false,
     algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-    token: tokens,
-    components: components,
-    ...props.theme
+    token: { ...tokens, ...props.theme?.token },
+    components: { ...components, ...props.theme?.components }
   };
 
   const contextValue = useMemo<ConfigContextValue>(() => {

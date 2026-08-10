@@ -1,17 +1,16 @@
-div.notifications-actions {
-  & > button.dw-btn > span:not(.anticon) {
-    color: var(--drawer-selected-text-color);
+.notifications-actions .dw-btn {
+  margin-left: 8px;
 
-    &:hover {
-      color: var(--primary-color);
-    }
+  .ant-btn-icon svg {
+    color: var(--primary-color);
+    height: 14px;
   }
 
-  .ant-btn {
-    margin-left: 8px;
+  & > span:not(.ant-btn-icon) {
+    color: var(--drawer-selected-text-color);
+  }
 
-    svg {
-      height: 14px;
-    }
+  &:hover > span:not(.ant-btn-icon) {
+    color: var(--primary-color);
   }
 }
