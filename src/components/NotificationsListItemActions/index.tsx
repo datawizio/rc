@@ -1,4 +1,4 @@
-import Button from "@/components/Button";
+import { Button } from "antd";
 import { UndoOutlined } from "@ant-design/icons";
 import { useConfig } from "@/hooks";
 import { DeleteIcon } from "@/components/Icons/DeleteIcon";
@@ -37,54 +37,45 @@ const ListItemActions: FC<ListItemActionsProps> = ({
     <div className="list-item-actions">
       {link && (
         <Button
+          type="link"
           icon={<OpenPageIcon />}
           title={t("NAVIGATE_TO")}
-          border={false}
-          type="default"
           className="dw-list-go-to"
           onClick={onOpenLink}
         />
       )}
       {item.read ? (
         <Button
+          type="link"
           icon={<MailIcon />}
           title={t("MARK_AS_UNREAD")}
-          border={false}
-          highlight
-          type="default"
           className="dw-list-mail"
           onClick={onMarkAsUnread}
         />
       ) : (
         <Button
+          type="link"
           icon={<EnvelopeIcon />}
           title={t("MARK_AS_READ")}
-          border={false}
-          highlight
-          type="default"
           className="dw-list-mail"
           onClick={onMarkAsRead}
         />
       )}
       {pageType === "deleted_page" && (
         <Button
+          type="link"
           icon={<UndoOutlined />}
           title={t("REVERT")}
-          danger
-          border={false}
-          highlight
-          type="default"
+          danger={true}
           className="dw-list-restore"
           onClick={onRestore}
         />
       )}
       <Button
+        type="link"
         icon={<DeleteIcon />}
         title={t("DELETE")}
-        danger
-        border={false}
-        highlight
-        type="default"
+        danger={true}
         className="dw-list-delete"
         onClick={onDelete}
       />
