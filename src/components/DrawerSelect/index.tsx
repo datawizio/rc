@@ -48,7 +48,7 @@ export type DrawerSelectProps<VT> = Omit<SelectProps<VT>, "onChange"> & {
   onDrawerCancel?: () => void;
   valueToUncheck?: string | number;
   onLoadData?: (data: any, value: any) => { value?: any };
-  loadMarkersChildren?: (id: string, filters?: any) => Promise<any>;
+  loadMarkersChildren?: (filters?: any) => Promise<any>;
   markersTree?: any;
   selectedMarkers?: string[] | number[];
   markersFieldPlaceholder?: string;
