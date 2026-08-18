@@ -54,7 +54,7 @@ export type DrawerTreeSelectProps<VT> = Omit<
   selectedMarkers?: string[] | number[];
   loadData?: (filters: IDrawerTreeSelectFilters) => Promise<any>;
   loadChildren?: (nodeId: string, filters?: any) => Promise<any>;
-  loadMarkersChildren?: (id: string, filters?: any) => Promise<any>;
+  loadMarkersChildren?: (filters?: any) => Promise<any>;
   onChange?: (values: SelectValue, selected?: AntTreeNode, extra?: any) => void;
   onChangeReturnObject?: (obj: {
     value: SelectValue;
