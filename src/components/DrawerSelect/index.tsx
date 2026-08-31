@@ -10,6 +10,7 @@ import { App, Skeleton, Tag, Select, Tree } from "antd";
 import { uniqBy } from "lodash";
 import { useConfig } from "@/hooks";
 import { useDrawerSelect } from "./hooks/useDrawerSelect";
+import { useListContainerHeight } from "@/components/DrawerTreeSelect/hooks/useListContainerHeight";
 import { useRef, useCallback, useMemo, useEffect, useState } from "react";
 
 import type { FC, ReactNode, UIEvent, ChangeEvent } from "react";
@@ -171,6 +172,8 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
   });
 
   const [scrollLoading, setScrollLoading] = useState(false);
+  const { ref: listContainerRef, height: listContainerHeight } =
+    useListContainerHeight(drawerVisible);
 
   const optionsRef = useRef<GetRef<typeof Tree>>(null);
   const selectedOptions = useRef<DefaultOptionType[]>([]);
@@ -844,14 +847,6 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
     [maxTagLength, optionsState, t]
   );
 
-  const listHeight =
-    window.innerHeight -
-    198 -
-    (multiple ? 27 : 0) -
-    (showMarkers ? 60 : 0) -
-    (showSelectAll && markersSelected.current.length ? 28 : 0) -
-    (labelPropOptions ? 30 : 0);
-
   const dropdownRender = () => {
     return (
       <Drawer
@@ -910,27 +905,35 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
               </Checkbox>
             </div>
           )}
-        {(!internalLoading || scrollLoading) && (
-          <InnerOptions
-            ref={optionsRef}
-            options={optionsState}
-            remoteSearch={!!loadData}
-            searchValue={searchValue}
-            height={listHeight}
-            value={(internalValue as SafeKey[]) || []}
-            keyProp={valueProp}
-            labelProp={optionLabelProp || "label"}
-            filterProp={
-              (Array.isArray(optionFilterProp)
-                ? optionFilterProp[0]
-                : optionFilterProp) || "label"
-            }
-            onCheck={handleTreeCheck}
-            onScroll={handleScroll}
-            optionRender={optionRender}
-          />
-        )}
-        <div className="drawer-select-loader-container">
+        <div ref={listContainerRef} className="drawer-select-list-container">
+          {(!internalLoading || scrollLoading) && (
+            <InnerOptions
+              ref={optionsRef}
+              options={optionsState}
+              remoteSearch={!!loadData}
+              searchValue={searchValue}
+              height={listContainerHeight}
+              value={(internalValue as SafeKey[]) || []}
+              keyProp={valueProp}
+              labelProp={optionLabelProp || "label"}
+              filterProp={
+                (Array.isArray(optionFilterProp)
+                  ? optionFilterProp[0]
+                  : optionFilterProp) || "label"
+              }
+              onCheck={handleTreeCheck}
+              onScroll={handleScroll}
+              optionRender={optionRender}
+            />
+          )}
+        </div>
+        <div
+          className={clsx(
+            "drawer-select-loader-container",
+            (!internalLoading || scrollLoading) &&
+              "drawer-select-loader-container--compact"
+          )}
+        >
           {internalLoading && (
             <>
               {!scrollLoading && (

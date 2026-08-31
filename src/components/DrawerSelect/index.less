@@ -164,6 +164,19 @@
     }
   }
 
+  .drawer-select-list-container {
+    flex: 1;
+    min-height: 0;
+
+    &:empty {
+      display: none;
+    }
+
+    .rc-virtual-list {
+      margin-bottom: -24px;
+    }
+  }
+
   .drawer-select-selected {
     padding-top: 5px;
     display: flex;
@@ -179,6 +192,12 @@
     flex: 1;
     height: 16px;
     overflow: visible;
+
+    &--compact {
+      flex: 0 0 16px;
+      min-height: 16px;
+      max-height: 16px;
+    }
 
     .ant-skeleton-title {
       margin: 0;

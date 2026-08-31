@@ -1,10 +1,10 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 /**
- * Measures the available height for the tree virtual list inside the drawer.
+ * Measures the available height for the virtual list inside the drawer.
  * @param visible - Boolean indicating whether the drawer is visible.
  */
-export const useTreeContainerHeight = (visible: boolean) => {
+export const useListContainerHeight = (visible: boolean) => {
   const [height, setHeight] = useState<number>(0);
 
   const nodeRef = useRef<HTMLDivElement | null>(null);
