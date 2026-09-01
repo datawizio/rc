@@ -3,14 +3,18 @@ import { Row } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { useConfig } from "@/hooks";
 
+import type { TOptions } from "i18next";
+
 import "./index.less";
 
 export interface TechnicalMaintenanceProps {
   messageKey?: string;
+  values?: TOptions;
 }
 
 const TechnicalMaintenance: FC<TechnicalMaintenanceProps> = ({
-  messageKey = "THE_SERVICE_IS_TEMPORARILY_UNAVAILABLE"
+  messageKey = "THE_SERVICE_IS_TEMPORARILY_UNAVAILABLE",
+  values
 }) => {
   const { t } = useConfig();
   const [visible, setVisible] = useState<boolean>(true);
@@ -22,7 +26,7 @@ const TechnicalMaintenance: FC<TechnicalMaintenanceProps> = ({
   return visible ? (
     <Row className="maintenance-container">
       <div className="maintenance-container-message">
-        <p dangerouslySetInnerHTML={{ __html: t(messageKey) }} />
+        <p dangerouslySetInnerHTML={{ __html: t(messageKey, values) }} />
       </div>
       <CloseOutlined
         className="maintenance-container-close-btn"
