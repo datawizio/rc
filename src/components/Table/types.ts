@@ -218,8 +218,20 @@ export type DataSourceType = IRow[];
 
 /* Column types */
 
-type OverwrittenColumnProps<RT> = {
+export interface TableColumnFilterOption {
+  value: string;
+  text: string;
+}
+
+export interface TableColumnFilters {
+  data: TableColumnFilterOption[];
+  need_translate?: boolean;
+  multi_select?: boolean;
+}
+
+export type OverwrittenColumnProps<RT> = {
   children?: IColumn<RT>[];
+  filters?: TableColumnFilters;
 };
 
 export type IColumn<RT = any> = Overwrite<
