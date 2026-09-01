@@ -9,7 +9,7 @@ import "./index.less";
 
 export interface TechnicalMaintenanceProps {
   messageKey?: string;
-  values?: TOptions;
+  values?: object;
 }
 
 const TechnicalMaintenance: FC<TechnicalMaintenanceProps> = ({
@@ -26,7 +26,11 @@ const TechnicalMaintenance: FC<TechnicalMaintenanceProps> = ({
   return visible ? (
     <Row className="maintenance-container">
       <div className="maintenance-container-message">
-        <p dangerouslySetInnerHTML={{ __html: t(messageKey, values) }} />
+        <p
+          dangerouslySetInnerHTML={{
+            __html: t(messageKey, values as TOptions)
+          }}
+        />
       </div>
       <CloseOutlined
         className="maintenance-container-close-btn"
