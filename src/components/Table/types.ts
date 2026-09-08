@@ -218,20 +218,8 @@ export type DataSourceType = IRow[];
 
 /* Column types */
 
-export interface TableColumnFilterOption {
-  value: string;
-  text: string;
-}
-
-export interface TableColumnFilters {
-  data: TableColumnFilterOption[];
-  need_translate?: boolean;
-  multi_select?: boolean;
-}
-
 export type OverwrittenColumnProps<RT> = {
   children?: IColumn<RT>[];
-  filters?: TableColumnFilters;
 };
 
 export type IColumn<RT = any> = Overwrite<
@@ -352,8 +340,8 @@ export type RowChildrenProviderType = (
 
 export type PaginationResponse<R> = {
   count: number;
-  next: string | null;
-  previous: string | null;
+  next?: string | null;
+  previous?: string | null;
   results: R;
 };
 
