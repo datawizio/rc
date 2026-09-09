@@ -65,7 +65,9 @@ yarn unlink "@datawizio/rc"
 
 ## 🤝 Contributing
 
-Please see our [Code Conventions](docs/code-conventions.md) for guidelines on how to contribute to this project.
+Please see our [Code Conventions](docs/code-conventions.md) for guidelines on how to contribute
+to this project, and [Releases and Branching](docs/releases.md) for how we version, publish, and
+name branches.
 
 ---
 
