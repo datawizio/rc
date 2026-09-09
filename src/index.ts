@@ -61,7 +61,7 @@ export { default as TableSearch } from "./components/TableSearch";
 export { default as TableSelectColumnsModal } from "./components/TableSelectColumnsModal";
 export { default as TableTemplates } from "./components/TableTemplates";
 export { default as TableTransposeButton } from "./components/TableTransposeButton";
-export { default as TechnicalMaintenance } from "./components/TechnicalMaintenance";
+export { default as Announcement } from "./components/Announcement";
 export { default as TimePicker } from "./components/TimePicker";
 export { default as TimeRangePicker } from "./components/TimeRangePicker";
 export { default as TopBar } from "./components/TopBar";
