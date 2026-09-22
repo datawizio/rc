@@ -117,6 +117,12 @@ export interface CronProps {
   mode?: Mode;
 
   /**
+   * Define if hour and minute fields can select only one or multiple values.
+   * Defaults to `mode`.
+   */
+  timeMode?: Mode;
+
+  /**
    * Change the component language.
    * Can also be used to remove prefix and suffix.
    *
