@@ -46,6 +46,7 @@ const Cron: FC<CronProps> = ({
   ],
   periodicityOnDoubleClick = true,
   mode = "multiple",
+  timeMode = mode,
   defaultHour,
   withHours = false,
   withMinutes = false,
@@ -356,7 +357,7 @@ const Cron: FC<CronProps> = ({
                 readOnly={readOnly}
                 period={periodForRender}
                 periodicityOnDoubleClick={periodicityOnDoubleClick}
-                mode={mode}
+                mode={timeMode}
                 getPopupContainer={getPopupContainer}
               />
             )}
@@ -378,7 +379,7 @@ const Cron: FC<CronProps> = ({
                 readOnly={readOnly}
                 period={periodForRender}
                 periodicityOnDoubleClick={periodicityOnDoubleClick}
-                mode={mode}
+                mode={timeMode}
                 getPopupContainer={getPopupContainer}
               />
             )}
