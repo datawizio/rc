@@ -1,4 +1,4 @@
-import type { FC, ReactElement } from "react";
+import type { FC, ReactElement, ReactNode } from "react";
 import type { TreeSelectProps as AntTreeSelectProps } from "antd";
 import type { SelectValue } from "antd/es/tree-select";
 import type { AntTreeNode } from "antd/es/tree";
@@ -33,6 +33,7 @@ export type DrawerTreeSelectProps<VT> = Omit<
   drawerWidth?: number;
   showLevels?: boolean;
   noticeRender?: ReactElement | null;
+  emptyText?: ReactNode;
   showMarkers?: boolean;
   markersRender?: ((props: MarkersRenderProps) => ReactElement) | null;
   levels?: LevelsType;

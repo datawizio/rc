@@ -50,6 +50,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   showLevels = false,
   showMarkers = false,
   noticeRender,
+  emptyText,
   markersRender = null,
   markersTree,
   levels = [],
@@ -966,6 +967,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
               onSelect={handleTreeSelect}
               onExpandedKeysChange={handlerTreeExpand}
               loadData={loadChildren ? handleTreeLoadData : undefined}
+              emptyText={emptyText}
             />
           )}
           <div className="drawer-select-loader-container">
