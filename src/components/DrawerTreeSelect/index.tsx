@@ -521,7 +521,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     dispatch({
       type: "setState",
       payload: {
-        stateTreeData: [],
         fakeVisible: false
       }
     });
