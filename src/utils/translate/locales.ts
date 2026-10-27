@@ -224,6 +224,6 @@ export const defaultLangs = new Set([
   "it",
   "el",
   "he",
+  "bg",
   "az"
-  "bg"
 ]);
