@@ -33,6 +33,7 @@ export type InnerOptionsProps = Omit<
   labelProp?: string;
   filterProp?: string;
   optionRender?: (option: DefaultOptionType) => ReactNode;
+  emptyText?: ReactNode;
   onCheck?: (checked: SafeKey[]) => void;
 };
 
@@ -46,6 +47,7 @@ const InnerOptions: FC<InnerOptionsProps> = ({
   labelProp = "title",
   filterProp = "title",
   optionRender,
+  emptyText,
   onCheck,
   ...props
 }) => {
@@ -162,7 +164,11 @@ const InnerOptions: FC<InnerOptionsProps> = ({
     nestedTreeData?.length === 0 ||
     (searchingLocally && searchValue && !notHiddenKeys?.size)
   ) {
-    return <div className="drawer-select-list-placeholder">{t("NO_DATA")}</div>;
+    return (
+      <div className="drawer-select-list-placeholder">
+        {emptyText ?? t("NO_DATA")}
+      </div>
+    );
   }
 
   return (

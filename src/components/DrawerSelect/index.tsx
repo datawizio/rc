@@ -38,6 +38,7 @@ export type DrawerSelectProps<VT> = Omit<SelectProps<VT>, "onChange"> & {
   ) => Promise<{ data: any; totalPages: number }>;
   optionRender?: (option: DefaultOptionType) => ReactNode;
   noticeRender?: ReactNode;
+  emptyText?: ReactNode;
   labelPropOptions?: ReactNode;
   multiple?: boolean;
   valueProp?: string;
@@ -131,6 +132,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
   maxTagLength,
   maxTagCount = 10,
   noticeRender,
+  emptyText,
   labelPropOptions,
   onDrawerCancel,
   onLoadData,
@@ -924,6 +926,7 @@ const DrawerSelect: FC<DrawerSelectProps<SelectValues>> = ({
               onCheck={handleTreeCheck}
               onScroll={handleScroll}
               optionRender={optionRender}
+              emptyText={emptyText}
             />
           )}
         </div>
