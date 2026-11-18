@@ -144,6 +144,19 @@ const DateRangePicker: IDateRangePicker = ({
     return [formatDate(propsDateFrom), formatDate(propsDateTo)];
   }, [propsDateFrom, propsDateTo, formatDate]);
 
+  // Preset hover previews by swapping `value`. The picker then moves the open
+  // panel to that value unless `defaultPickerValue` is set, so pin the panel
+  // to the committed range (callers can still override it).
+  const pinnedPickerValue = useMemo((): [Dayjs, Dayjs] => {
+    const provided = props.defaultPickerValue;
+    if (Array.isArray(provided)) return [provided[0], provided[1]];
+    if (provided) return [provided, provided];
+
+    const start = dateFrom ?? dateTo ?? dayjs();
+    const end = dateTo ?? dateFrom ?? start;
+    return [start, end];
+  }, [dateFrom, dateTo, props.defaultPickerValue]);
+
   const [maxDate, minDate] = useMemo(() => {
     return [formatDate(propsMaxDate), formatDate(propsMinDate)];
   }, [propsMaxDate, propsMinDate, formatDate]);
@@ -222,7 +235,8 @@ const DateRangePicker: IDateRangePicker = ({
         }
       }}
       onChange={onChange}
-      value={previewRange ?? [dateFrom, dateTo]} // TODO: find a better solution for period presets
+      value={previewRange ?? [dateFrom, dateTo]}
+      defaultPickerValue={pinnedPickerValue}
       disabledDate={isDisabledDate}
       open={props.open ?? isOpen}
       onOpenChange={open => {
