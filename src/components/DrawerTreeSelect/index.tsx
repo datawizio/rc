@@ -13,7 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Skeleton, Tag, TreeSelect } from "antd";
 import { useConfig } from "@/hooks";
 import { useDrawerTreeSelect } from "./hooks/useDrawerTreeSelect";
-import { useTreeContainerHeight } from "./hooks/useTreeContainerHeight";
+import { useListContainerHeight } from "./hooks/useListContainerHeight";
 import {
   getAllLeafItems,
   getMainLevelItems,
@@ -50,6 +50,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   showLevels = false,
   showMarkers = false,
   noticeRender,
+  emptyText,
   markersRender = null,
   markersTree,
   levels = [],
@@ -124,7 +125,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
   });
 
   const { ref: treeContainerRef, height: treeContainerHeight } =
-    useTreeContainerHeight(drawerVisible);
+    useListContainerHeight(drawerVisible);
 
   const [searchValue, setSearchValue] = useState<string>("");
   const mainLevelItems = useRef<string[]>([]);
@@ -520,7 +521,6 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
     dispatch({
       type: "setState",
       payload: {
-        stateTreeData: [],
         fakeVisible: false
       }
     });
@@ -966,6 +966,7 @@ const DrawerTreeSelect: DrawerTreeSelectCompoundComponent<SelectValues> = ({
               onSelect={handleTreeSelect}
               onExpandedKeysChange={handlerTreeExpand}
               loadData={loadChildren ? handleTreeLoadData : undefined}
+              emptyText={emptyText}
             />
           )}
           <div className="drawer-select-loader-container">

@@ -6,7 +6,7 @@ import { DEFAULT_LOCALE_EN } from "../locale";
 import { sort } from "../utils";
 import { parsePartArray, partToString, formatValue } from "../converter";
 
-import type { FC } from "react";
+import type { FC, KeyboardEvent } from "react";
 import type { SelectProps } from "antd";
 import type { CustomSelectProps, Clicks } from "../types";
 
@@ -27,6 +27,7 @@ const CustomSelect: FC<CustomSelectProps> = ({
   periodicityOnDoubleClick,
   mode,
   sortOptionsList,
+  onInputKeyDown,
   ...props
 }) => {
   const stringValue = useMemo(() => {
@@ -123,6 +124,11 @@ const CustomSelect: FC<CustomSelectProps> = ({
         });
       }
 
+      // Empty selection is rendered as "every ...", which is not a choice in single mode.
+      if (mode === "single" && newValue.length === 0) {
+        return;
+      }
+
       if (newValue.length === unit.total) {
         setValue([]);
       } else {
@@ -130,7 +136,7 @@ const CustomSelect: FC<CustomSelectProps> = ({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setValue, value]
+    [setValue, value, mode]
   );
 
   const doubleClick = useCallback(
@@ -220,10 +226,22 @@ const CustomSelect: FC<CustomSelectProps> = ({
   );
 
   const onClear = useCallback(() => {
-    if (!readOnly) {
+    if (!readOnly && mode !== "single") {
       setValue([]);
     }
-  }, [setValue, readOnly]);
+  }, [setValue, readOnly, mode]);
+
+  const handleInputKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      onInputKeyDown?.(event);
+
+      // `rc-select` treats Tab like Enter and toggles the active option.
+      if (event.key === "Tab") {
+        event.stopPropagation();
+      }
+    },
+    [onInputKeyDown]
+  );
 
   const internalClassName = useMemo(
     () =>
@@ -261,7 +279,7 @@ const CustomSelect: FC<CustomSelectProps> = ({
   return (
     <Select
       mode="multiple"
-      allowClear={!readOnly}
+      allowClear={!readOnly && mode !== "single"}
       virtual={false}
       open={readOnly ? false : undefined}
       value={stringValue}
@@ -285,6 +303,7 @@ const CustomSelect: FC<CustomSelectProps> = ({
           : undefined
       }
       {...props}
+      onInputKeyDown={handleInputKeyDown}
     />
   );
 };

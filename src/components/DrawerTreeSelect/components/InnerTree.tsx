@@ -14,7 +14,7 @@ import {
   preserveSelectionOrder
 } from "../utils/tree";
 
-import type { FC, Key } from "react";
+import type { FC, Key, ReactNode } from "react";
 import type { TreeProps, TreeDataNode } from "antd";
 import type { SafeKey } from "@rc-component/tree-select/es/interface";
 import type { CheckedStrategy } from "@rc-component/tree-select/es/utils/strategyUtil";
@@ -31,6 +31,7 @@ export type InnerTreeProps = Omit<
   internalTreeDefaultExpandedKeys?: Key[];
   onExpandedKeysChange?: (keys: SafeKey[]) => void;
   showCheckedStrategy?: CheckedStrategy;
+  emptyText?: ReactNode;
   onCheck?: ReplaceParameter<HandlerFn<TreeProps, "onCheck">, 0, SafeKey[]>;
 };
 
@@ -49,6 +50,7 @@ const InnerTree: FC<InnerTreeProps> = ({
   checkedKeys,
   onExpandedKeysChange,
   showCheckedStrategy,
+  emptyText,
   onCheck,
   ...props
 }) => {
@@ -319,7 +321,9 @@ const InnerTree: FC<InnerTreeProps> = ({
     (searchingLocally && searchValue && !localExpandedKeys?.length)
   ) {
     return (
-      <div className="drawer-tree-select-list-placeholder">{t("NO_DATA")}</div>
+      <div className="drawer-tree-select-list-placeholder">
+        {emptyText ?? t("NO_DATA")}
+      </div>
     );
   }
 

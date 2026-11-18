@@ -4,6 +4,17 @@ export type WebSocketMessage = {
   payload?: Record<string, any>;
 };
 
+/**
+ * Close codes that mean the socket can be opened again.
+ * Normal closure (1000), protocol errors, and auth or policy
+ * rejections are left out: retrying those does not recover the session.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
+ */
+const RECONNECTABLE_CLOSE_CODES: ReadonlySet<number> = new Set([
+  1001, 1006, 1011, 1012, 1013
+]);
+
 export class WebSocketManager {
   private _ws: WebSocket | null = null;
   private _server: string | null = null;
@@ -98,10 +109,15 @@ export class WebSocketManager {
     this._counter++;
     clearInterval(this._pingIntervalId);
     this._authToken = null;
+
     console.warn(
-      "WebSocket is closed.",
+      `WebSocket is closed with ${event.code} status code.`,
       event.reason && `Reason: ${event.reason}`
     );
+
+    if (RECONNECTABLE_CLOSE_CODES.has(event.code)) {
+      this._reconnect();
+    }
   }
 
   private _onError(event: Event) {

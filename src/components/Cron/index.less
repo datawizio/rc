@@ -68,9 +68,10 @@
   .rc-virtual-list-holder-inner {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
 
     .ant-select-item-option {
-      border-radius: 0 !important;
+      border-radius: var(--ant-border-radius) !important;
 
       &-content {
         text-align: center;

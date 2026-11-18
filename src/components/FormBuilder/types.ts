@@ -119,10 +119,10 @@ export type FieldEnableSelectProps = FormFieldProps<EnableSelectValueType>;
 export type FieldPhoneProps = FormFieldProps<string>;
 
 export type FieldDrawerSelectProps = FormFieldProps<string | string[]> &
-  DrawerSelectProps<SelectValues>;
+  Omit<DrawerSelectProps<SelectValues>, "onChange">;
 
-export type FieldDrawerTreeSelectProps = FormFieldProps<string> &
-  DrawerTreeSelectProps<SelectValues>;
+export type FieldDrawerTreeSelectProps = FormFieldProps<string | string[]> &
+  Omit<DrawerTreeSelectProps<SelectValues>, "onChange">;
 
 export type ImageProps = Omit<
   ImgCropProps,

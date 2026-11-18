@@ -4,11 +4,16 @@ import { useCallback } from "react";
 import { useConfig } from "@/hooks";
 import { prepareTreeData } from "@/utils/data/tree";
 
+import type { DataNode } from "@rc-component/tree-select/lib/interface";
+import type { TreeSelectProps } from "antd";
+
+type LegacyDataNode = Parameters<NonNullable<TreeSelectProps["loadData"]>>[0];
+
 export interface MarkersProps {
   value?: string[] | number[];
   treeData?: any;
   onChange?: any;
-  loadChildren?: (id: string, filters?: any) => Promise<any>;
+  loadChildren?: TreeSelectProps["loadData"];
   placeholder?: string;
   style?: React.CSSProperties;
 }
@@ -23,17 +28,21 @@ const Markers: React.FC<MarkersProps> = ({
 }) => {
   const { t } = useConfig();
 
-  const handleSearch = useCallback((inputValue: string, treeNode: any) => {
-    return treeNode.title.toLowerCase().includes(inputValue.toLowerCase());
+  const handleSearch = useCallback((inputValue: string, treeNode: DataNode) => {
+    if (typeof treeNode.title === "string") {
+      return treeNode.title.toLowerCase().includes(inputValue.toLowerCase());
+    }
+    return false;
   }, []);
 
-  const loadData = async (node: any) => {
+  const loadData = async (node: LegacyDataNode) => {
     if (node.children?.length) return;
     await loadChildren?.(node);
   };
 
   return (
     <TreeSelect
+      className="select-markers-field"
       value={value}
       treeData={prepareTreeData(treeData)}
       treeCheckable={true}
@@ -42,7 +51,6 @@ const Markers: React.FC<MarkersProps> = ({
       loadData={loadData}
       onChange={onChange}
       showSearch={{ filterTreeNode: handleSearch }}
-      className="select-markers-field"
       style={style}
     />
   );

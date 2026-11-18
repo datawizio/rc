@@ -2,8 +2,8 @@ import i18n from "i18next";
 import type {
   IColumn,
   IRow,
-  TableResponse,
-  TableProps
+  TableProps,
+  PaginationResponse
 } from "@/components/Table/types";
 
 export const translateArray = (array: Array<string>) => {
@@ -38,17 +38,17 @@ interface TranslateTableResponseOptions {
   translateByCondition?: (column: IColumn) => boolean;
 }
 
-export function translateTableResponse(
-  fetcher: (...args: any) => Promise<TableResponse>,
+export function translateTableResponse<
+  T extends PaginationResponse<{ columns?: any[]; dataSource?: any[] }>
+>(
+  fetcher: (...args: any) => Promise<T>,
   options?: TranslateTableResponseOptions
-): (...args: any) => Promise<TableResponse> {
+): (...args: any) => Promise<T> {
   return async (...args: any) => {
     const response = await fetcher(...args);
 
     if (response.results) {
-      const {
-        results: { columns, dataSource }
-      } = response;
+      const { columns, dataSource } = response.results;
 
       response.results.columns = columns && translateColumns(columns, options);
 

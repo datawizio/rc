@@ -218,7 +218,7 @@ export type DataSourceType = IRow[];
 
 /* Column types */
 
-type OverwrittenColumnProps<RT> = {
+export type OverwrittenColumnProps<RT> = {
   children?: IColumn<RT>[];
 };
 
@@ -340,7 +340,12 @@ export type RowChildrenProviderType = (
 
 export type PaginationResponse<R> = {
   count: number;
+  next?: string | null;
+  previous?: string | null;
   results: R;
 };
 
-export type TableResponse = PaginationResponse<TableProps>;
+export type TableResponse = PaginationResponse<{
+  columns?: IColumn[];
+  dataSource?: IRow[];
+}>;
