@@ -72,6 +72,11 @@ export const locales: ILocaleList = {
     getAnt: () => import("antd/es/locale/es_ES"),
     getDayJs: () => import("dayjs/locale/es")
   },
+  "es-419": {
+    name: "es_ES",
+    getAnt: () => import("antd/es/locale/es_ES"),
+    getDayJs: () => import("dayjs/locale/es")
+  },
   kk: {
     name: "kk_KK",
     getAnt: () => import("../customLocales/languages/kk_KK"),
@@ -203,6 +208,7 @@ export const defaultLangs = new Set([
   "lt",
   "lv",
   "es",
+  "es-419",
   "kk",
   "ms",
   "et",
